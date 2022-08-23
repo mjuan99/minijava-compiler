@@ -7,7 +7,6 @@ public class SourceFileManager {
     private File sourceFile;
     private FileInputStream fileInputStream;
     private InputStreamReader inputStreamReader;
-    private BufferedReader bufferedReader;
     private int lineNumber;
     private int columnNumber;
     private char currentChar;
@@ -57,7 +56,7 @@ public class SourceFileManager {
     }
 
     public String getLine(int lineNumber) throws IOException {
-        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
         for (int i = 1; i < lineNumber; i++)
             bufferedReader.readLine();
         return bufferedReader.readLine();

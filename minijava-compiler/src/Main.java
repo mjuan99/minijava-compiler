@@ -46,12 +46,12 @@ public class Main {
                     }
                 } catch (LexicalException exception) {
                     error = true;
-                    System.out.println("Error Léxico en línea " + exception.getLineNumber() +
+                    System.out.println("\n\nError Léxico en línea " + exception.getLineNumber() +
                             " columna " + exception.getColumnNumber() + ": " + exception.getMessage() +
                             " --> " + exception.getLexeme());
-                    System.out.println("Detalle: " + sourceFileManager.getLine(exception.getLineNumber()));
-                    System.out.println(getSpaces(exception.getColumnNumber() + 8) + '^');
-                    System.out.println("\n[Error:" + exception.getLexeme() + '|' + exception.getLineNumber() + "]\n");
+                    System.out.println("Detalle:\n" + sourceFileManager.getLine(exception.getLineNumber()));
+                    System.out.println(getSpaces(exception.getColumnNumber() - 1) + '^');
+                    System.out.println("[Error:" + exception.getLexeme() + '|' + exception.getLineNumber() + "]");
                 }
             }
             catch(IOException exception){
