@@ -10,9 +10,8 @@ private Token e16() throws IOException, LexicalException{
         updateLexeme();
         updateCurrentChar();
         return e19();
-        &a
+        updateLexeme(&a);
         }else{
-        updateLexeme();
         updateCurrentChar();
         return e17();
         }

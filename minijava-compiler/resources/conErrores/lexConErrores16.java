@@ -8,4 +8,4 @@ private Token e9() throws IOException{
         }else
         return new Token("intLiteral", lexeme, sourceFileManager.getLineNumber());
         }
-"asd\
+("intLiteral", lexeme, sourceFileManager.getLineNumber());"asd\

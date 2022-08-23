@@ -2,5 +2,5 @@
 
 private void updateLexeme(){
         lexeme += currentChar;
-        "asd
+        lexeme += "asd
         }

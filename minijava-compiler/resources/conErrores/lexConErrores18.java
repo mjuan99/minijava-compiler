@@ -12,4 +12,4 @@ private Token e17() throws IOException, LexicalException{
         throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), "formato de literal carácter inválido");
         }
         }
-&
+updateCurrentChar();&

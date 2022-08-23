@@ -9,4 +9,4 @@ private void updateCurrentChar() throws IOException {
         eof = true;
         }
         }
-'\
+currentChar = '\

@@ -1,1 +1,1 @@
-Cl_Ase1'a'me_To2'\0'/*comentario multilinea*/12345678954321"string\"\0\""(){}<==>=!=>=!===*++=-=-/%&&||.,;//comentario simple
+Cl_Ase1'a'me_To2'\0'/*comentario multilinea*/123456789"string\"\0\""1234(){}<==>=!=>=!===*++=-=-/%&&||.,;//comentario simple

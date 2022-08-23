@@ -8,8 +8,7 @@ else if(Character.isLowerCase(currentChar)){
         updateLexeme();
         updateCurrentChar();
         return e3();
-        '\asd'
-        }else if(Character.isDigit(currentChar)){
+        }else if(Character.isDigit('\asd')){
         updateLexeme();
         updateCurrentChar();
         return e7();

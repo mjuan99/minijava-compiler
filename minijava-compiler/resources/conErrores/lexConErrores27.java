@@ -1,15 +1,16 @@
-///[Error:'\u2G|9]
+///[Error:'\|12]
 
-private Token e50() throws IOException, LexicalException{
+private Token e20() throws IOException, LexicalException{
         if(eof)
         throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), "EOF sin cerrar literal carácter");
-        else if(isHexadecimalDigit(currentChar)){
+        else if(currentChar == '\''){
         updateLexeme();
         updateCurrentChar();
-        char randomChar = '\u2Ge3';
-        return e51();
-        } else {
+        return e18();
+        }else{
         updateLexeme();
+        int a1 = '\
+        updateCurrentChar();
         throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), "formato de literal carácter inválido");
         }
         }

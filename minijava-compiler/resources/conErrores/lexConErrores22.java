@@ -7,7 +7,7 @@ private Token e54() throws IOException, LexicalException{
         updateLexeme();
         updateCurrentChar();
         return e18();
-        '\u01abc'
+        string += '\u01abc';
         } else {
         updateLexeme();
         throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), "formato de literal carácter inválido");

@@ -10,4 +10,4 @@ private Token e0() throws IOException, LexicalException {
         updateLexeme();
         updateCurrentChar();
         return e1();
-'\n
+String asd = "asd" + '\n

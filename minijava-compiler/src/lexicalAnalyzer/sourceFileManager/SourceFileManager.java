@@ -7,9 +7,10 @@ public class SourceFileManager {
     private File sourceFile;
     private FileInputStream fileInputStream;
     private InputStreamReader inputStreamReader;
+    private BufferedReader bufferedReader;
     private int lineNumber;
     private int columnNumber;
-    private char nextChar;
+    private char currentChar;
 
     public SourceFileManager(String sourceFilePath) throws FileNotFoundException {
         setSourceFile(sourceFilePath);
@@ -21,33 +22,30 @@ public class SourceFileManager {
         inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
         lineNumber = 1;
         columnNumber = 0;
-        nextChar = '\0';
+        currentChar = '\0';
     }
 
     public char getNextChar() throws IOException{
-        if(lastCharWasEnter()) {
+        if(currentChar == '\n') {
             lineNumber++;
             columnNumber = 0;
         }
-        columnNumber++;
-        return readChar();
+        if(currentChar == '\t'){
+            columnNumber = getTabColumns(columnNumber);
+        }else
+            columnNumber++;
+        readChar();
+        return currentChar;
     }
 
-    private char readChar() throws IOException {
-        int nextCharCode = inputStreamReader.read();
-        if(nextCharCode != -1) {
-            nextChar = (char)nextCharCode;
-            if(nextChar != '\r') //TODO preguntar esto
-                return nextChar;
-            else
-                return readChar();
-        }
-        else
-            throw new EOFException();
+    private int getTabColumns(int columnNumber){
+        return ((columnNumber - 1) / 4) * 4 + 5;
     }
 
-    private boolean lastCharWasEnter() {
-        return nextChar == '\n';
+    private void readChar() throws IOException {
+        currentChar = (char)inputStreamReader.read();
+        if(currentChar == '\r')
+            readChar();
     }
 
     public int getLineNumber(){
@@ -56,5 +54,12 @@ public class SourceFileManager {
 
     public int getColumnNumber(){
         return columnNumber;
+    }
+
+    public String getLine(int lineNumber) throws IOException {
+        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+        for (int i = 1; i < lineNumber; i++)
+            bufferedReader.readLine();
+        return bufferedReader.readLine();
     }
 }

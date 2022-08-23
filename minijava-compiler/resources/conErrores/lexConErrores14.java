@@ -12,4 +12,4 @@
         updateLexeme();
         updateCurrentChar();
         return e24();
-"asd
+if(codigoInalcanzable()) "asd

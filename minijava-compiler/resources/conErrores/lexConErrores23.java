@@ -7,5 +7,5 @@ private boolean isHexadecimalDigit(char character){
 private void initializeKeywordsMap(){
         keywordsMap = new HashMap<>();
         keywordsMap.put("class", "pr_class");
-        '\u12'
+        char unicodeAMedias = '\u12';
         keywordsMap.put("interface", "pr_interface");

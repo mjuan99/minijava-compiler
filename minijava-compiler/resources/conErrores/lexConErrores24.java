@@ -12,4 +12,4 @@ LexicalAnalyzer lexicalAnalyzer = null;
         System.exit(3);
         }
 
-'\u12
+System.out.println('\u12

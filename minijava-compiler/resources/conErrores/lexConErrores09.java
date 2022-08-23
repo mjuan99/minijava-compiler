@@ -5,8 +5,7 @@ public Token getNextToken() throws IOException, LexicalException {
         Token nextToken = e0();
         if(nextToken.getTokenType().equals("idMetVar")){
         String keyword = keywordsMap.get(nextToken.getLexeme());
-        ''
-        if(keyword != null)
+        if(keyword != '' null)
         nextToken = new Token(keyword, nextToken.getLexeme(), nextToken.getLineNumber());
         }
         return nextToken;

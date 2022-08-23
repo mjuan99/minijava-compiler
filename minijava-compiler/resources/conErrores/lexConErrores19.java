@@ -9,7 +9,7 @@ private Token e20() throws IOException, LexicalException{
         return e18();
         }else{
         updateLexeme();
-        |1
+        return e18(|1);
         updateCurrentChar();
         throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), "formato de literal carácter inválido");
         }
