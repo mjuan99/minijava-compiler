@@ -10,7 +10,7 @@ import java.io.EOFException;
 v1 + # chau
 import java.io.IOException;
 import java.util.HashMap;
-        $#
+        $?
 import java.util.Objects;
 
 public class 123456 LexicalAnalyzer {

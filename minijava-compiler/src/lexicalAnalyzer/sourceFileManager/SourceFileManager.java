@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 
 public class SourceFileManager {
     private File sourceFile;
-    private FileInputStream fileInputStream;
     private InputStreamReader inputStreamReader;
     private int lineNumber;
     private int columnNumber;
@@ -17,8 +16,7 @@ public class SourceFileManager {
 
     public void setSourceFile(String sourceFilePath) throws FileNotFoundException {
         sourceFile = new File(sourceFilePath);
-        fileInputStream = new FileInputStream(sourceFile);
-        inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+        inputStreamReader = new InputStreamReader(new FileInputStream(sourceFile), StandardCharsets.UTF_8);
         lineNumber = 1;
         columnNumber = 0;
         currentChar = '\0';
@@ -59,6 +57,7 @@ public class SourceFileManager {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
         for (int i = 1; i < lineNumber; i++)
             bufferedReader.readLine();
-        return bufferedReader.readLine();
+        String line = bufferedReader.readLine();
+        return line != null ? line : "";
     }
 }
