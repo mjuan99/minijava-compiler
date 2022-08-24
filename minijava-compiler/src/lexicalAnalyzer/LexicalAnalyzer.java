@@ -14,6 +14,9 @@ public class LexicalAnalyzer {
     private HashMap<String, String> keywordsMap;
     private int lastCharLineNumber;
     private int lastCharColumnNumber;
+    private int multiLineCommentLineNumber;
+    private int multiLineCommentColumnNumber;
+    private boolean multiLineCommentEnter;
 
     public LexicalAnalyzer(SourceFileManager sourceFileManager) throws IOException {
         this.sourceFileManager = sourceFileManager;
@@ -171,6 +174,9 @@ public class LexicalAnalyzer {
     }
 
     private Token e3() throws IOException, LexicalException{
+        multiLineCommentLineNumber = sourceFileManager.getLineNumber();
+        multiLineCommentColumnNumber = sourceFileManager.getColumnNumber() - 1;
+        multiLineCommentEnter = false;
         if(currentChar == '*'){
             updateLexeme();
             updateCurrentChar();
@@ -185,22 +191,25 @@ public class LexicalAnalyzer {
 
     private Token e4() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar comentario");
+            throw new LexicalException(lexeme, multiLineCommentLineNumber, multiLineCommentColumnNumber, "EOF sin cerrar comentario");
         else if(currentChar == '*') {
             updateLexeme();
             updateCurrentChar();
             return e5();
         }else{
-            updateLexeme();
+            if(currentChar == '\n')
+                multiLineCommentEnter = true;
+            if(!multiLineCommentEnter)
+                updateLexeme();
             updateCurrentChar();
             return e4();
         }
     }
 
     private Token e5() throws IOException, LexicalException{
-        if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar comentario"); //TODO chequear esto
-        else if(currentChar =='*'){
+        if(eof) {
+            throw new LexicalException(lexeme, multiLineCommentLineNumber, multiLineCommentColumnNumber, "EOF sin cerrar comentario"); //TODO chequear esto
+        }else if(currentChar =='*'){
             updateLexeme();
             updateCurrentChar();
             return e5();
@@ -209,7 +218,10 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e0();
         }else{
-            updateLexeme();
+            if(currentChar == '\n')
+                multiLineCommentEnter = true;
+            if(!multiLineCommentEnter)
+                updateLexeme();
             updateCurrentChar();
             return e4();
         }

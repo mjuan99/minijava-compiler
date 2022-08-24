@@ -49,8 +49,8 @@ public class Main {
                     System.out.println("\n\nError Léxico en línea " + exception.getLineNumber() +
                             " columna " + exception.getColumnNumber() + ": " + exception.getMessage() +
                             " --> " + exception.getLexeme());
-                    System.out.println("Detalle:\n" + sourceFileManager.getLine(exception.getLineNumber()));
-                    System.out.println(getSpaces(exception.getColumnNumber() - 1) + '^');
+                    System.out.println("Detalle:");
+                    printLineAndMark(sourceFileManager.getLine(exception.getLineNumber()), exception.getColumnNumber());
                     System.out.println("[Error:" + exception.getLexeme() + '|' + exception.getLineNumber() + "]");
                 }
             }
@@ -59,6 +59,19 @@ public class Main {
                 System.exit(ERR_IO);
             }
         }
+    }
+
+    private static void printLineAndMark(String line, int columnNumber){
+        System.out.println(line);
+        for(int i = 0; i < columnNumber - 1; i++) {
+            if (i < line.length() && line.charAt(i) == '\t') {
+                System.out.print('\t');
+            }
+            else {
+                System.out.print(' ');
+            }
+        }
+        System.out.println('^');
     }
 
     private static String getSpaces(int spaces){

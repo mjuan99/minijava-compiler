@@ -27,16 +27,9 @@ public class SourceFileManager {
             lineNumber++;
             columnNumber = 0;
         }
-        if(currentChar == '\t'){
-            columnNumber = getTabColumns(columnNumber);
-        }else
-            columnNumber++;
+        columnNumber++;
         readChar();
         return currentChar;
-    }
-
-    private int getTabColumns(int columnNumber){
-        return ((columnNumber - 1) / 4) * 4 + 5;
     }
 
     private void readChar() throws IOException {
