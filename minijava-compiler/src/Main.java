@@ -50,7 +50,7 @@ public class Main {
                             " columna " + exception.getColumnNumber() + ": " + exception.getMessage() +
                             " --> " + exception.getLexeme());
                     System.out.println("Detalle:");
-                    printLineAndMark(sourceFileManager.getLine(exception.getLineNumber()), exception.getColumnNumber());
+                    printLineAndMark(exception.getLine(), exception.getColumnNumber());
                     System.out.println("[Error:" + exception.getLexeme() + '|' + exception.getLineNumber() + "]");
                 }
             }

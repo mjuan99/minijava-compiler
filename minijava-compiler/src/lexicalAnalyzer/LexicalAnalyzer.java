@@ -14,8 +14,10 @@ public class LexicalAnalyzer {
     private HashMap<String, String> keywordsMap;
     private int lastCharLineNumber;
     private int lastCharColumnNumber;
+    private String currentLine;
     private int multiLineCommentLineNumber;
     private int multiLineCommentColumnNumber;
+    private String multiLineCommentFirstLine;
     private boolean multiLineCommentEnter;
 
     public LexicalAnalyzer(SourceFileManager sourceFileManager) throws IOException {
@@ -147,9 +149,10 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e47();
         }else{
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "símbolo válido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "símbolo válido");
         }
     }
 
@@ -176,6 +179,7 @@ public class LexicalAnalyzer {
     private Token e3() throws IOException, LexicalException{
         multiLineCommentLineNumber = sourceFileManager.getLineNumber();
         multiLineCommentColumnNumber = sourceFileManager.getColumnNumber() - 1;
+        multiLineCommentFirstLine = sourceFileManager.getCurrentLine();
         multiLineCommentEnter = false;
         if(currentChar == '*'){
             updateLexeme();
@@ -190,8 +194,10 @@ public class LexicalAnalyzer {
     }
 
     private Token e4() throws IOException, LexicalException{
+        if(!multiLineCommentEnter && currentChar != '\n')
+            multiLineCommentFirstLine += currentChar;
         if(eof)
-            throw new LexicalException(lexeme, multiLineCommentLineNumber, multiLineCommentColumnNumber, "EOF sin cerrar comentario");
+            throw new LexicalException(lexeme, multiLineCommentLineNumber, multiLineCommentColumnNumber, multiLineCommentFirstLine, "EOF sin cerrar comentario");
         else if(currentChar == '*') {
             updateLexeme();
             updateCurrentChar();
@@ -207,8 +213,10 @@ public class LexicalAnalyzer {
     }
 
     private Token e5() throws IOException, LexicalException{
+        if(!multiLineCommentEnter && currentChar != '\n')
+            multiLineCommentFirstLine += currentChar;
         if(eof) {
-            throw new LexicalException(lexeme, multiLineCommentLineNumber, multiLineCommentColumnNumber, "EOF sin cerrar comentario"); //TODO chequear esto
+            throw new LexicalException(lexeme, multiLineCommentLineNumber, multiLineCommentColumnNumber, multiLineCommentFirstLine, "EOF sin cerrar comentario"); //TODO chequear esto
         }else if(currentChar =='*'){
             updateLexeme();
             updateCurrentChar();
@@ -315,27 +323,26 @@ public class LexicalAnalyzer {
 
     private Token e15() throws IOException, LexicalException {
         if(Character.isDigit(currentChar)){
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            e55();
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "Literal entero supera longitud máxima");
         }
         return new Token("intLiteral", lexeme, sourceFileManager.getLineNumber());
     }
 
-    private Token e55() throws LexicalException {
-        throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "Literal entero supera longitud máxima");
-    }
-
     private Token e16() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(currentChar == '\n'){
+            currentLine = sourceFileManager.getCurrentLine();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "Enter en literal carácter");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "Enter en literal carácter");
         }else if(currentChar == '\'') {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "literal carácter vacío");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "literal carácter vacío");
         }else if(currentChar == '\\'){
             updateLexeme();
             updateCurrentChar();
@@ -349,15 +356,16 @@ public class LexicalAnalyzer {
 
     private Token e17() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(currentChar == '\''){
             updateLexeme();
             updateCurrentChar();
             return e18();
         }else{
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 
@@ -367,10 +375,11 @@ public class LexicalAnalyzer {
 
     private Token e19() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(currentChar == '\n'){
+            currentLine = sourceFileManager.getCurrentLine();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "Enter en literal carácter");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "Enter en literal carácter");
         }else if(currentChar == 'u'){
             updateLexeme();
             updateCurrentChar();
@@ -384,24 +393,26 @@ public class LexicalAnalyzer {
 
     private Token e20() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(currentChar == '\''){
             updateLexeme();
             updateCurrentChar();
             return e18();
         }else{
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 
     private Token e21() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal string");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal string");
         if(currentChar == '\n'){
+            currentLine = sourceFileManager.getCurrentLine();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "salto de línea dentro de un literal string");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "salto de línea dentro de un literal string");
         }else if(currentChar == '\\'){
             updateLexeme();
             updateCurrentChar();
@@ -423,10 +434,11 @@ public class LexicalAnalyzer {
 
     private Token e23() throws IOException, LexicalException {
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal string");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal string");
         if(currentChar == '\n'){
+            currentLine = sourceFileManager.getCurrentLine();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "salto de línea dentro de un literal string");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "salto de línea dentro de un literal string");
         }else{
             updateLexeme();
             updateCurrentChar();
@@ -550,15 +562,16 @@ public class LexicalAnalyzer {
 
     private Token e45() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF tras operador mal formado");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF tras operador mal formado");
         else if(currentChar == '|'){
             updateLexeme();
             updateCurrentChar();
             return e46();
         }else {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "operador mal formado");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "operador mal formado");
         }
     }
 
@@ -568,15 +581,16 @@ public class LexicalAnalyzer {
 
     private Token e47() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF tras operador mal formado");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF tras operador mal formado");
         else if(currentChar == '&'){
             updateLexeme();
             updateCurrentChar();
             return e48();
         }else{
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "operador mal formado");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "operador mal formado");
         }
     }
 
@@ -590,71 +604,76 @@ public class LexicalAnalyzer {
 
     private Token e50() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(isHexadecimalDigit(currentChar)){
             updateLexeme();
             updateCurrentChar();
             return e51();
         } else {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 
     private Token e51() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(isHexadecimalDigit(currentChar)){
             updateLexeme();
             updateCurrentChar();
             return e52();
         } else {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 
     private Token e52() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(isHexadecimalDigit(currentChar)){
             updateLexeme();
             updateCurrentChar();
             return e53();
         } else {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 
     private Token e53() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(isHexadecimalDigit(currentChar)){
             updateLexeme();
             updateCurrentChar();
             return e54();
         } else {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 
     private Token e54() throws IOException, LexicalException{
         if(eof)
-            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), "EOF sin cerrar literal carácter");
+            throw new LexicalException(lexeme, sourceFileManager.getLineNumber(), sourceFileManager.getColumnNumber(), sourceFileManager.getCurrentLine(), "EOF sin cerrar literal carácter");
         else if(currentChar == '\''){
             updateLexeme();
             updateCurrentChar();
             return e18();
         } else {
+            currentLine = sourceFileManager.getCurrentLine();
             updateLexeme();
             updateCurrentChar();
-            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, "formato de literal carácter inválido");
+            throw new LexicalException(lexeme, lastCharLineNumber, lastCharColumnNumber, currentLine, "formato de literal carácter inválido");
         }
     }
 

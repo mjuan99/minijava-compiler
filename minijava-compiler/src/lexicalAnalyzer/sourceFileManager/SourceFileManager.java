@@ -9,6 +9,7 @@ public class SourceFileManager {
     private int lineNumber;
     private int columnNumber;
     private char currentChar;
+    private String currentLine;
 
     public SourceFileManager(String sourceFilePath) throws FileNotFoundException {
         setSourceFile(sourceFilePath);
@@ -20,15 +21,19 @@ public class SourceFileManager {
         lineNumber = 1;
         columnNumber = 0;
         currentChar = '\0';
+        currentLine = "";
     }
 
     public char getNextChar() throws IOException{
         if(currentChar == '\n') {
             lineNumber++;
             columnNumber = 0;
+            currentLine = "";
         }
         columnNumber++;
         readChar();
+        if(currentChar != '\n' && currentChar != (char)-1)
+            currentLine += currentChar;
         return currentChar;
     }
 
@@ -46,11 +51,15 @@ public class SourceFileManager {
         return columnNumber;
     }
 
-    public String getLine(int lineNumber) throws IOException {
+    public String getCurrentLine(){
+        return currentLine;
+    }
+
+    /*public String getLine(int lineNumber) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
         for (int i = 1; i < lineNumber; i++)
             bufferedReader.readLine();
         String line = bufferedReader.readLine();
         return line != null ? line : "";
-    }
+    }*/
 }
