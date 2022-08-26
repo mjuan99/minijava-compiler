@@ -14,8 +14,10 @@ public class Main {
     public final static int ERR_IO = 3;
 
     public static void main(String[] args){
-        if(args.length == 0)
+        if(args.length == 0) {
+            System.out.println("Argumento faltante");
             System.exit(ERR_ARGUMENTO_FALTANTE);
+        }
         LexicalAnalyzer lexicalAnalyzer = null;
         SourceFileManager sourceFileManager = null;
         try {
@@ -32,17 +34,16 @@ public class Main {
         boolean eof = false;
         boolean error = false;
 
-        while (!eof) {
-            try{
+        try{
+            while (!eof) {
                 try {
                     Token token = lexicalAnalyzer.getNextToken();
+                    if (!error)
+                        System.out.println(token);
                     if (Objects.equals(token.getTokenType(), "EOF")) {
                         eof = true;
                         if (!error)
                             System.out.println("\n[SinErrores]");
-                    } else {
-                        if (!error)
-                            System.out.println(token);
                     }
                 } catch (LexicalException exception) {
                     error = true;
@@ -54,10 +55,10 @@ public class Main {
                     System.out.println("[Error:" + exception.getLexeme() + '|' + exception.getLineNumber() + "]");
                 }
             }
-            catch(IOException exception){
-                System.out.println("Error de IO");
-                System.exit(ERR_IO);
-            }
+        }
+        catch(IOException exception){
+            System.out.println("Error de IO");
+            System.exit(ERR_IO);
         }
     }
 
