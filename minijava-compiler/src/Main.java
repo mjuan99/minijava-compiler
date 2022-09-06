@@ -2,6 +2,8 @@ import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.LexicalException;
 import lexicalAnalyzer.Token;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
+import syntacticAnalyzer.SyntacticAnalyzer;
+import syntacticAnalyzer.SyntacticException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,66 +20,25 @@ public class Main {
             System.out.println("Argumento faltante");
             System.exit(ERR_ARGUMENTO_FALTANTE);
         }
-        LexicalAnalyzer lexicalAnalyzer = null;
         SourceFileManager sourceFileManager = null;
+        LexicalAnalyzer lexicalAnalyzer = null;
+        SyntacticAnalyzer syntacticAnalyzer = null;
         try {
             sourceFileManager = new SourceFileManager(args[0]);
             lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
+            syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
+            System.out.println("[SinErrores]");
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
             System.exit(ERR_ARCHIVO_NO_ENCONTRADO);
         } catch (IOException exception){
             System.out.println("Error de IO");
             System.exit(ERR_IO);
+        } catch (LexicalException exception) {
+            System.out.println(exception.getMessage());
+        } catch (SyntacticException exception) {
+            System.out.println(exception.getMessage());
+            System.out.println("[Error:" + exception.getToken().getLexeme() + "|" + exception.getToken().getLineNumber() + "]");
         }
-
-        boolean eof = false;
-        boolean error = false;
-
-        try{
-            while (!eof) {
-                try {
-                    Token token = lexicalAnalyzer.getNextToken();
-                    if (!error)
-                        System.out.println(token);
-                    if (Objects.equals(token.getTokenType(), "EOF")) {
-                        eof = true;
-                        if (!error)
-                            System.out.println("\n[SinErrores]");
-                    }
-                } catch (LexicalException exception) {
-                    error = true;
-                    System.out.println("\n\nError Léxico en línea " + exception.getLineNumber() +
-                            " columna " + exception.getColumnNumber() + ": " + exception.getMessage() +
-                            " --> " + exception.getLexeme());
-                    System.out.println("Detalle:");
-                    printLineAndMark(exception.getLine(), exception.getColumnNumber());
-                    System.out.println("[Error:" + exception.getLexeme() + '|' + exception.getLineNumber() + "]");
-                }
-            }
-        }
-        catch(IOException exception){
-            System.out.println("Error de IO");
-            System.exit(ERR_IO);
-        }
-    }
-
-    private static void printLineAndMark(String line, int columnNumber){
-        System.out.println(line);
-        for(int i = 0; i < columnNumber - 1; i++) {
-            if (i < line.length() && line.charAt(i) == '\t') {
-                System.out.print('\t');
-            }
-            else {
-                System.out.print(' ');
-            }
-        }
-        System.out.println('^');
-    }
-
-    private static String getSpaces(int spaces){
-        char[] array = new char[spaces];
-        Arrays.fill(array, ' ');
-        return new String(array);
     }
 }

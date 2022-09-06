@@ -3,11 +3,19 @@ package syntacticAnalyzer;
 import lexicalAnalyzer.Token;
 
 public class SyntacticException extends Exception{
-    private String actualToken;
-    private String expectedToken;
+    private Token found;
+    private String expected;
 
-    public SyntacticException(String actualToken, String expectedToken){
-        this.actualToken = actualToken;
-        this.expectedToken = expectedToken;
+    public SyntacticException(Token found, String expected){
+        this.found = found;
+        this.expected = expected;
+    }
+
+    public String getMessage(){
+        return "Error sintactico en linea " + found.getLineNumber() + ": se esperaba " + expected + " pero se encontro " + found.getLexeme();
+    }
+
+    public Token getToken(){
+        return found;
     }
 }
