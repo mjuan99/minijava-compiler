@@ -32,8 +32,8 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("pr_interface", "pr_class"))
             ListaClases();
         else ;
-            //TODO por ahora no hago nada, PREGUNTAR
-        match("EOF"); //TODO PREGUNTAR
+            //TODO por ahora no hago nada
+        match("EOF");
     }
 
     private void ListaClases() throws SyntacticException, LexicalException, IOException {
@@ -57,7 +57,7 @@ public class SyntacticAnalyzer {
 
     private void ClaseConcreta() throws SyntacticException, LexicalException, IOException {
         match("pr_class");
-        match("idClase");
+        ClaseGenerica();
         HeredaDe();
         ImplementaA();
         match("llaveA");
@@ -65,9 +65,23 @@ public class SyntacticAnalyzer {
         match("llaveC");
     }
 
+    private void ClaseGenerica() throws LexicalException, SyntacticException, IOException {
+        match("idClase");
+        GenericidadOpt();
+    }
+
+    private void GenericidadOpt() throws LexicalException, SyntacticException, IOException {
+        if(checkCurrentToken("op<")){
+            match("op<");
+            ListaTipoReferencia();
+            match("op>");
+        }else ;
+            //TODO no hago nada por ahora
+    }
+
     private void Interface() throws SyntacticException, LexicalException, IOException {
         match("pr_interface");
-        match("idClase");
+        ClaseGenerica();
         ExtiendeA();
         match("llaveA");
         ListaEncabezados();
@@ -77,7 +91,7 @@ public class SyntacticAnalyzer {
     private void HeredaDe() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("pr_extends")){
             match("pr_extends");
-            match("idClase");
+            ClaseGenerica();
         }
         else ;
             //TODO no hago nada por ahora
@@ -102,7 +116,7 @@ public class SyntacticAnalyzer {
     }
 
     private void ListaTipoReferencia() throws LexicalException, SyntacticException, IOException {
-        match("idClase");
+        ClaseGenerica();
         RestoListaTipoRefOpt();
     }
 
@@ -175,7 +189,7 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("pr_boolean", "pr_char", "pr_int"))
             TipoPrimitivo();
         else if(checkCurrentToken("idClase"))
-            match("idClase");
+            ClaseGenerica();
         else
             throw new SyntacticException(currentToken, "tipo");
     }
@@ -494,9 +508,30 @@ public class SyntacticAnalyzer {
 
     private void AccesoConstructor() throws LexicalException, SyntacticException, IOException {
         match("pr_new");
-        match("idClase");
+        ClaseGenericaConstructor();
         match("parenA");
         match("parenC");
+    }
+
+    private void ClaseGenericaConstructor() throws LexicalException, SyntacticException, IOException {
+        match("idClase");
+        GenericidadConstructor();
+    }
+
+    private void GenericidadConstructor() throws LexicalException, SyntacticException, IOException {
+        if(checkCurrentToken("op<")){
+            match("op<");
+            ListaTipoReferenciaOpt();
+            match("op>");
+        }else ;
+            //TODO no hago nada por ahora
+    }
+
+    private void ListaTipoReferenciaOpt() throws LexicalException, SyntacticException, IOException {
+        if(checkCurrentToken("idClase"))
+            ListaTipoReferencia();
+        else ;
+            //TODO no hago nada por ahora
     }
 
     private void ExpresionParentizada() throws LexicalException, SyntacticException, IOException {
@@ -506,7 +541,7 @@ public class SyntacticAnalyzer {
     }
 
     private void AccesoMetodoEstatico() throws LexicalException, SyntacticException, IOException {
-        match("idClase");
+        ClaseGenerica();
         match("punto");
         match("idMetVar");
         ArgsActuales();
