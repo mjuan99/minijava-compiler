@@ -1,4 +1,4 @@
-
+//Prueba de declaracion de clases e interfaces
 class MiClase{ }
 
 class MiClase extends MiClase{ }

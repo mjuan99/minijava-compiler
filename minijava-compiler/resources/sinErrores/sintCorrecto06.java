@@ -1,4 +1,4 @@
-
+//Prueba de miembros de clases y encabezados de interfaces
 class MiClase{ }
 
 class MiClase{
