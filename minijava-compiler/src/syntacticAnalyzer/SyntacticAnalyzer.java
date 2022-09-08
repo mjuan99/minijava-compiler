@@ -647,7 +647,9 @@ public class SyntacticAnalyzer {
     private void AccesoConstructor() throws LexicalException, SyntacticException, IOException {
         match("pr_new");
         ClaseGenericaConstructor();
-        ArgsFormales();
+        match("parenA");
+        ListaExpsOpt();
+        match("parenC");
     }
 
     private void ClaseGenericaConstructor() throws LexicalException, SyntacticException, IOException {
