@@ -31,9 +31,11 @@ public class SyntacticAnalyzer {
     private void Inicial() throws SyntacticException, LexicalException, IOException {
         if(checkCurrentToken("pr_interface", "pr_class"))
             ListaClases();
-        else ;
-            //TODO por ahora no hago nada
-        match("EOF");
+
+        if(checkCurrentToken("EOF"))
+            match("EOF");
+        else
+            throw new SyntacticException(currentToken, "declaracion de clase o interfaz");
     }
 
     private void ListaClases() throws SyntacticException, LexicalException, IOException {

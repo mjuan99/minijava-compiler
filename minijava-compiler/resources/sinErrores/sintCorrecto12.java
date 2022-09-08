@@ -17,7 +17,7 @@ class MiClase{
         return new MiClase();
     }
     MiClase(int a, char b, MiClase c){
-        return new MiClase(a, b, c);
+        return new MiClase(a, b, new MiClase());
     }
     MiClase miMetodo(){
 
