@@ -229,18 +229,6 @@ public class SyntacticAnalyzer {
         Bloque();
     }
 
-    private void Atributo() throws LexicalException, SyntacticException, IOException {
-        Visibilidad();
-        Tipo();
-        ListaDecAtrs();
-        match("puntoComa");
-    }
-
-    private void Metodo() throws LexicalException, SyntacticException, IOException {
-        EncabezadoMetodo();
-        Bloque();
-    }
-
     private void EncabezadoMetodo() throws LexicalException, SyntacticException, IOException {
         EstaticoOpt();
         TipoMetodo();
@@ -587,7 +575,6 @@ public class SyntacticAnalyzer {
     }
 
     private void Literal() throws LexicalException, SyntacticException, IOException {
-        // null | true | false | intLiteral | charLiteral | stringLiteral
         if(checkCurrentToken("pr_null"))
             match("pr_null");
         else if(checkCurrentToken("pr_true"))
@@ -629,7 +616,6 @@ public class SyntacticAnalyzer {
     }
 
     private void PrimarioNoMetEstatico() throws LexicalException, SyntacticException, IOException {
-        //this, idMetVar, new, idClase, (
         if(checkCurrentToken("pr_this"))
             AccesoThis();
         else if(checkCurrentToken("idMetVar"))
@@ -661,8 +647,7 @@ public class SyntacticAnalyzer {
     private void AccesoConstructor() throws LexicalException, SyntacticException, IOException {
         match("pr_new");
         ClaseGenericaConstructor();
-        match("parenA");
-        match("parenC");
+        ArgsFormales();
     }
 
     private void ClaseGenericaConstructor() throws LexicalException, SyntacticException, IOException {

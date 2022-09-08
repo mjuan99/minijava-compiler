@@ -8,7 +8,7 @@ class MiClase{
         int a = 5, b = 3, c;
         int a, b, c = 2;
         MiClase a;
-        MiClase<A, B<C>, D> a = new MiClase<>();
-        MiClase<A, B<C>, D> a = new MiClase<>(), b, c;
+        MiClase a = new MiClase();
+        MiClase a = new MiClase(), b, c;
     }
 }
