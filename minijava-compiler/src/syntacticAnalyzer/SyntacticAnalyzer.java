@@ -150,11 +150,83 @@ public class SyntacticAnalyzer {
 
     private void Miembro() throws SyntacticException, LexicalException, IOException {
         if(checkCurrentToken("pr_public", "pr_private"))
+            AtributoConVisibilidad();
+        else if(checkCurrentToken("pr_static"))
+            MetodoEstatico();
+        else if(checkCurrentToken("pr_void"))
+            MetodoNoEstVoid();
+        else if(checkCurrentToken("pr_boolean", "pr_char", "pr_int"))
+            AtributoOMetodoTipoPri();
+        else if(checkCurrentToken("idClase"))
+            AtributoTCOMetodoTCOConstructor();
+        else
+            throw new SyntacticException(currentToken, "atributo, metodo o constructor");
+        /*if(checkCurrentToken("pr_public", "pr_private"))
             Atributo();
         else if(checkCurrentToken("pr_static", "pr_boolean", "pr_char", "pr_int", "idClase", "pr_void"))
             Metodo();
         else
-            throw new SyntacticException(currentToken, "visibilidad, static o tipo");
+            throw new SyntacticException(currentToken, "visibilidad, static o tipo");*/
+    }
+
+    private void AtributoConVisibilidad() throws LexicalException, SyntacticException, IOException {
+        Visibilidad();
+        Tipo();
+        ListaDecAtrs();
+        match("puntoComa");
+    }
+
+    private void MetodoEstatico() throws LexicalException, SyntacticException, IOException {
+        match("pr_static");
+        TipoMetodo();
+        match("idMetVar");
+        ArgsFormales();
+        Bloque();
+    }
+
+    private void MetodoNoEstVoid() throws LexicalException, SyntacticException, IOException {
+        match("pr_void");
+        match("idMetVar");
+        ArgsFormales();
+        Bloque();
+    }
+
+    private void AtributoOMetodoTipoPri() throws LexicalException, SyntacticException, IOException {
+        TipoPrimitivo();
+        match("idMetVar");
+        RestoAtrOMet();
+    }
+
+    private void RestoAtrOMet() throws LexicalException, SyntacticException, IOException {
+        if(checkCurrentToken("coma", "puntoComa")){
+            RestoListaDecAtrsOpt();
+            match("puntoComa");
+        }else if(checkCurrentToken("parenA")) {
+            ArgsFormales();
+            Bloque();
+        }else
+            throw new SyntacticException(currentToken, "lista de atributos o argumentos formales");
+    }
+
+    private void AtributoTCOMetodoTCOConstructor() throws LexicalException, SyntacticException, IOException {
+        match("idClase");
+        RestoAtrTCOMetTCOCons();
+    }
+
+    private void RestoAtrTCOMetTCOCons() throws LexicalException, SyntacticException, IOException {
+        if(checkCurrentToken("op<", "idMetVar")){
+            GenericidadOpt();
+            match("idMetVar");
+            RestoAtrOMet();
+        }else if(checkCurrentToken("parenA"))
+            RestoConstructor();
+        else
+            throw new SyntacticException(currentToken, "identificador de metodo o variable o argumentos de constructor");
+    }
+
+    private void RestoConstructor() throws LexicalException, SyntacticException, IOException {
+        ArgsFormales();
+        Bloque();
     }
 
     private void Atributo() throws LexicalException, SyntacticException, IOException {
