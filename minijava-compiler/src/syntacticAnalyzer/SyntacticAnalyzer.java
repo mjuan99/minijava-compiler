@@ -391,7 +391,7 @@ public class SyntacticAnalyzer {
         }else if(checkCurrentToken("idClase"))
             VarClaseOAccesoMetEstaticoYAsignacionOpt();
         else
-            throw new SyntacticException(currentToken, "asignacion, declaracion o llamada");
+            throw new SyntacticException(currentToken, "asignacion, declaracion de variable o llamada");
     }
 
     private void ListaDeclaraciones() throws LexicalException, SyntacticException, IOException {
@@ -434,7 +434,7 @@ public class SyntacticAnalyzer {
             RestoAccesoMetEst();
             AsignacionOpt();
         }else
-            throw new SyntacticException(currentToken, "nombre de variable o llamada a método estático");
+            throw new SyntacticException(currentToken, "identificador de variable o llamada a método estático");
     }
 
     private void RestoAccesoMetEst() throws LexicalException, SyntacticException, IOException {
@@ -664,9 +664,7 @@ public class SyntacticAnalyzer {
     private void AccesoConstructor() throws LexicalException, SyntacticException, IOException {
         match("pr_new");
         ClaseGenericaConstructor();
-        match("parenA");
-        ListaExpsOpt();
-        match("parenC");
+        ArgsActuales();
     }
 
     private void ClaseGenericaConstructor() throws LexicalException, SyntacticException, IOException {
