@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class SyntacticAnalyzer {
     private LexicalAnalyzer lexicalAnalyzer;
     private Token currentToken;
+    private final static boolean useAdvancedImplementation = true;
 
     public SyntacticAnalyzer(LexicalAnalyzer lexicalAnalyzer) throws LexicalException, IOException, SyntacticException {
         this.lexicalAnalyzer = lexicalAnalyzer;
@@ -28,6 +29,14 @@ public class SyntacticAnalyzer {
         return Arrays.asList(validTokens).contains(currentToken.getTokenType());
     }
 
+    private boolean invalidEpsilon(String... validTokens){
+        if(useAdvancedImplementation)
+            return !checkCurrentToken(validTokens);
+        else
+            return false;
+
+    }
+
     private void Inicial() throws SyntacticException, LexicalException, IOException {
         if(checkCurrentToken("pr_interface", "pr_class"))
             ListaClases();
@@ -43,9 +52,9 @@ public class SyntacticAnalyzer {
             Clase();
             ListaClases();
         }
-        else ;
-            //TODO por ahora no hago nada, PREGUNTAR
-
+        else if(invalidEpsilon("EOF"))
+            throw new SyntacticException(currentToken, "declaracion de clase o interfaz");
+            //TODO por ahora no hago nada
     }
 
     private void Clase() throws SyntacticException, LexicalException, IOException {
@@ -77,7 +86,8 @@ public class SyntacticAnalyzer {
             match("op<");
             ListaTipoReferencia();
             match("op>");
-        }else ;
+        }else if(invalidEpsilon("pr_extends", "pr_implements", "coma", "idMetVar", "punto", "op>", "llaveA"))
+            throw new SyntacticException(currentToken, "<, extends, implements, ',', idMetVar, ., > o {");
             //TODO no hago nada por ahora
     }
 
@@ -95,7 +105,8 @@ public class SyntacticAnalyzer {
             match("pr_extends");
             ClaseGenerica();
         }
-        else ;
+        else if(invalidEpsilon("pr_implements", "llaveA"))
+            throw new SyntacticException(currentToken, "extends, implements o {");
             //TODO no hago nada por ahora
     }
 
@@ -104,7 +115,8 @@ public class SyntacticAnalyzer {
             match("pr_implements");
             ListaTipoReferencia();
         }
-        else ;
+        else if(invalidEpsilon("llaveA"))
+            throw new SyntacticException(currentToken, "implements o {");
             //TODO no hago nada por ahora
     }
 
@@ -113,7 +125,8 @@ public class SyntacticAnalyzer {
             match("pr_extends");
             ListaTipoReferencia();
         }
-        else ;
+        else if(invalidEpsilon("llaveA"))
+            throw new SyntacticException(currentToken, "extends o {");
             //TODO no hago nada por ahora
     }
 
@@ -127,7 +140,8 @@ public class SyntacticAnalyzer {
             match("coma");
             ListaTipoReferencia();
         }
-        else ;
+        else if(invalidEpsilon("op>", "llaveA"))
+            throw new SyntacticException(currentToken, ",, > o {");
             //TODO no hago nada por ahora
     }
 
@@ -137,7 +151,8 @@ public class SyntacticAnalyzer {
             Miembro();
             ListaMiembros();
         }
-        else ;
+        else if(invalidEpsilon("llaveC"))
+            throw new SyntacticException(currentToken, "declaracion de miembro o }");
             //TODO no hago nada por ahora
 
     }
@@ -163,12 +178,6 @@ public class SyntacticAnalyzer {
             AtributoTCOMetodoTCOConstructor();
         else
             throw new SyntacticException(currentToken, "atributo, metodo o constructor");
-        /*if(checkCurrentToken("pr_public", "pr_private"))
-            Atributo();
-        else if(checkCurrentToken("pr_static", "pr_boolean", "pr_char", "pr_int", "idClase", "pr_void"))
-            Metodo();
-        else
-            throw new SyntacticException(currentToken, "visibilidad, static o tipo");*/
     }
 
     private void AtributoConVisibilidad() throws LexicalException, SyntacticException, IOException {
@@ -277,14 +286,16 @@ public class SyntacticAnalyzer {
             match("coma");
             ListaDecAtrs();
         }
-        else ;
+        else if(invalidEpsilon("puntoComa"))
+            throw new SyntacticException(currentToken, ", o ;");
             //TODO no hago nada por ahora
     }
 
     private void EstaticoOpt() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("pr_static"))
             match("pr_static");
-        else ;
+        else if(invalidEpsilon("pr_boolean", "pr_char", "pr_int", "idClase", "pr_void"))
+            throw new SyntacticException(currentToken, "static, boolean, char, int, void o identificador de clase");
             //TODO no hago nada por ahora
     }
 
@@ -306,7 +317,8 @@ public class SyntacticAnalyzer {
     private void ListaArgsFormalesOpt() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("pr_boolean", "pr_char", "pr_int", "idClase"))
             ListaArgsFormales();
-        else ;
+        else if(invalidEpsilon("parenC"))
+            throw new SyntacticException(currentToken, "boolean, char, int, identificador de clase o )");
             //TODO no hago nada por ahora
     }
 
@@ -320,7 +332,8 @@ public class SyntacticAnalyzer {
             match("coma");
             ListaArgsFormales();
         }
-        else ;
+        else if(invalidEpsilon("parenC"))
+            throw new SyntacticException(currentToken, ", o )");
             //TODO no hago nada por ahora
     }
 
@@ -340,7 +353,8 @@ public class SyntacticAnalyzer {
                 "pr_return", "pr_if", "pr_while", "llaveA", "pr_boolean", "pr_char", "pr_int")){
             Sentencia();
             ListaSentencias();
-        }else ;
+        }else if(invalidEpsilon("llaveC"))
+            throw new SyntacticException(currentToken, "sentencia o }");
             //TODO no hago nada por ahora
     }
 
@@ -367,11 +381,6 @@ public class SyntacticAnalyzer {
             throw new SyntacticException(currentToken, "sentencia");
     }
 
-    /*private void AsignacionOLlamada() throws LexicalException, SyntacticException, IOException {
-        Acceso();
-        AsignacionOpt();
-    }*/
-
     private void AsignacionOLlamadaOVarClasica() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("pr_this", "idMetVar", "pr_new", "parenA")){
             AccesoNoMetEstatico();
@@ -394,7 +403,8 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("coma")){
             match("coma");
             ListaDeclaraciones();
-        }else ;
+        }else if(invalidEpsilon("puntoComa"))
+            throw new SyntacticException(currentToken, ", o ;");
             //TODO no hago nada por ahora
     }
 
@@ -407,7 +417,8 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("asig=")){
             match("asig=");
             Expresion();
-        }else ;
+        }else if(invalidEpsilon("coma", "puntoComa"))
+            throw new SyntacticException(currentToken, ", o ;");
             //TODO no hago nada por ahora
     }
 
