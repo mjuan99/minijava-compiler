@@ -195,7 +195,7 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e6();
         }else
-            return new Token("op/", lexeme, sourceFileManager.getLineNumber());
+            return new Token("/", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e4() throws IOException, LexicalException{
@@ -463,19 +463,19 @@ public class LexicalAnalyzer {
     }
 
     private Token e24(){
-        return new Token("parenA", lexeme, sourceFileManager.getLineNumber());
+        return new Token("(", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e25(){
-        return new Token("parenC", lexeme, sourceFileManager.getLineNumber());
+        return new Token(")", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e26(){
-        return new Token("llaveA", lexeme, sourceFileManager.getLineNumber());
+        return new Token("{", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e27(){
-        return new Token("llaveC", lexeme, sourceFileManager.getLineNumber());
+        return new Token("}", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e28() throws IOException{
@@ -484,11 +484,11 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e29();
         }else
-            return new Token("op<", lexeme, sourceFileManager.getLineNumber());
+            return new Token("<", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e29(){
-        return new Token("op<=", lexeme, sourceFileManager.getLineNumber());
+        return new Token("<=", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e30() throws IOException{
@@ -497,15 +497,15 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e31();
         }else
-            return new Token("op>", lexeme, sourceFileManager.getLineNumber());
+            return new Token(">", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e31(){
-        return new Token("op>=", lexeme, sourceFileManager.getLineNumber());
+        return new Token(">=", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e32(){
-        return new Token("op*", lexeme, sourceFileManager.getLineNumber());
+        return new Token("*", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e33() throws IOException{
@@ -514,11 +514,11 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e34();
         }else
-            return new Token("asig=", lexeme, sourceFileManager.getLineNumber());
+            return new Token("=", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e34(){
-        return new Token("op==", lexeme, sourceFileManager.getLineNumber());
+        return new Token("==", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e35() throws IOException{
@@ -527,27 +527,27 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e36();
         }else
-            return new Token("op!", lexeme, sourceFileManager.getLineNumber());
+            return new Token("!", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e36(){
-        return new Token("op!=", lexeme, sourceFileManager.getLineNumber());
+        return new Token("!=", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e37(){
-        return new Token("puntoComa", lexeme, sourceFileManager.getLineNumber());
+        return new Token(";", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e38(){
-        return new Token("coma", lexeme, sourceFileManager.getLineNumber());
+        return new Token(",", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e39(){
-        return new Token("punto", lexeme, sourceFileManager.getLineNumber());
+        return new Token(".", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e40(){
-        return new Token("op%", lexeme, sourceFileManager.getLineNumber());
+        return new Token("%", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e41() throws IOException{
@@ -556,11 +556,11 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e42();
         }else
-            return new Token("op+", lexeme, sourceFileManager.getLineNumber());
+            return new Token("+", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e42(){
-        return new Token("asig+=", lexeme, sourceFileManager.getLineNumber());
+        return new Token("+=", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e43() throws IOException{
@@ -569,11 +569,11 @@ public class LexicalAnalyzer {
             updateCurrentChar();
             return e44();
         }else
-            return new Token("op-", lexeme, sourceFileManager.getLineNumber());
+            return new Token("-", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e44(){
-        return new Token("asig-=", lexeme, sourceFileManager.getLineNumber());
+        return new Token("-=", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e45() throws IOException, LexicalException{
@@ -596,7 +596,7 @@ public class LexicalAnalyzer {
     }
 
     private Token e46(){
-        return new Token("op||", lexeme, sourceFileManager.getLineNumber());
+        return new Token("||", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e47() throws IOException, LexicalException{
@@ -619,7 +619,7 @@ public class LexicalAnalyzer {
     }
 
     private Token e48(){
-        return new Token("op&&", lexeme, sourceFileManager.getLineNumber());
+        return new Token("&&", lexeme, sourceFileManager.getLineNumber());
     }
 
     private Token e49(){
@@ -708,26 +708,26 @@ public class LexicalAnalyzer {
 
     private void initializeKeywordsMap(){
         keywordsMap = new HashMap<>();
-        keywordsMap.put("class", "pr_class");
-        keywordsMap.put("interface", "pr_interface");
-        keywordsMap.put("extends", "pr_extends");
-        keywordsMap.put("implements", "pr_implements");
-        keywordsMap.put("public", "pr_public");
-        keywordsMap.put("private", "pr_private");
-        keywordsMap.put("static", "pr_static");
-        keywordsMap.put("void", "pr_void");
-        keywordsMap.put("boolean", "pr_boolean");
-        keywordsMap.put("char", "pr_char");
-        keywordsMap.put("int", "pr_int");
-        keywordsMap.put("if", "pr_if");
-        keywordsMap.put("else", "pr_else");
-        keywordsMap.put("while", "pr_while");
-        keywordsMap.put("return", "pr_return");
-        keywordsMap.put("var", "pr_var");
-        keywordsMap.put("this", "pr_this");
-        keywordsMap.put("new", "pr_new");
-        keywordsMap.put("null", "pr_null");
-        keywordsMap.put("true", "pr_true");
-        keywordsMap.put("false", "pr_false");
+        keywordsMap.put("class", "class");
+        keywordsMap.put("interface", "interface");
+        keywordsMap.put("extends", "extends");
+        keywordsMap.put("implements", "implements");
+        keywordsMap.put("public", "public");
+        keywordsMap.put("private", "private");
+        keywordsMap.put("static", "static");
+        keywordsMap.put("void", "void");
+        keywordsMap.put("boolean", "boolean");
+        keywordsMap.put("char", "char");
+        keywordsMap.put("int", "int");
+        keywordsMap.put("if", "if");
+        keywordsMap.put("else", "else");
+        keywordsMap.put("while", "while");
+        keywordsMap.put("return", "return");
+        keywordsMap.put("var", "var");
+        keywordsMap.put("this", "this");
+        keywordsMap.put("new", "new");
+        keywordsMap.put("null", "null");
+        keywordsMap.put("true", "true");
+        keywordsMap.put("false", "false");
     }
 }
