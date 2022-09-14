@@ -449,7 +449,8 @@ public class SyntacticAnalyzer {
             TipoDeAsignacion();
             Expresion();
         }
-        else ;
+        else if(invalidEpsilon("puntoComa"))
+            throw new SyntacticException(currentToken, "asignacion o ;");
             //TODO no hago nada por ahora
     }
 
@@ -480,7 +481,8 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("op+", "op-", "op!", "pr_null", "pr_true", "pr_false", "intLiteral",
                 "charLiteral", "stringLiteral", "pr_this", "idMetVar", "pr_new", "idClase", "parenA"))
             Expresion();
-        else ;
+        else if(invalidEpsilon("puntoComa"))
+            throw new SyntacticException(currentToken, "expresion o ;");
             //TODO no hago nada por ahora
     }
 
@@ -497,7 +499,9 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("pr_else")){
             match("pr_else");
             Sentencia();
-        }else ;
+        }else if(invalidEpsilon("puntoComa", "pr_this", "idMetVar", "pr_new", "parenA", "pr_boolean", "pr_char",
+                "pr_int", "idClase", "pr_var", "pr_return", "pr_if", "pr_while", "llaveA", "llaveC", "pr_else"))
+            throw new SyntacticException(currentToken, "else, sentencia o }");
             //TODO no hago nada por ahora
     }
 
@@ -520,7 +524,8 @@ public class SyntacticAnalyzer {
             ExpresionUnaria();
             RestoExpresion();
         }
-        else ;
+        else if(invalidEpsilon("coma", "puntoComa", "parenC"))
+            throw new SyntacticException(currentToken, "operador binario, ,, ) o ;");
             //TODO no hago nada por ahora
     }
 
@@ -552,8 +557,7 @@ public class SyntacticAnalyzer {
             match("op/");
         else if(checkCurrentToken("op%"))
             match("op%");
-        else ;
-            //TODO no hago nada por ahora
+        else throw new SyntacticException(currentToken, "operador binario");
     }
 
     private void ExpresionUnaria() throws SyntacticException, LexicalException, IOException {
@@ -611,8 +615,6 @@ public class SyntacticAnalyzer {
             AccesoNoMetEstatico();
         else
             throw new SyntacticException(currentToken, "acceso");
-        //Primario();
-        //EncadenadoOpt();
     }
 
     private void AccesoNoMetEstatico() throws LexicalException, SyntacticException, IOException {
@@ -649,7 +651,9 @@ public class SyntacticAnalyzer {
     private void ArgActualesMetodoOpt() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("parenA"))
             ArgsActuales();
-        else ;
+        else if(invalidEpsilon("asig=", "asig+=", "asig-=", "puntoComa", "op||", "op&&", "op==", "op!=", "op<",
+                "op>", "op<=", "op>=", "op+", "op-", "op*", "op/", "op%", "coma", "parenC", "punto"))
+            throw new SyntacticException(currentToken, "argumentos actuales, asignacion, operador binario, ,, ) o ;");
             //TODO no hago nada por ahora
     }
 
@@ -675,14 +679,16 @@ public class SyntacticAnalyzer {
             match("op<");
             ListaTipoReferenciaOpt();
             match("op>");
-        }else ;
+        }else if(invalidEpsilon("parenA"))
+            throw new SyntacticException(currentToken, "genericidad o argumentos actuales");
             //TODO no hago nada por ahora
     }
 
     private void ListaTipoReferenciaOpt() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("idClase"))
             ListaTipoReferencia();
-        else ;
+        else if(invalidEpsilon("op>"))
+            throw new SyntacticException(currentToken, "identificador de clase o >");
             //TODO no hago nada por ahora
     }
 
@@ -702,7 +708,8 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("op+", "op-", "op!", "pr_null", "pr_true", "pr_false", "intLiteral",
                 "charLiteral", "stringLiteral", "pr_this", "idMetVar", "pr_new", "idClase", "parenA"))
             ListaExps();
-        else ;
+        else if(invalidEpsilon("parenC"))
+            throw new SyntacticException(currentToken, "expresion o )");
             //TODO no hago nada por ahora
     }
 
@@ -715,14 +722,17 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("coma")) {
             match("coma");
             ListaExps();
-        }else ;
+        }else if(invalidEpsilon("parenC"))
+            throw new SyntacticException(currentToken, ", o )");
             //TODO no hago nada por ahora
     }
 
     private void EncadenadoOpt() throws LexicalException, SyntacticException, IOException {
         if(checkCurrentToken("punto"))
             VarOMetodoEncadenado();
-        else ;
+        else if(invalidEpsilon("asig=", "asig+=", "asig-=", "puntoComa", "op||", "op&&", "op==", "op!=", "op<",
+                "op>", "op<=", "op>=", "op+", "op-", "op*", "op/", "op%", "coma", "parenC"))
+            throw new SyntacticException(currentToken, "encadenado, asignacion, operador binario, ,, ) o ;");
             //TODO no hago nada por ahora
     }
 
