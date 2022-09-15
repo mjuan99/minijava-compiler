@@ -2,6 +2,6 @@
 
 class MiClase{
     int miMetodo(){
-        while(a > 0) implements
+        while(a > 0);
     }
 }

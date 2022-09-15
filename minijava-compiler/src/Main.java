@@ -1,14 +1,10 @@
+import Errors.CompilerException;
 import lexicalAnalyzer.LexicalAnalyzer;
-import lexicalAnalyzer.LexicalException;
-import lexicalAnalyzer.Token;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 import syntacticAnalyzer.SyntacticAnalyzer;
-import syntacticAnalyzer.SyntacticException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class Main {
     public final static int ERR_ARGUMENTO_FALTANTE = 1;
@@ -34,11 +30,8 @@ public class Main {
         } catch (IOException exception){
             System.out.println("Error de IO");
             System.exit(ERR_IO);
-        } catch (LexicalException exception) {
-            System.out.println(exception.getMessage());
-        } catch (SyntacticException exception) {
-            System.out.println(exception.getMessage());
-            System.out.println("[Error:" + exception.getToken().getLexeme() + "|" + exception.getToken().getLineNumber() + "]");
+        } catch (CompilerException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
