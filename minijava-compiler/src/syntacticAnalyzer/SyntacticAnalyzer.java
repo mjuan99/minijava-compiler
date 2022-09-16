@@ -78,6 +78,14 @@ public class SyntacticAnalyzer {
     private void Inicial() throws IOException {
         if(checkCurrentToken("interface", "class"))
             ListaClases();
+        else{
+            addError(new SyntacticError(currentToken, "interface o class"));
+            discardTokensUntilValidTokenIsFound("}");
+            if(checkCurrentToken("}")) {
+                updateCurrentToken();
+                ListaClases();
+            }
+        }
 
         if(!checkCurrentToken("EOF")){
             addError(new SyntacticError(currentToken, "declaracion de clase o interfaz"));
@@ -212,7 +220,7 @@ public class SyntacticAnalyzer {
             ListaTipoReferencia();
         }
         else if(invalidEpsilon(">", "{")) {
-            addError(new SyntacticError(currentToken, ",, > o {"));
+            addError(new SyntacticError(currentToken, "',', > o {"));
             throwExceptionIfErrorsWereFound();
         }
             //TODO no hago nada por ahora
@@ -231,6 +239,7 @@ public class SyntacticAnalyzer {
                 Bloque();
             else
                 updateCurrentToken();
+            ListaMiembros();
         }
             //TODO no hago nada por ahora
 
@@ -789,7 +798,7 @@ public class SyntacticAnalyzer {
             RestoExpresion();
         }
         else if(invalidEpsilon(",", ";", ")")) {
-            addError(new SyntacticError(currentToken, "operador binario, ,, ) o ;"));
+            addError(new SyntacticError(currentToken, "operador binario, ',', ) o ;"));
             throwExceptionIfErrorsWereFound();
         }
             //TODO no hago nada por ahora
@@ -934,7 +943,7 @@ public class SyntacticAnalyzer {
             ArgsActuales();
         else if(invalidEpsilon("=", "+=", "-=", ";", "||", "&&", "==", "!=", "<",
                 ">", "<=", ">=", "+", "-", "*", "/", "%", ",", ")", ".")) {
-            addError(new SyntacticError(currentToken, "argumentos actuales, asignacion, operador binario, ,, ) o ;"));
+            addError(new SyntacticError(currentToken, "argumentos actuales, asignacion, operador binario, ',', ) o ;"));
             throwExceptionIfErrorsWereFound();
         }
             //TODO no hago nada por ahora
@@ -1029,7 +1038,7 @@ public class SyntacticAnalyzer {
             VarOMetodoEncadenado();
         else if(invalidEpsilon("=", "+=", "-=", ";", "||", "&&", "==", "!=", "<",
                 ">", "<=", ">=", "+", "-", "*", "/", "%", ",", ")")) {
-            addError(new SyntacticError(currentToken, "encadenado, asignacion, operador binario, ,, ) o ;"));
+            addError(new SyntacticError(currentToken, "encadenado, asignacion, operador binario, ',', ) o ;"));
             throwExceptionIfErrorsWereFound();
         }
             //TODO no hago nada por ahora
