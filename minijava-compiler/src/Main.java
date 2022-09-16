@@ -16,13 +16,29 @@ public class Main {
             System.out.println("Argumento faltante");
             System.exit(ERR_ARGUMENTO_FALTANTE);
         }
-        SourceFileManager sourceFileManager = null;
-        LexicalAnalyzer lexicalAnalyzer = null;
-        SyntacticAnalyzer syntacticAnalyzer = null;
+        //analyzeAllErrorFiles();
+        String sourceFilePath = args[0];
+        analyze(sourceFilePath);
+    }
+
+    private static void analyzeAllErrorFiles() {
+        for(int i = 1; i <= 55; i++){
+            System.out.println(getNumber(i) + "--------------------------------------------------------------------\n");
+            String path = "./resources/conErrores/sintError" + getNumber(i) + ".java";
+            analyze(path);
+            System.out.println("----------------------------------------------------------------------\n");
+        }
+    }
+
+    private static String getNumber(int i){
+        return i > 9 ? "" + i : "0" + i;
+    }
+
+    private static void analyze(String sourceFilePath) {
         try {
-            sourceFileManager = new SourceFileManager(args[0]);
-            lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
-            syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
+            SourceFileManager sourceFileManager = new SourceFileManager(sourceFilePath);
+            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
+            new SyntacticAnalyzer(lexicalAnalyzer);
             System.out.println("[SinErrores]");
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
