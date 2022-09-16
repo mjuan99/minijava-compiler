@@ -350,7 +350,7 @@ public class SyntacticAnalyzer {
             }
             Bloque();
         }else {
-            addError(new SyntacticError(currentToken, "lista de atributos o argumentos formales"));
+            addError(new SyntacticError(currentToken, "',' o argumentos formales"));
             discardTokensUntilValidTokenIsFound(";", "{");
             if(checkCurrentToken("{"))
                 Bloque();
