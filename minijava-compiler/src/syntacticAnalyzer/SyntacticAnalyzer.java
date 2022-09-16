@@ -743,7 +743,7 @@ public class SyntacticAnalyzer {
             try {
                 Expresion();
             } catch (CompilerException e) {
-                discardTokensUntilValidTokenIsFound(")");
+                discardTokensUntilValidTokenIsFound(")", ";", "{");
             }
             match(")");
             Sentencia();
@@ -775,7 +775,7 @@ public class SyntacticAnalyzer {
             try {
                 Expresion();
             } catch (CompilerException e) {
-                discardTokensUntilValidTokenIsFound(")");
+                discardTokensUntilValidTokenIsFound(")", ";", "{");
             }
             match(")");
             Sentencia();
@@ -846,7 +846,7 @@ public class SyntacticAnalyzer {
                 "stringLiteral", "this", "idMetVar", "new", "idClase", "("))
             Operando();
         else {
-            addError(new SyntacticError(currentToken, "erando"));
+            addError(new SyntacticError(currentToken, "operando"));
             throwExceptionIfErrorsWereFound();
         }
     }
