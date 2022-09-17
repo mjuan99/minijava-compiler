@@ -9,7 +9,7 @@ class MiClase{
             if(){}
             if);
             else ;
-            if{a a}
+            if{a a;}
         }else a a;
         return 5;
 

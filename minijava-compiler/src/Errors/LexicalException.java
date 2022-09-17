@@ -1,4 +1,4 @@
-package lexicalAnalyzer;
+package Errors;
 
 public class LexicalException extends Exception{
     private String lexeme;

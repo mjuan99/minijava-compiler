@@ -4,7 +4,7 @@
 MiClase {}
 class miClase {}
 interface miInterfaz{}
-class MiClase MiClase2  {} // ESTO DA ERRORES RAROS POR LOS SIGUIENTES
+class MiClase MiClase2  {}
 interface MiInterfaz MiInterfaz2 {}
 class MiClase extends miClase2 {}
 class MiClase extends MiClase2, MiClase3 {}

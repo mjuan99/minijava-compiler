@@ -1,4 +1,4 @@
-import Errors.CompilerException;
+import Errors.SyntacticException;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 import syntacticAnalyzer.SyntacticAnalyzer;
@@ -15,16 +15,14 @@ public class Main {
             System.exit(ERR_ARGUMENTO_FALTANTE);
         }
         //analyzeAllErrorFiles();
-        String sourceFilePath = args[0];
-        analyze(sourceFilePath);
+        analyze(args[0]);
     }
 
     private static void analyzeAllErrorFiles() {
-        for(int i = 1; i <= 55; i++){
-            System.out.println(getNumber(i) + "--------------------------------------------------------------------\n");
+        for(int i = 1; i <= 63; i++){
+            System.out.println("\n" + getNumber(i) + "###########################################################################################################\n\n");
             String path = "./resources/conErrores/sintError" + getNumber(i) + ".java";
             analyze(path);
-            System.out.println("----------------------------------------------------------------------\n");
         }
     }
 
@@ -42,7 +40,7 @@ public class Main {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){
             System.out.println("Error de IO");
-        } catch (CompilerException e) {
+        } catch (SyntacticException e) {
             System.out.println(e.getMessage());
         }
     }

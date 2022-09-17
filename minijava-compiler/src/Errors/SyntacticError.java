@@ -14,9 +14,12 @@ public class SyntacticError implements CompilerError{
     }
 
     public String getMessage(){
-        return "Error sintactico en linea " + found.getLineNumber() + ": se esperaba " + expected +
+        String message = "Error sintactico en linea " + found.getLineNumber() + ": se esperaba " + expected +
                 " pero se encontro " + (Objects.equals(found.getLexeme(), "") ? "EOF" : found.getLexeme()) +
                 "\n[Error:" + found.getLexeme() + "|" + found.getLineNumber() + "]\n";
+        message = message.replaceAll("idMetVar", "identificador de metodo o variable");
+        message = message.replaceAll("idClase", "identificador de clase");
+        return message;
     }
 
 }

@@ -1,5 +1,6 @@
 package lexicalAnalyzer;
 
+import Errors.LexicalException;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 
 import java.io.IOException;
