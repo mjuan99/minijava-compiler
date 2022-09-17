@@ -82,7 +82,7 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("interface", "class"))
             ListaClases();
         else{
-            addError(new SyntacticError(currentToken, "interface o class"));
+            addError(new SyntacticError(currentToken, "declaracion de clase o interfaz"));
             discardTokensUntilValidTokenIsFound("}");
             if(checkCurrentToken("}")) {
                 updateCurrentToken();
@@ -112,7 +112,7 @@ public class SyntacticAnalyzer {
         else if(checkCurrentToken("interface"))
             Interface();
         else {
-            addError(new SyntacticError(currentToken, "class o interface"));
+            addError(new SyntacticError(currentToken, "declaracion de clase o interfaz"));
             discardTokensUntilValidTokenIsFound("class", "interface");
         }
     }
@@ -228,7 +228,7 @@ public class SyntacticAnalyzer {
             ListaMiembros();
         }
         else if(invalidEpsilon("}")) {
-            addError(new SyntacticError(currentToken, "declaracion de miembro o }"));
+            addError(new SyntacticError(currentToken, "declaracion de atributo, metodo o constructor o }"));
             if(checkCurrentToken("{"))
                 try {
                     Bloque();
@@ -269,7 +269,7 @@ public class SyntacticAnalyzer {
             else if (checkCurrentToken("idClase"))
                 AtributoTCOMetodoTCOConstructor();
             else {
-                addError(new SyntacticError(currentToken, "atributo, metodo o constructor"));
+                addError(new SyntacticError(currentToken, "declaracion de atributo, metodo o constructor"));
                 if (checkCurrentToken("{"))
                     Bloque();
                 else
@@ -873,7 +873,7 @@ public class SyntacticAnalyzer {
         else if(checkCurrentToken("("))
             ExpresionParentizada();
         else {
-            addError(new SyntacticError(currentToken, "acceso primario"));
+            addError(new SyntacticError(currentToken, "this, identificador de metodo o variable, new o ("));
             throwExceptionIfErrorsWereFound();
         }
     }
