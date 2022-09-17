@@ -15,10 +15,10 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public class SyntacticAnalyzer {
-    private LexicalAnalyzer lexicalAnalyzer;
+    private final LexicalAnalyzer lexicalAnalyzer;
     private Token currentToken;
     private final static boolean useAdvancedImplementation = true;
-    private LinkedList<CompilerError> compilerErrorList;
+    private final LinkedList<CompilerError> compilerErrorList;
 
     public SyntacticAnalyzer(LexicalAnalyzer lexicalAnalyzer) throws IOException, SyntacticException {
         this.lexicalAnalyzer = lexicalAnalyzer;
@@ -246,7 +246,6 @@ public class SyntacticAnalyzer {
                 EncabezadoMetodo();
                 match(";");
             }catch (SyntacticException e){
-                //discardTokensUntilValidTokenIsFound(";");
                 updateCurrentToken();
             }
             ListaEncabezados();
@@ -324,11 +323,6 @@ public class SyntacticAnalyzer {
         }else {
             addError(new SyntacticError(currentToken, "',', ; o argumentos formales"));
             throwExceptionIfErrorsWereFound();
-            /*discardTokensUntilValidTokenIsFound(";", "{");
-            if(checkCurrentToken("{"))
-                Bloque();
-            else
-                updateCurrentToken();*/
         }
     }
 
@@ -336,7 +330,7 @@ public class SyntacticAnalyzer {
         match("idClase");
         RestoAtrTCOMetTCOCons();
     }
-//TODO ACA---------------------------------------------------------------------------
+
     private void RestoAtrTCOMetTCOCons() throws IOException, SyntacticException {
         if(checkCurrentToken("<", "idMetVar")){
             GenericidadOpt();
@@ -351,11 +345,7 @@ public class SyntacticAnalyzer {
     }
 
     private void RestoConstructor() throws IOException, SyntacticException {
-        //try {
         ArgsFormales();
-        /*}catch (SyntacticException e){
-            discardTokensUntilValidTokenIsFound("{");
-        }*/
         Bloque();
     }
 
@@ -491,15 +481,7 @@ public class SyntacticAnalyzer {
     }
 
     private void Bloque() throws IOException, SyntacticException {
-        //try{
-            match("{");
-        /*}catch (SyntacticException e){
-            discardTokensUntilValidTokenIsFound("{", ";");
-            if(checkCurrentToken(";")){
-                updateCurrentToken();
-                return;
-            }else updateCurrentToken();
-        }*/
+        match("{");
         ListaSentencias();
         try{
             match("}");
@@ -701,7 +683,6 @@ public class SyntacticAnalyzer {
     }
 
     private void If() throws IOException {
-        int linea = currentToken.getLineNumber();
         try{
             match("if");
             match("(");
@@ -719,10 +700,10 @@ public class SyntacticAnalyzer {
             else
                 updateCurrentToken();
         }
-        ElseOpt(linea);
+        ElseOpt();
     }
 
-    private void ElseOpt(int linea) throws IOException {
+    private void ElseOpt() throws IOException {
         if(checkCurrentToken("else")){
             updateCurrentToken();
             Sentencia();
@@ -770,7 +751,6 @@ public class SyntacticAnalyzer {
     }
 
     private void OperadorBinario() throws IOException, SyntacticException {
-        // "||", "&&", "==", "!=", "<", ">", "<=", ">=", "+", "-", "*", "/", "%"
         if(checkCurrentToken("||"))
             match("||");
         else if(checkCurrentToken("&&"))
