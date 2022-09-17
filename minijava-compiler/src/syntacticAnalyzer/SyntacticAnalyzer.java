@@ -295,7 +295,7 @@ public class SyntacticAnalyzer {
 
     private void MetodoEstatico() throws IOException, SyntacticException {
         match("static");
-        TipoMetodo();
+        TipoMetodoEstatico();
         match("idMetVar");
         ArgsFormales();
         Bloque();
@@ -433,6 +433,19 @@ public class SyntacticAnalyzer {
             match("void");
         else {
             addError(new SyntacticError(currentToken, "tipo de metodo"));
+            throwExceptionIfErrorsWereFound();
+        }
+    }
+
+    private void TipoMetodoEstatico() throws IOException, SyntacticException {
+        if(checkCurrentToken("boolean", "char", "int"))
+            TipoPrimitivo();
+        else if(checkCurrentToken("idClase"))
+            match("idClase");
+        else if(checkCurrentToken("void"))
+            match("void");
+        else {
+            addError(new SyntacticError(currentToken, "tipo de metodo estatico"));
             throwExceptionIfErrorsWereFound();
         }
     }
@@ -601,14 +614,15 @@ public class SyntacticAnalyzer {
     }
 
     private void VarClaseOAccesoMetEstaticoYAsignacionOpt() throws IOException, SyntacticException {
-        ClaseGenerica();
+        match("idClase");
         ListaDecORestoAccesoMetEstYAsigOpt();
     }
 
     private void ListaDecORestoAccesoMetEstYAsigOpt() throws IOException, SyntacticException {
-        if(checkCurrentToken("idMetVar"))
+        if(checkCurrentToken("<", "idMetVar")) {
+            GenericidadOpt();
             ListaDeclaraciones();
-        else if(checkCurrentToken(".")){
+        }else if(checkCurrentToken(".")){
             RestoAccesoMetEst();
             AsignacionOpt();
         }else {
@@ -858,7 +872,7 @@ public class SyntacticAnalyzer {
     }
 
     private void AccesoMetodoEstatico() throws IOException, SyntacticException {
-        ClaseGenerica();
+        match("idClase");
         match(".");
         match("idMetVar");
         ArgsActuales();

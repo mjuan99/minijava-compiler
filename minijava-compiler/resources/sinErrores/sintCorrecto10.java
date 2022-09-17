@@ -8,8 +8,10 @@ class MiClase<A> extends MiClase<A,B> implements MiClase, Miclase<A, B<C<D<E>,F>
 
         new MiClase<A, B>();
         new MiClase<>();
-        MiClase<A>.metodoEstatico();
+        MiClase.metodoEstatico();
     }
+
+    static MiClase miMetodo(){}
 }
 
 interface MiInterfaz<A, B, C> extends MiInterfaz, MiInterfaze<D>{}
