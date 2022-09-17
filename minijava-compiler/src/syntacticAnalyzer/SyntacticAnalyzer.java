@@ -360,8 +360,12 @@ public class SyntacticAnalyzer {
     }
 
     private void EncabezadoMetodo() throws IOException, SyntacticException {
+        boolean isStatic = checkCurrentToken("static");
         EstaticoOpt();
-        TipoMetodo();
+        if(isStatic)
+            TipoMetodoEstatico();
+        else
+            TipoMetodo();
         match("idMetVar");
         ArgsFormales();
     }

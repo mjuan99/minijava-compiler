@@ -14,4 +14,7 @@ class MiClase<A> extends MiClase<A,B> implements MiClase, Miclase<A, B<C<D<E>,F>
     static MiClase miMetodo(){}
 }
 
-interface MiInterfaz<A, B, C> extends MiInterfaz, MiInterfaze<D>{}
+interface MiInterfaz<A, B, C> extends MiInterfaz, MiInterfaze<D>{
+    static MiClase miMetodo();
+    MiClase<A> miMetodo();
+}
