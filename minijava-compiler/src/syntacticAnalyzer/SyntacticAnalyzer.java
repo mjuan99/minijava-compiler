@@ -152,7 +152,7 @@ public class SyntacticAnalyzer {
                 discardTokensUntilValidTokenIsFound(">");
                 updateCurrentToken();
             }
-        }else if(invalidEpsilon("extends", "implements", ",", "idMetVar", ".", ">", "{")) {
+        }else if(invalidEpsilon("extends", "implements", ",", "idMetVar", ">", "{")) {
             addError(new SyntacticError(currentToken, "<, extends, implements, ',', idMetVar, ., > o {"));
             throwExceptionIfErrorsWereFound();
         }
