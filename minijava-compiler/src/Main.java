@@ -1,6 +1,7 @@
 import Errors.SyntacticException;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
+import semanticAnalyzer.SemanticAnalyzer;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
 import java.io.FileNotFoundException;
@@ -21,7 +22,8 @@ public class Main {
         try {
             SourceFileManager sourceFileManager = new SourceFileManager(sourceFilePath);
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
-            new SyntacticAnalyzer(lexicalAnalyzer);
+            SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
+            new SemanticAnalyzer(syntacticAnalyzer);
             System.out.println("[SinErrores]");
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");

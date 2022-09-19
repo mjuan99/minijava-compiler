@@ -7,6 +7,7 @@ import Errors.SyntacticError;
 import lexicalAnalyzer.LexicalAnalyzer;
 import Errors.LexicalException;
 import lexicalAnalyzer.Token;
+import symbolTable.SymbolTable;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -19,15 +20,21 @@ public class SyntacticAnalyzer {
     private Token currentToken;
     private final static boolean useAdvancedImplementation = true;
     private final LinkedList<CompilerError> compilerErrorList;
+    private final SymbolTable symbolTable;
 
     public SyntacticAnalyzer(LexicalAnalyzer lexicalAnalyzer) throws IOException, SyntacticException {
         this.lexicalAnalyzer = lexicalAnalyzer;
         compilerErrorList = new LinkedList<>();
+        symbolTable = new SymbolTable();
         updateCurrentToken();
         try {
             Inicial();
         }catch (EOFException ignored){}
         throwExceptionIfErrorsWereFound();
+    }
+
+    public SymbolTable getSymbolTable(){
+        return symbolTable;
     }
 
     private void addError(CompilerError error){

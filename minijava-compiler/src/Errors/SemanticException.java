@@ -2,10 +2,10 @@ package Errors;
 
 import java.util.LinkedList;
 
-public class SyntacticException extends Exception{
+public class SemanticException extends Exception{
     private LinkedList<CompilerError> errors;
 
-    public SyntacticException(LinkedList<CompilerError> errors){
+    public SemanticException(LinkedList<CompilerError> errors){
         this.errors = errors;
     }
 
