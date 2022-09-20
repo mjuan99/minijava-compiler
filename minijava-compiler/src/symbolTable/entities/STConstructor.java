@@ -1,4 +1,4 @@
-package symbolTable;
+package symbolTable.entities;
 
 public class STConstructor {
 }

@@ -7,9 +7,9 @@ import Errors.SyntacticError;
 import lexicalAnalyzer.LexicalAnalyzer;
 import Errors.LexicalException;
 import lexicalAnalyzer.Token;
-import symbolTable.STClass;
-import symbolTable.STInterface;
+import symbolTable.entities.*;
 import symbolTable.SymbolTable;
+import symbolTable.types.*;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class SyntacticAnalyzer {
             updateCurrentToken();
         else{
             addError(new SyntacticError(currentToken, expected));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -168,7 +168,7 @@ public class SyntacticAnalyzer {
             }
         }else if(invalidEpsilon("extends", "implements", ",", "idMetVar", ">", "{")) {
             addError(new SyntacticError(currentToken, "<, extends, implements, ',', idMetVar, ., > o {"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -196,9 +196,9 @@ public class SyntacticAnalyzer {
         }
         else if(invalidEpsilon("implements", "{")) {
             addError(new SyntacticError(currentToken, "extends, implements o {"));
-            throwExceptionIfErrorsWereFound(); //TODO hacer que estos sean throw posta asi puedo retornar en el else
-        }
-        return new Token("idClase", "Object", 0);
+            throw new SyntacticException(compilerErrorList); //TODO hacer que estos sean throw posta asi puedo retornar en el else
+        }else
+            return new Token("idClase", "Object", 0);
     }
 
     private LinkedList<Token> ImplementaA() throws IOException, SyntacticException {
@@ -207,9 +207,9 @@ public class SyntacticAnalyzer {
             return ListaTipoReferencia();
         } else if (invalidEpsilon("{")) {
             addError(new SyntacticError(currentToken, "implements o {"));
-            throwExceptionIfErrorsWereFound();
-        }
-        return new LinkedList<>();
+            throw new SyntacticException(compilerErrorList);
+        }else
+            return new LinkedList<>();
     }
 
     private LinkedList<Token> ExtiendeA() throws IOException, SyntacticException {
@@ -219,9 +219,9 @@ public class SyntacticAnalyzer {
         }
         else if(invalidEpsilon("{")) {
             addError(new SyntacticError(currentToken, "extends o {"));
-            throwExceptionIfErrorsWereFound();
-        }
-        return new LinkedList<>();
+            throw new SyntacticException(compilerErrorList);
+        }else
+            return new LinkedList<>();
     }
 
     private LinkedList<Token> ListaTipoReferencia() throws IOException, SyntacticException {
@@ -238,9 +238,9 @@ public class SyntacticAnalyzer {
         }
         else if(invalidEpsilon(">", "{")) {
             addError(new SyntacticError(currentToken, "',', > o {"));
-            throwExceptionIfErrorsWereFound();
-        }
-        return new LinkedList<>();
+            throw new SyntacticException(compilerErrorList);
+        }else
+            return new LinkedList<>();
     }
 
     private void ListaMiembros() throws IOException {
@@ -308,43 +308,58 @@ public class SyntacticAnalyzer {
     }
 
     private void AtributoConVisibilidad() throws IOException, SyntacticException {
-        Visibilidad();
-        Tipo();
-        ListaDecAtrs();
+        String visibility = Visibilidad();
+        STType stType = Tipo();
+        LinkedList<Token> tkAttributesList = ListaDecAtrs();
         match(";");
+        for(Token tkAttribute : tkAttributesList)
+            symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, visibility, stType));
     }
 
     private void MetodoEstatico() throws IOException, SyntacticException {
         match("static");
-        TipoMetodoEstatico();
+        STType returnType = TipoMetodoEstatico();
+        STMethod stMethod = new STMethod(currentToken, true, returnType);
+        symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
-        ArgsFormales();
+        stMethod.insertArguments(ArgsFormales());
         Bloque();
+        symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
     private void MetodoNoEstVoid() throws IOException, SyntacticException {
         match("void");
+        STMethod stMethod = new STMethod(currentToken, false, new STTypeVoid());
+        symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
-        ArgsFormales();
+        stMethod.insertArguments(ArgsFormales());
         Bloque();
+        symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
     private void AtributoOMetodoTipoPri() throws IOException, SyntacticException {
-        TipoPrimitivo();
+        STType stType = TipoPrimitivo();
+        Token idMetVar = currentToken;
         match("idMetVar");
-        RestoAtrOMet();
+        RestoAtrOMet(idMetVar, stType);
     }
 
-    private void RestoAtrOMet() throws IOException, SyntacticException {
+    private void RestoAtrOMet(Token idMetVar, STType stType) throws IOException, SyntacticException {
         if(checkCurrentToken(",", ";")){
-            RestoListaDecAtrsOpt();
+            LinkedList<Token> tkAttributesList = RestoListaDecAtrsOpt();
             match(";");
+            tkAttributesList.add(idMetVar);
+            for(Token tkAttribute : tkAttributesList)
+                symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, "public", stType));
         }else if(checkCurrentToken("(")) {
-            ArgsFormales();
+            STMethod stMethod = new STMethod(idMetVar, false, stType);
+            symbolTable.setCurrentSTMethod(stMethod);
+            stMethod.insertArguments(ArgsFormales());
             Bloque();
+            symbolTable.getCurrentSTClass().insertMethod(stMethod);
         }else {
             addError(new SyntacticError(currentToken, "',', ; o argumentos formales"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -357,12 +372,12 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("<", "idMetVar")){
             GenericidadOpt();
             match("idMetVar");
-            RestoAtrOMet();
+            //RestoAtrOMet(); //TODO ARREGLAR ESTO YA
         }else if(checkCurrentToken("("))
             RestoConstructor();
         else {
             addError(new SyntacticError(currentToken, "identificador de metodo o variable o argumentos de constructor"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -372,65 +387,83 @@ public class SyntacticAnalyzer {
     }
 
     private void EncabezadoMetodo() throws IOException, SyntacticException {
+        STType returnType;
         boolean isStatic = checkCurrentToken("static");
         EstaticoOpt();
         if(isStatic)
-            TipoMetodoEstatico();
+            returnType = TipoMetodoEstatico();
         else
-            TipoMetodo();
+            returnType = TipoMetodo();
+        STMethod stMethod = new STMethod(currentToken, isStatic, returnType);
+        symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
-        ArgsFormales();
+        stMethod.insertArguments(ArgsFormales());
+        symbolTable.getCurrentSTInterface().insertMethod(stMethod);
     }
 
-    private void Visibilidad() throws IOException, SyntacticException {
-        if(checkCurrentToken("public"))
+    private String Visibilidad() throws IOException, SyntacticException {
+        if(checkCurrentToken("public")) {
             match("public");
-        else if(checkCurrentToken("private"))
+            return "public";
+        }
+        else if(checkCurrentToken("private")) {
             match("private");
+            return "private";
+        }
         else {
             addError(new SyntacticError(currentToken, "modificador de acceso"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void Tipo() throws IOException, SyntacticException {
+    private STType Tipo() throws IOException, SyntacticException {
         if(checkCurrentToken("boolean", "char", "int"))
-            TipoPrimitivo();
+            return TipoPrimitivo();
         else if(checkCurrentToken("idClase"))
-            ClaseGenerica();
+            return new STTypeReference(ClaseGenerica());
         else {
             addError(new SyntacticError(currentToken, "tipo"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void TipoPrimitivo() throws IOException, SyntacticException {
-        if(checkCurrentToken("boolean"))
+    private STType TipoPrimitivo() throws IOException, SyntacticException {
+        if(checkCurrentToken("boolean")) {
             match("boolean");
-        else if(checkCurrentToken("char"))
+            return new STTypeBoolean();
+        }
+        else if(checkCurrentToken("char")) {
             match("char");
-        else if(checkCurrentToken("int"))
+            return new STTypeChar();
+        }
+        else if(checkCurrentToken("int")) {
             match("int");
+            return new STTypeInt();
+        }
         else {
             addError(new SyntacticError(currentToken, "tipo primitvo"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void ListaDecAtrs() throws IOException, SyntacticException {
+    private LinkedList<Token> ListaDecAtrs() throws IOException, SyntacticException {
+        Token tkAttribute = currentToken;
         match("idMetVar");
-        RestoListaDecAtrsOpt();
+        LinkedList<Token> tkAttributesList = RestoListaDecAtrsOpt();
+        tkAttributesList.add(tkAttribute);
+        return tkAttributesList;
     }
 
-    private void RestoListaDecAtrsOpt() throws IOException, SyntacticException {
+    private LinkedList<Token> RestoListaDecAtrsOpt() throws IOException, SyntacticException {
         if(checkCurrentToken(",")){
             match(",");
-            ListaDecAtrs();
+            return ListaDecAtrs();
         }
         else if(invalidEpsilon(";")) {
             addError(new SyntacticError(currentToken, "',' o ;"));
-            throwExceptionIfErrorsWereFound();
-        }
+            throw new SyntacticException(compilerErrorList);
+        } else
+            return new LinkedList<>();
     }
 
     private void EstaticoOpt() throws IOException, SyntacticException {
@@ -438,68 +471,82 @@ public class SyntacticAnalyzer {
             match("static");
         else if(invalidEpsilon("boolean", "char", "int", "idClase", "void")) {
             addError(new SyntacticError(currentToken, "tipo de metodo"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void TipoMetodo() throws IOException, SyntacticException {
+    private STType TipoMetodo() throws IOException, SyntacticException {
         if(checkCurrentToken("boolean", "char", "int", "idClase"))
-            Tipo();
-        else if(checkCurrentToken("void"))
+            return Tipo();
+        else if(checkCurrentToken("void")) {
             match("void");
+            return new STTypeVoid();
+        }
         else {
             addError(new SyntacticError(currentToken, "tipo de metodo"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void TipoMetodoEstatico() throws IOException, SyntacticException {
+    private STType TipoMetodoEstatico() throws IOException, SyntacticException {
         if(checkCurrentToken("boolean", "char", "int"))
-            TipoPrimitivo();
-        else if(checkCurrentToken("idClase"))
+            return TipoPrimitivo();
+        else if(checkCurrentToken("idClase")) {
+            STType type = new STTypeReference(currentToken);
             match("idClase");
-        else if(checkCurrentToken("void"))
+            return type;
+        }
+        else if(checkCurrentToken("void")) {
             match("void");
+            return new STTypeVoid();
+        }
         else {
             addError(new SyntacticError(currentToken, "tipo de metodo estatico"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void ArgsFormales() throws IOException, SyntacticException {
+    private LinkedList<STArgument> ArgsFormales() throws IOException, SyntacticException {
         match("(");
-        ListaArgsFormalesOpt();
+        LinkedList<STArgument> stArguments = ListaArgsFormalesOpt();
         match(")");
+        return stArguments;
     }
 
-    private void ListaArgsFormalesOpt() throws IOException, SyntacticException {
+    private LinkedList<STArgument> ListaArgsFormalesOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("boolean", "char", "int", "idClase"))
-            ListaArgsFormales();
+            return ListaArgsFormales();
         else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "tipo o )"));
-            throwExceptionIfErrorsWereFound();
-        }
+            throw new SyntacticException(compilerErrorList);
+        }else
+            return new LinkedList<>();
     }
 
-    private void ListaArgsFormales() throws IOException, SyntacticException {
-        ArgFormal();
-        RestoListaArgsFormalesOpt();
+    private LinkedList<STArgument> ListaArgsFormales() throws IOException, SyntacticException {
+        STArgument stArgument = ArgFormal();
+        LinkedList<STArgument> stArgumentsList = RestoListaArgsFormalesOpt();
+        stArgumentsList.add(stArgument);
+        return stArgumentsList;
     }
 
-    private void RestoListaArgsFormalesOpt() throws IOException, SyntacticException {
+    private LinkedList<STArgument> RestoListaArgsFormalesOpt() throws IOException, SyntacticException {
         if(checkCurrentToken(",")) {
             match(",");
-            ListaArgsFormales();
+            return ListaArgsFormales();
         }
         else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "',' o )"));
-            throwExceptionIfErrorsWereFound();
-        }
+            throw new SyntacticException(compilerErrorList);
+        }else
+            return new LinkedList<>();
     }
 
-    private void ArgFormal() throws IOException, SyntacticException {
-        Tipo();
+    private STArgument ArgFormal() throws IOException, SyntacticException {
+        STType stType = Tipo();
+        STArgument stArgument = new STArgument(currentToken, stType);
         match("idMetVar");
+        return stArgument;
     }
 
     private void Bloque() throws IOException, SyntacticException {
@@ -583,7 +630,7 @@ public class SyntacticAnalyzer {
             VarClaseOAccesoMetEstaticoYAsignacionOpt();
         else {
             addError(new SyntacticError(currentToken, "asignacion, declaracion de variable o llamada"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -598,7 +645,7 @@ public class SyntacticAnalyzer {
             ListaDeclaraciones();
         }else if(invalidEpsilon(";")) {
             addError(new SyntacticError(currentToken, "',' o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -617,7 +664,7 @@ public class SyntacticAnalyzer {
             }
         }else if(invalidEpsilon(",", ";")) {
             addError(new SyntacticError(currentToken, "',' o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -635,7 +682,7 @@ public class SyntacticAnalyzer {
             AsignacionOpt();
         }else {
             addError(new SyntacticError(currentToken, "identificador de variable o llamada a método estático"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -657,7 +704,7 @@ public class SyntacticAnalyzer {
         }
         else if(invalidEpsilon(";")) {
             addError(new SyntacticError(currentToken, "asignacion o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -670,7 +717,7 @@ public class SyntacticAnalyzer {
             match("-=");
         else {
             addError(new SyntacticError(currentToken, "asignacion"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -700,7 +747,7 @@ public class SyntacticAnalyzer {
             Expresion();
         else if(invalidEpsilon(";")) {
             addError(new SyntacticError(currentToken, "expresion o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -768,7 +815,7 @@ public class SyntacticAnalyzer {
         }
         else if(invalidEpsilon(",", ";", ")")) {
             addError(new SyntacticError(currentToken, "operador binario, ',', ) o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -801,7 +848,7 @@ public class SyntacticAnalyzer {
             match("%");
         else {
             addError(new SyntacticError(currentToken, "operador binario"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -814,7 +861,7 @@ public class SyntacticAnalyzer {
             Operando();
         else {
             addError(new SyntacticError(currentToken, "operando"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -827,7 +874,7 @@ public class SyntacticAnalyzer {
             match("!");
         else {
             addError(new SyntacticError(currentToken, "operador unario"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -838,7 +885,7 @@ public class SyntacticAnalyzer {
             Acceso();
         else {
             addError(new SyntacticError(currentToken, "literal o acceso"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -857,7 +904,7 @@ public class SyntacticAnalyzer {
             match("stringLiteral");
         else {
             addError(new SyntacticError(currentToken, "literal"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -868,7 +915,7 @@ public class SyntacticAnalyzer {
             AccesoNoMetEstatico();
         else {
             addError(new SyntacticError(currentToken, "acceso"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -896,7 +943,7 @@ public class SyntacticAnalyzer {
             ExpresionParentizada();
         else {
             addError(new SyntacticError(currentToken, "this, identificador de metodo o variable, new o ("));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -911,7 +958,7 @@ public class SyntacticAnalyzer {
         else if(invalidEpsilon("=", "+=", "-=", ";", "||", "&&", "==", "!=", "<",
                 ">", "<=", ">=", "+", "-", "*", "/", "%", ",", ")", ".")) {
             addError(new SyntacticError(currentToken, "argumentos actuales, asignacion, operador binario, ',', ) o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -937,7 +984,7 @@ public class SyntacticAnalyzer {
             match(">");
         }else if(invalidEpsilon("(")) {
             addError(new SyntacticError(currentToken, "genericidad o argumentos actuales"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -946,7 +993,7 @@ public class SyntacticAnalyzer {
             ListaTipoReferencia();
         else if(invalidEpsilon(">")) {
             addError(new SyntacticError(currentToken, "identificador de clase o >"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -972,7 +1019,7 @@ public class SyntacticAnalyzer {
             ListaExps();
         else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "expresion o )"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -991,7 +1038,7 @@ public class SyntacticAnalyzer {
             ListaExps();
         }else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "',' o )"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 
@@ -1001,7 +1048,7 @@ public class SyntacticAnalyzer {
         else if(invalidEpsilon("=", "+=", "-=", ";", "||", "&&", "==", "!=", "<",
                 ">", "<=", ">=", "+", "-", "*", "/", "%", ",", ")")) {
             addError(new SyntacticError(currentToken, "encadenado, asignacion, operador binario, ',', ) o ;"));
-            throwExceptionIfErrorsWereFound();
+            throw new SyntacticException(compilerErrorList);
         }
     }
 

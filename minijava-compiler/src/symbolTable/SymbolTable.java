@@ -1,5 +1,9 @@
 package symbolTable;
 
+import symbolTable.entities.STClass;
+import symbolTable.entities.STInterface;
+import symbolTable.entities.STMethod;
+
 import java.util.HashMap;
 
 public class SymbolTable {
@@ -28,6 +32,14 @@ public class SymbolTable {
 
     public STInterface getCurrentSTInterface(){
         return currentSTInterface;
+    }
+
+    public void setCurrentSTMethod(STMethod currentSTMethod) {
+        this.currentSTMethod = currentSTMethod;
+    }
+
+    public STMethod getCurrentSTMethod(){
+        return currentSTMethod;
     }
 
     public void insertSTClass(STClass stClass){

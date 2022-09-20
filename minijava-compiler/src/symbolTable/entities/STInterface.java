@@ -1,4 +1,4 @@
-package symbolTable;
+package symbolTable.entities;
 
 import lexicalAnalyzer.Token;
 
@@ -32,13 +32,18 @@ public class STInterface {
         StringBuilder interfaces = new StringBuilder();
         for(Token token : stInterfacesItExtends.values())
             interfaces.append(token.getLexeme()).append(", ");
-        System.out.println("interface " + name.getLexeme() + " extends " + interfaces);
+        System.out.println("interface " + name.getLexeme() + " extends " + interfaces + " {");
         stMethods.forEach((key, stMethod) -> {
             stMethod.print();
         });
+        System.out.println("}");
     }
 
     public Token getName() {
         return name;
+    }
+
+    public void insertMethod(STMethod stMethod) {
+        stMethods.put(stMethod.getName().getLexeme(), stMethod);
     }
 }
