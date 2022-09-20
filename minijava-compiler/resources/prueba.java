@@ -1,9 +1,5 @@
-class MiClase{
-    public int a
-    void miMetodo(){}
-    static cualquier cosa que no deberia compilar(){}
-    a b c d
-}
-
-    interfaz aaaa{}
-class MiClase MiClase MiClase{}
+class MiClase1 extends MiClase2{}
+class MiClase2 implements MiInterfaz1, MiInterfaz2, MiInterfaz3{}
+class MiClase3 extends MiClase2 implements MiInterfaz1, MiInterfaz2, MiInterfaz3{}
+interface MiInterfaz1{}
+interface MiInterfaz2 extends MiInterfaz1, MiInterfaz2, MiInterfaz3{}

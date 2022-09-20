@@ -7,6 +7,8 @@ import Errors.SyntacticError;
 import lexicalAnalyzer.LexicalAnalyzer;
 import Errors.LexicalException;
 import lexicalAnalyzer.Token;
+import symbolTable.STClass;
+import symbolTable.STInterface;
 import symbolTable.SymbolTable;
 
 import java.io.EOFException;
@@ -127,9 +129,11 @@ public class SyntacticAnalyzer {
     private void ClaseConcreta() throws IOException {
         try {
             match("class");
-            ClaseGenerica();
-            HeredaDe();
-            ImplementaA();
+            Token tkClass = ClaseGenerica();
+            STClass stClass = new STClass(tkClass);
+            symbolTable.setCurrentSTClass(stClass);
+            stClass.setSTClassItExtends(HeredaDe());
+            stClass.setStInterfacesItImplements(ImplementaA());
             match("{");
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound("{");
@@ -142,11 +146,14 @@ public class SyntacticAnalyzer {
             discardTokensUntilValidTokenIsFound("}");
             updateCurrentToken();
         }
+        symbolTable.insertSTClass(symbolTable.getCurrentSTClass());
     }
 
-    private void ClaseGenerica() throws IOException, SyntacticException {
+    private Token ClaseGenerica() throws IOException, SyntacticException {
+        Token tkClass = currentToken;
         match("idClase");
         GenericidadOpt();
+        return tkClass;
     }
 
     private void GenericidadOpt() throws IOException, SyntacticException {
@@ -168,64 +175,72 @@ public class SyntacticAnalyzer {
     private void Interface() throws IOException {
         try {
             match("interface");
-            ClaseGenerica();
-            ExtiendeA();
+            Token tkInterface = ClaseGenerica();
+            STInterface stInterface = new STInterface(tkInterface);
+            symbolTable.setCurrentSTInterface(stInterface);
+            stInterface.setSTInterfacesItExtends(ExtiendeA());
             match("{");
             ListaEncabezados();
             match("}");
+            symbolTable.insertSTInterface(symbolTable.getCurrentSTInterface());
         }catch(SyntacticException e){
             discardTokensUntilValidTokenIsFound("}");
             updateCurrentToken();
         }
     }
 
-    private void HeredaDe() throws IOException, SyntacticException {
+    private Token HeredaDe() throws IOException, SyntacticException {
         if(checkCurrentToken("extends")){
             match("extends");
-            ClaseGenerica();
+            return ClaseGenerica();
         }
         else if(invalidEpsilon("implements", "{")) {
             addError(new SyntacticError(currentToken, "extends, implements o {"));
-            throwExceptionIfErrorsWereFound();
+            throwExceptionIfErrorsWereFound(); //TODO hacer que estos sean throw posta asi puedo retornar en el else
         }
+        return new Token("idClase", "Object", 0);
     }
 
-    private void ImplementaA() throws IOException, SyntacticException {
-        if(checkCurrentToken("implements")){
+    private LinkedList<Token> ImplementaA() throws IOException, SyntacticException {
+        if (checkCurrentToken("implements")) {
             match("implements");
-            ListaTipoReferencia();
-        }
-        else if(invalidEpsilon("{")) {
+            return ListaTipoReferencia();
+        } else if (invalidEpsilon("{")) {
             addError(new SyntacticError(currentToken, "implements o {"));
             throwExceptionIfErrorsWereFound();
         }
+        return new LinkedList<>();
     }
 
-    private void ExtiendeA() throws IOException, SyntacticException {
+    private LinkedList<Token> ExtiendeA() throws IOException, SyntacticException {
         if(checkCurrentToken("extends")){
             match("extends");
-            ListaTipoReferencia();
+            return ListaTipoReferencia();
         }
         else if(invalidEpsilon("{")) {
             addError(new SyntacticError(currentToken, "extends o {"));
             throwExceptionIfErrorsWereFound();
         }
+        return new LinkedList<>();
     }
 
-    private void ListaTipoReferencia() throws IOException, SyntacticException {
-        ClaseGenerica();
-        RestoListaTipoRefOpt();
+    private LinkedList<Token> ListaTipoReferencia() throws IOException, SyntacticException {
+        Token tkClass = ClaseGenerica();
+        LinkedList<Token> tkClasses = RestoListaTipoRefOpt();
+        tkClasses.add(tkClass);
+        return tkClasses;
     }
 
-    private void RestoListaTipoRefOpt() throws IOException, SyntacticException {
+    private LinkedList<Token> RestoListaTipoRefOpt() throws IOException, SyntacticException {
         if(checkCurrentToken(",")){
             match(",");
-            ListaTipoReferencia();
+            return ListaTipoReferencia();
         }
         else if(invalidEpsilon(">", "{")) {
             addError(new SyntacticError(currentToken, "',', > o {"));
             throwExceptionIfErrorsWereFound();
         }
+        return new LinkedList<>();
     }
 
     private void ListaMiembros() throws IOException {

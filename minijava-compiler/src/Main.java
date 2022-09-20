@@ -25,6 +25,7 @@ public class Main {
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
             new SemanticAnalyzer(syntacticAnalyzer);
             System.out.println("[SinErrores]");
+            syntacticAnalyzer.getSymbolTable().print();
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){
