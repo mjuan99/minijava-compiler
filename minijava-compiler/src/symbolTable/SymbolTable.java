@@ -1,6 +1,7 @@
 package symbolTable;
 
 import symbolTable.entities.STClass;
+import symbolTable.entities.STConstructor;
 import symbolTable.entities.STInterface;
 import symbolTable.entities.STMethod;
 
@@ -12,6 +13,7 @@ public class SymbolTable {
     private STClass currentSTClass;
     private STInterface currentSTInterface;
     private STMethod currentSTMethod;
+    private STConstructor currentSTConstructor;
 
     public SymbolTable(){
         stClasses = new HashMap<>();
@@ -40,6 +42,14 @@ public class SymbolTable {
 
     public STMethod getCurrentSTMethod(){
         return currentSTMethod;
+    }
+
+    public void setCurrentSTConstructor(STConstructor currentSTConstructor){
+        this.currentSTConstructor = currentSTConstructor;
+    }
+
+    public STConstructor getCurrentSTConstructor(){
+        return currentSTConstructor;
     }
 
     public void insertSTClass(STClass stClass){

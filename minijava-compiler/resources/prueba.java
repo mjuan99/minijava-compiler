@@ -1,8 +1,9 @@
 class MiClase1 extends MiClase2{
-    int a1;
-    char a2, a3, a4;
-    boolean m1(String a, int b, MiClase c){}
-    int m2(){}
+    MiClase1 a1;
+    MiClase2 a2, a3, a4;
+    MiClase3 m1(){}
+    MiClase4 m2(int a, String b, MiClase5 c){}
+    MiClase(char d, MiInterfaz e){}
 
 }
 class MiClase2 implements MiInterfaz1, MiInterfaz2, MiInterfaz3{}

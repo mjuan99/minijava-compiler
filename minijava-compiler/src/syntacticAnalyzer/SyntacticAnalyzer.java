@@ -196,7 +196,7 @@ public class SyntacticAnalyzer {
         }
         else if(invalidEpsilon("implements", "{")) {
             addError(new SyntacticError(currentToken, "extends, implements o {"));
-            throw new SyntacticException(compilerErrorList); //TODO hacer que estos sean throw posta asi puedo retornar en el else
+            throw new SyntacticException(compilerErrorList);
         }else
             return new Token("idClase", "Object", 0);
     }
@@ -364,26 +364,31 @@ public class SyntacticAnalyzer {
     }
 
     private void AtributoTCOMetodoTCOConstructor() throws IOException, SyntacticException {
+        Token idClass = currentToken;
         match("idClase");
-        RestoAtrTCOMetTCOCons();
+        RestoAtrTCOMetTCOCons(idClass);
     }
 
-    private void RestoAtrTCOMetTCOCons() throws IOException, SyntacticException {
+    private void RestoAtrTCOMetTCOCons(Token idClass) throws IOException, SyntacticException {
         if(checkCurrentToken("<", "idMetVar")){
             GenericidadOpt();
+            Token idMetVar = currentToken;
             match("idMetVar");
-            //RestoAtrOMet(); //TODO ARREGLAR ESTO YA
+            RestoAtrOMet(idMetVar, new STTypeReference(idClass));
         }else if(checkCurrentToken("("))
-            RestoConstructor();
+            RestoConstructor(idClass);
         else {
             addError(new SyntacticError(currentToken, "identificador de metodo o variable o argumentos de constructor"));
             throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void RestoConstructor() throws IOException, SyntacticException {
-        ArgsFormales();
+    private void RestoConstructor(Token idClass) throws IOException, SyntacticException {
+        STConstructor stConstructor = new STConstructor(idClass);
+        symbolTable.setCurrentSTConstructor(stConstructor);
+        stConstructor.insertArguments(ArgsFormales());
         Bloque();
+        symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
     }
 
     private void EncabezadoMetodo() throws IOException, SyntacticException {

@@ -9,7 +9,7 @@ public class STClass {
     private Token name;
     private HashMap<String, STAttribute> stAttributes;
     private HashMap<String, STMethod> stMethods;
-    //private HashMap<, STConstructor> stConstructors;
+    private HashMap<String, STConstructor> stConstructors;//TODO como hago con esto
     private Token stClassItExtends;
     private HashMap<String, Token> stInterfacesItImplements;
 
@@ -18,6 +18,7 @@ public class STClass {
         stAttributes = new HashMap<>();
         stMethods = new HashMap<>();
         stInterfacesItImplements = new HashMap<>();
+        stConstructors = new HashMap<>();
     }
 
     public Token getName(){
@@ -51,6 +52,9 @@ public class STClass {
         stMethods.forEach((key, stMethod) -> {
             stMethod.print();
         });
+        stConstructors.forEach((key, stConstructor) -> {
+            stConstructor.print();
+        });
         System.out.println("}");
     }
 
@@ -60,5 +64,9 @@ public class STClass {
 
     public void insertAttribute(STAttribute stAttribute) {
         stAttributes.put(stAttribute.getName().getLexeme(), stAttribute);
+    }
+
+    public void insertConstructor(STConstructor stConstructor) {
+        stConstructors.put(stConstructor.getName().getLexeme(), stConstructor);
     }
 }
