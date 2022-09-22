@@ -1,4 +1,4 @@
-//prueba de consolidación clases (interfaces implementadas)
+//prueba de consolidación clases (atributos de las clases extendidas)
 
 class MiClase{
     int a;

@@ -99,13 +99,26 @@ public class STClass {
                     STClass stClassItExtends = ST.symbolTable.getSTClass(tkClassItExtends.getLexeme());
                     if(stClassItExtends != null){
                         stClassItExtends.consolidate();
-                        addMethodsAndAttributesFromParentSTClass(stClassItExtends);
+                        addMethodsFromParentSTClass(stClassItExtends);
+                        addAttributesFromParentSTClass(stClassItExtends);
                     }
                 }
                 checkInterfacesImplementation();
             }
             consolidated = true;
         }
+    }
+
+    private void addAttributesFromParentSTClass(STClass stClass) {
+        stClass.stAttributes.forEach((key, stAttribute) -> {
+            if(stAttributes.get(stAttribute.getHash()) == null)
+                stAttributes.put(stAttribute.getHash(), stAttribute); //TODO QUE PASA SI ERA PRIVADO
+            else ; //TODO QUE PASA SI YA ESTABA
+        });
+    }
+
+    private void addMethodsFromParentSTClass(STClass stClass) {
+        //TODO IMPLEMENTAR
     }
 
     private void checkInterfacesImplementation() {
@@ -126,10 +139,6 @@ public class STClass {
         });
     }
 
-    private void addMethodsAndAttributesFromParentSTClass(STClass stClassItExtends) {
-        //TODO IMPLEMENTAR
-    }
-
     public void print() {
         StringBuilder interfaces = new StringBuilder();
         for(Token token : tkInterfacesItImplements.values())
@@ -144,7 +153,7 @@ public class STClass {
     public void insertMethod(STMethod stMethod) throws SemanticException {
         if(stMethods.get(stMethod.getHash()) == null) {
             stMethods.put(stMethod.getHash(), stMethod);
-            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main"))
+            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main()"))
                 ST.symbolTable.setHasMain();
         }
         else{

@@ -52,15 +52,19 @@ public class STMethod {
             ST.symbolTable.throwExceptionIfErrorsWereFound();
     }
 
-    private String getSignature(){
-        StringBuilder signature = new StringBuilder();
-        for(STArgument stArgument : stArgumentsList)
-            signature.append("\\").append(stArgument.getType());
+    private String getArgumentsSignature(){
+        StringBuilder signature = new StringBuilder("(");
+        for(int i = 0; i < stArgumentsList.size(); i++) {
+            signature.append(stArgumentsList.get(i).getType());
+            if(i != stArguments.size() - 1)
+                signature.append(", ");
+        }
+        signature.append(")");
         return signature.toString();
     }
 
     public String getHash() {
-        return tkName.getLexeme() + getSignature();
+        return tkName.getLexeme() + getArgumentsSignature();
     }
 
     public void insertArtumentUnchecked(STArgument stArgument) {
