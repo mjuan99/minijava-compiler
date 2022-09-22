@@ -1,3 +1,4 @@
+import Errors.SemanticException;
 import Errors.SyntacticException;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
@@ -24,13 +25,13 @@ public class Main {
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
             new SemanticAnalyzer(syntacticAnalyzer);
-            System.out.println("[SinErrores]");
             syntacticAnalyzer.getSymbolTable().print();
+            System.out.println("[SinErrores]");
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){
             System.out.println("Error de IO");
-        } catch (SyntacticException e) {
+        } catch (SyntacticException | SemanticException e) {
             System.out.println(e.getMessage());
         }
     }

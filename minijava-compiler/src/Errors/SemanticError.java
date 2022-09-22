@@ -11,6 +11,6 @@ public class SemanticError implements CompilerError{
     }
 
     public String getMessage() {
-        return message + "\n[Error:" + token.getLexeme() + "|" + token.getLineNumber() + "]\n";
+        return "Error semántico en la línea: " + token.getLineNumber() + ", "+ message + "\n[Error:" + token.getLexeme() + "|" + token.getLineNumber() + "]\n";
     }
 }

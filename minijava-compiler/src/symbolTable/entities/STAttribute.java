@@ -4,21 +4,25 @@ import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 
 public class STAttribute {
-    private Token name;
+    private Token tkName;
     private STType stType;
     private String visibility;
 
-    public STAttribute(Token name, String visibility, STType stType) {
-        this.name = name;
+    public STAttribute(Token tkName, String visibility, STType stType) {
+        this.tkName = tkName;
         this.visibility = visibility;
         this.stType = stType;
     }
 
     public void print() {
-        System.out.println("    " + visibility + " " + stType + " " + name.getLexeme());
+        System.out.println("    " + visibility + " " + stType + " " + tkName.getLexeme());
     }
 
-    public Token getName() {
-        return name;
+    public Token getTKName() {
+        return tkName;
+    }
+
+    public String getHash() {
+        return tkName.getLexeme();
     }
 }

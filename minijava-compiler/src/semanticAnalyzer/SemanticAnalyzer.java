@@ -1,14 +1,16 @@
 package semanticAnalyzer;
 
+import Errors.SemanticException;
 import symbolTable.SymbolTable;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
 public class SemanticAnalyzer {
     private final SymbolTable symbolTable;
 
-    public SemanticAnalyzer(SyntacticAnalyzer syntacticAnalyzer){
+    public SemanticAnalyzer(SyntacticAnalyzer syntacticAnalyzer) throws SemanticException {
         symbolTable = syntacticAnalyzer.getSymbolTable();
         symbolTable.checkDeclarations();
         symbolTable.consolidate();
+        symbolTable.throwExceptionIfErrorsWereFound();
     }
 }
