@@ -10,14 +10,16 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 public class STInterface {
-    private Token tkName;
-    private HashMap<String, STMethodHeader> stMethodsHeaders;
-    private HashMap<String, Token> tkInterfacesItExtends;
+    private final Token tkName;
+    private final HashMap<String, STMethodHeader> stMethodsHeaders;
+    private final HashMap<String, Token> tkInterfacesItExtends;
+    private boolean consolidated;
 
     public STInterface(Token tkName) {
         this.tkName = tkName;
         stMethodsHeaders = new HashMap<>();
         tkInterfacesItExtends = new HashMap<>();
+        consolidated = false;
     }
 
     public void setSTInterfacesItExtends(LinkedList<Token> tkInterfacesList) throws SemanticException {
@@ -61,13 +63,19 @@ public class STInterface {
     }
 
     public void consolidate() {
+        if(!consolidated){
+
+
+
+            consolidated = true;
+        }
     }
 
     public void print() {
         StringBuilder interfaces = new StringBuilder();
         for(Token token : tkInterfacesItExtends.values())
             interfaces.append(token.getLexeme()).append(", ");
-        System.out.println("interface " + tkName.getLexeme() + " extends " + interfaces + " {");
+        System.out.println("interface " + tkName.getLexeme() + (!interfaces.toString().equals("") ? " extends " + interfaces : "") + " {");
         stMethodsHeaders.forEach((key, stMethod) -> stMethod.print());
         System.out.println("}");
     }

@@ -24,7 +24,7 @@ public class STConstructor {
         System.out.print("    " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
-        System.out.println(")");
+        System.out.println("){}");
     }
 
     public Token getTKName() {

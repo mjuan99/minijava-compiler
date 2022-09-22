@@ -30,7 +30,7 @@ public class STMethod {
         System.out.print("    " + (isStatic ? "static " : "") + returnType + " " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
-        System.out.println(")");
+        System.out.println("){}");
     }
 
     public Token getTKName() {

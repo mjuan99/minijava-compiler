@@ -11,13 +11,14 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public class STClass {
-    private Token tkName;
-    private HashMap<String, STAttribute> stAttributes;
-    private HashMap<String, STMethod> stMethods;
-    private HashMap<String, STConstructor> stConstructors;//TODO como hago con esto
+    private final Token tkName;
+    private final HashMap<String, STAttribute> stAttributes;
+    private final HashMap<String, STMethod> stMethods;
+    private final HashMap<String, STConstructor> stConstructors;
     private Token tkClassItExtends;
-    private HashMap<String, Token> tkInterfacesItImplements;
-    private HashSet<String> ancestorsClasses;
+    private final HashMap<String, Token> tkInterfacesItImplements;
+    private final HashSet<String> ancestorsClasses;
+    private boolean consolidated;
 
     public STClass(Token tkName){
         this.tkName = tkName;
@@ -26,6 +27,7 @@ public class STClass {
         tkInterfacesItImplements = new HashMap<>();
         stConstructors = new HashMap<>();
         ancestorsClasses = new HashSet<>();
+        consolidated = false;
     }
 
     public Token getTKName(){
@@ -62,9 +64,16 @@ public class STClass {
             if(!SyntacticAnalyzer.symbolTable.stInterfaceExists(tkInterface.getLexeme()))
                 SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " no fue declarada"));
         });
+        if(stConstructors.isEmpty())
+            addDefaultConstructor();
         stAttributes.forEach((key, stAttribute) -> stAttribute.checkDeclaration());
         stMethods.forEach((key, stMethod) -> stMethod.checkDeclaration());
         stConstructors.forEach((key, stConstructor) -> stConstructor.checkDeclaration());
+    }
+
+    private void addDefaultConstructor() {
+        STConstructor stDefaultConstructor = new STConstructor(tkName);
+        stConstructors.put(stDefaultConstructor.getHash(), stDefaultConstructor);
     }
 
     private boolean cyclicInheritance(Token tkAncestorClass) {
@@ -79,13 +88,19 @@ public class STClass {
     }
 
     public void consolidate() {
+        if(!consolidated){
+
+
+
+            consolidated = true;
+        }
     }
 
     public void print() {
         StringBuilder interfaces = new StringBuilder();
         for(Token token : tkInterfacesItImplements.values())
             interfaces.append(token.getLexeme()).append(", ");
-        System.out.println("class " + tkName.getLexeme() + (tkClassItExtends != null ? " extends " + tkClassItExtends.getLexeme() : "") + " implements " + interfaces + " {");
+        System.out.println("class " + tkName.getLexeme() + (tkClassItExtends != null ? " extends " + tkClassItExtends.getLexeme() : "") + (!interfaces.toString().equals("") ? " implements " + interfaces : "") + " {");
         stAttributes.forEach((key, stAttribute) -> stAttribute.print());
         stMethods.forEach((key, stMethod) -> stMethod.print());
         stConstructors.forEach((key, stConstructor) -> stConstructor.print());
