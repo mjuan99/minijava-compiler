@@ -6,14 +6,15 @@ import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class STMethodHeader {
-    private Token tkName;
-    private Token tkStatic;
-    private STType returnType;
-    private HashMap<String, STArgument> stArguments;
+    private final Token tkName;
+    private final Token tkStatic;
+    private final STType returnType;
+    private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
 
     public STMethodHeader(Token tkName, Token tkStatic, STType returnType){
@@ -45,7 +46,7 @@ public class STMethodHeader {
                 SyntacticAnalyzer.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
-        stArgumentsList.sort((stArgument1, stArgument2) -> stArgument1.getPosition() - stArgument2.getPosition());
+        stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
         if(error)
             SyntacticAnalyzer.symbolTable.throwExceptionIfErrorsWereFound();
     }
@@ -65,5 +66,6 @@ public class STMethodHeader {
         if(tkStatic != null)
             SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkStatic, "metodo estatico en una interfaz"));
         returnType.checkDeclaration();
+        stArguments.forEach((key, stArgument) -> stArgument.checkDeclaration());
     }
 }

@@ -5,12 +5,13 @@ import Errors.SemanticException;
 import lexicalAnalyzer.Token;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class STConstructor {
-    private Token tkName;
-    private HashMap<String, STArgument> stArguments;
+    private final Token tkName;
+    private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
 
     public STConstructor(Token tkName) {
@@ -40,7 +41,7 @@ public class STConstructor {
                 SyntacticAnalyzer.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
-        stArgumentsList.sort((stArgument1, stArgument2) -> stArgument1.getPosition() - stArgument2.getPosition());
+        stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
         if(error)
             SyntacticAnalyzer.symbolTable.throwExceptionIfErrorsWereFound();
     }
@@ -57,5 +58,6 @@ public class STConstructor {
     }
 
     public void checkDeclaration() {
+        stArguments.forEach((key, stArgument) -> stArgument.checkDeclaration());
     }
 }

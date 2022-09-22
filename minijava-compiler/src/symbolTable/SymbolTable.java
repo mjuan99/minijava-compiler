@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class SymbolTable {
-    private HashMap<String, STClass> stClasses;
-    private HashMap<String, STInterface> stInterfaces;
+    private final HashMap<String, STClass> stClasses;
+    private final HashMap<String, STInterface> stInterfaces;
     private STClass currentSTClass;
     private STInterface currentSTInterface;
     private STMethod currentSTMethod;
     private STConstructor currentSTConstructor;
-    private LinkedList<CompilerError> compilerErrorList;
+    private final LinkedList<CompilerError> compilerErrorList;
     private STMethodHeader currentSTMethodHeader;
 
     public SymbolTable(){

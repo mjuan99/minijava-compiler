@@ -4,9 +4,9 @@ import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 
 public class STArgument {
-    private Token name;
-    private STType stType;
-    private int position;
+    private final Token name;
+    private final STType stType;
+    private final int position;
 
     public STArgument(Token name, STType stType, int position) {
         this.name = name;
@@ -32,5 +32,9 @@ public class STArgument {
 
     public STType getType() {
         return stType;
+    }
+
+    public void checkDeclaration() {
+        stType.checkDeclaration();
     }
 }

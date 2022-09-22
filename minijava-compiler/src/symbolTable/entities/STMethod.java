@@ -6,14 +6,15 @@ import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class STMethod {
-    private Token tkName;
-    private boolean isStatic;
-    private STType returnType;
-    private HashMap<String, STArgument> stArguments;
+    private final Token tkName;
+    private final boolean isStatic;
+    private final STType returnType;
+    private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
     //private STBlock block;
 
@@ -46,7 +47,7 @@ public class STMethod {
                 SyntacticAnalyzer.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
-        stArgumentsList.sort((stArgument1, stArgument2) -> stArgument1.getPosition() - stArgument2.getPosition());
+        stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
         if(error)
             SyntacticAnalyzer.symbolTable.throwExceptionIfErrorsWereFound();
     }
@@ -69,5 +70,6 @@ public class STMethod {
 
     public void checkDeclaration() {
         returnType.checkDeclaration();
+        stArguments.forEach((key, stArgument) -> stArgument.checkDeclaration());
     }
 }
