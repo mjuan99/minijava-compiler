@@ -3,7 +3,7 @@ package symbolTable.entities;
 import Errors.SemanticError;
 import Errors.SemanticException;
 import lexicalAnalyzer.Token;
-import syntacticAnalyzer.SyntacticAnalyzer;
+import symbolTable.ST;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -38,12 +38,12 @@ public class STConstructor {
                 this.stArguments.put(stArgument.getHash(), stArgument);
             else{
                 error = true;
-                SyntacticAnalyzer.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
+                ST.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
         stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
         if(error)
-            SyntacticAnalyzer.symbolTable.throwExceptionIfErrorsWereFound();
+            ST.symbolTable.throwExceptionIfErrorsWereFound();
     }
 
     private String getSignature(){

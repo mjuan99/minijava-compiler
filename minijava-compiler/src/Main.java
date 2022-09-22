@@ -3,6 +3,7 @@ import Errors.SyntacticException;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 import semanticAnalyzer.SemanticAnalyzer;
+import symbolTable.ST;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
 import java.io.FileNotFoundException;
@@ -33,6 +34,6 @@ public class Main {
         } catch (SyntacticException | SemanticException e) {
             System.out.println(e.getMessage());
         }
-        SyntacticAnalyzer.symbolTable.print();
+        ST.symbolTable.print();
     }
 }

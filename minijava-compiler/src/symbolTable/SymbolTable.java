@@ -169,4 +169,12 @@ public class SymbolTable {
     public void setCurrentSTMethodHeader(STMethodHeader stMethodHeader) {
         currentSTMethodHeader = stMethodHeader;
     }
+
+    public STClass getSTClass(String className) {
+        return stClasses.get(className);
+    }
+
+    public STInterface getSTInterface(String interfaceName) {
+        return stInterfaces.get(interfaceName);
+    }
 }

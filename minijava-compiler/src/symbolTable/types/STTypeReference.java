@@ -2,7 +2,7 @@ package symbolTable.types;
 
 import Errors.SemanticError;
 import lexicalAnalyzer.Token;
-import syntacticAnalyzer.SyntacticAnalyzer;
+import symbolTable.ST;
 
 public class STTypeReference implements STType{
     Token reference;
@@ -16,7 +16,7 @@ public class STTypeReference implements STType{
     }
 
     public void checkDeclaration(){
-        if(!SyntacticAnalyzer.symbolTable.stClassExists(reference.getLexeme()) && !SyntacticAnalyzer.symbolTable.stInterfaceExists(reference.getLexeme()))
-            SyntacticAnalyzer.symbolTable.addError(new SemanticError(reference, "la clase " + reference.getLexeme() + " no fue declarada"));
+        if(!ST.symbolTable.stClassExists(reference.getLexeme()) && !ST.symbolTable.stInterfaceExists(reference.getLexeme()))
+            ST.symbolTable.addError(new SemanticError(reference, "la clase " + reference.getLexeme() + " no fue declarada"));
     }
 }

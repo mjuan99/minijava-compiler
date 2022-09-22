@@ -3,6 +3,7 @@ package syntacticAnalyzer;
 import Errors.*;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.Token;
+import symbolTable.ST;
 import symbolTable.entities.*;
 import symbolTable.SymbolTable;
 import symbolTable.types.*;
@@ -18,12 +19,11 @@ public class SyntacticAnalyzer {
     private Token currentToken;
     private final static boolean useAdvancedImplementation = true;
     private final LinkedList<CompilerError> compilerErrorList;
-    public static SymbolTable symbolTable;
 
     public SyntacticAnalyzer(LexicalAnalyzer lexicalAnalyzer) throws IOException, SyntacticException {
         this.lexicalAnalyzer = lexicalAnalyzer;
         compilerErrorList = new LinkedList<>();
-        symbolTable = new SymbolTable();
+        ST.symbolTable = new SymbolTable();
         updateCurrentToken();
         try {
             Inicial();
@@ -32,7 +32,7 @@ public class SyntacticAnalyzer {
     }
 
     public SymbolTable getSymbolTable(){
-        return symbolTable;
+        return ST.symbolTable;
     }
 
     private void addError(CompilerError error){
@@ -86,7 +86,7 @@ public class SyntacticAnalyzer {
     private void Inicial() throws IOException {
         if(checkCurrentToken("interface", "class"))
             ListaClases();
-        else{
+        else if(invalidEpsilon("EOF")){
             addError(new SyntacticError(currentToken, "declaracion de clase o interfaz"));
             discardTokensUntilValidTokenIsFound("}");
             if(checkCurrentToken("}")) {
@@ -127,7 +127,7 @@ public class SyntacticAnalyzer {
             match("class");
             Token tkClass = ClaseGenerica();
             STClass stClass = new STClass(tkClass);
-            symbolTable.setCurrentSTClass(stClass);
+            ST.symbolTable.setCurrentSTClass(stClass);
             stClass.setSTClassItExtends(HeredaDe());
             try {
                 stClass.setTkInterfacesItImplements(ImplementaA());
@@ -145,7 +145,7 @@ public class SyntacticAnalyzer {
             updateCurrentToken();
         }
         try {
-            symbolTable.insertSTClass(symbolTable.getCurrentSTClass());
+            ST.symbolTable.insertSTClass(ST.symbolTable.getCurrentSTClass());
         } catch (SemanticException ignored) {}
     }
 
@@ -177,7 +177,7 @@ public class SyntacticAnalyzer {
             match("interface");
             Token tkInterface = ClaseGenerica();
             STInterface stInterface = new STInterface(tkInterface);
-            symbolTable.setCurrentSTInterface(stInterface);
+            ST.symbolTable.setCurrentSTInterface(stInterface);
             try {
                 stInterface.setSTInterfacesItExtends(ExtiendeA());
             } catch (SemanticException ignored) {}
@@ -185,7 +185,7 @@ public class SyntacticAnalyzer {
             ListaEncabezados();
             match("}");
             try {
-                symbolTable.insertSTInterface(symbolTable.getCurrentSTInterface());
+                ST.symbolTable.insertSTInterface(ST.symbolTable.getCurrentSTInterface());
             } catch (SemanticException ignored) {}
         }catch(SyntacticException e){
             discardTokensUntilValidTokenIsFound("}");
@@ -318,7 +318,7 @@ public class SyntacticAnalyzer {
         match(";");
         for(Token tkAttribute : tkAttributesList) {
             try {
-                symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, visibility, stType));
+                ST.symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, visibility, stType));
             } catch (SemanticException ignored) {}
         }
     }
@@ -327,28 +327,28 @@ public class SyntacticAnalyzer {
         match("static");
         STType returnType = TipoMetodoEstatico();
         STMethod stMethod = new STMethod(currentToken, true, returnType);
-        symbolTable.setCurrentSTMethod(stMethod);
+        ST.symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
         try {
             stMethod.insertArguments(ArgsFormales());
         } catch (SemanticException ignored) {}
         Bloque();
         try {
-            symbolTable.getCurrentSTClass().insertMethod(stMethod);
+            ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
         } catch (SemanticException ignored) {}
     }
 
     private void MetodoNoEstVoid() throws IOException, SyntacticException {
         match("void");
         STMethod stMethod = new STMethod(currentToken, false, new STTypeVoid());
-        symbolTable.setCurrentSTMethod(stMethod);
+        ST.symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
         try {
             stMethod.insertArguments(ArgsFormales());
         } catch (SemanticException ignored) {}
         Bloque();
         try {
-            symbolTable.getCurrentSTClass().insertMethod(stMethod);
+            ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
         } catch (SemanticException ignored) {}
     }
 
@@ -366,18 +366,18 @@ public class SyntacticAnalyzer {
             tkAttributesList.add(idMetVar);
             for(Token tkAttribute : tkAttributesList) {
                 try {
-                    symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, "public", stType));
+                    ST.symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, "public", stType));
                 } catch (SemanticException ignored) {}
             }
         }else if(checkCurrentToken("(")) {
             STMethod stMethod = new STMethod(idMetVar, false, stType);
-            symbolTable.setCurrentSTMethod(stMethod);
+            ST.symbolTable.setCurrentSTMethod(stMethod);
             try {
                 stMethod.insertArguments(ArgsFormales());
             } catch (SemanticException ignored) {}
             Bloque();
             try {
-                symbolTable.getCurrentSTClass().insertMethod(stMethod);
+                ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
             } catch (SemanticException ignored) {}
         }else {
             addError(new SyntacticError(currentToken, "',', ; o argumentos formales"));
@@ -407,13 +407,13 @@ public class SyntacticAnalyzer {
 
     private void RestoConstructor(Token idClass) throws IOException, SyntacticException {
         STConstructor stConstructor = new STConstructor(idClass);
-        symbolTable.setCurrentSTConstructor(stConstructor);
+        ST.symbolTable.setCurrentSTConstructor(stConstructor);
         try {
             stConstructor.insertArguments(ArgsFormales());
         } catch (SemanticException ignored) {}
         Bloque();
         try {
-            symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
+            ST.symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
         } catch (SemanticException ignored) {}
     }
 
@@ -426,13 +426,13 @@ public class SyntacticAnalyzer {
         else
             returnType = TipoMetodo();
         STMethodHeader stMethodHeader = new STMethodHeader(currentToken, tkStatic, returnType);
-        symbolTable.setCurrentSTMethodHeader(stMethodHeader);
+        ST.symbolTable.setCurrentSTMethodHeader(stMethodHeader);
         match("idMetVar");
         try {
             stMethodHeader.insertArguments(ArgsFormales());
         } catch (SemanticException ignored) {}
         try {
-            symbolTable.getCurrentSTInterface().insertMethod(stMethodHeader);
+            ST.symbolTable.getCurrentSTInterface().insertMethod(stMethodHeader);
         } catch (SemanticException ignored) {}
     }
 
