@@ -66,4 +66,7 @@ public class STMethod {
         stArguments.put(stArgument.getHash(), stArgument);
         stArgumentsList.add(stArgument);
     }
+
+    public void checkDeclaration() {
+    }
 }

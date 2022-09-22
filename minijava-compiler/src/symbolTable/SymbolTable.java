@@ -18,6 +18,7 @@ public class SymbolTable {
     private STMethod currentSTMethod;
     private STConstructor currentSTConstructor;
     private LinkedList<CompilerError> compilerErrorList;
+    private STMethodHeader currentSTMethodHeader;
 
     public SymbolTable(){
         stClasses = new HashMap<>();
@@ -163,5 +164,9 @@ public class SymbolTable {
 
     public HashMap<String, Token> getTKParentsInterfaces(Token tkInterface) {
         return stInterfaces.get(tkInterface.getLexeme()).getTKInterfacesItExtends();
+    }
+
+    public void setCurrentSTMethodHeader(STMethodHeader stMethodHeader) {
+        currentSTMethodHeader = stMethodHeader;
     }
 }

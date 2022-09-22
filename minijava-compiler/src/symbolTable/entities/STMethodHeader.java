@@ -3,24 +3,29 @@ package symbolTable.entities;
 import Errors.SemanticError;
 import Errors.SemanticException;
 import lexicalAnalyzer.Token;
+import symbolTable.types.STType;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class STConstructor {
+public class STMethodHeader {
     private Token tkName;
+    private boolean isStatic;
+    private STType returnType;
     private HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
 
-    public STConstructor(Token tkName) {
+    public STMethodHeader(Token tkName, boolean isStatic, STType returnType){
         this.tkName = tkName;
+        this.isStatic = isStatic;
+        this.returnType = returnType;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
     }
 
     public void print() {
-        System.out.print("    " + tkName.getLexeme() + "(");
+        System.out.print("    " + (isStatic ? "static " : "") + returnType + " " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
         System.out.println(")");

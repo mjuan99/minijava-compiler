@@ -4,4 +4,7 @@ public class STTypeInt implements STPrimitiveType{
     public String toString(){
         return "int";
     }
+
+    public void checkDeclaration() {
+    }
 }

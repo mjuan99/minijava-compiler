@@ -11,12 +11,12 @@ import java.util.LinkedList;
 
 public class STInterface {
     private Token tkName;
-    private HashMap<String, STMethod> stMethods;
+    private HashMap<String, STMethodHeader> stMethodsHeaders;
     private HashMap<String, Token> tkInterfacesItExtends;
 
     public STInterface(Token tkName) {
         this.tkName = tkName;
-        stMethods = new HashMap<>();
+        stMethodsHeaders = new HashMap<>();
         tkInterfacesItExtends = new HashMap<>();
     }
 
@@ -44,6 +44,7 @@ public class STInterface {
             }else
                 SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " no fue declarada"));
         });
+        stMethodsHeaders.forEach((key, stMethodsHeader) -> stMethodsHeader.checkDeclaration());
     }
 
     private boolean cyclicInheritance(Token tkAncestorInterface, HashSet<String> ancestorsInterfaces) {
@@ -67,7 +68,7 @@ public class STInterface {
         for(Token token : tkInterfacesItExtends.values())
             interfaces.append(token.getLexeme()).append(", ");
         System.out.println("interface " + tkName.getLexeme() + " extends " + interfaces + " {");
-        stMethods.forEach((key, stMethod) -> stMethod.print());
+        stMethodsHeaders.forEach((key, stMethod) -> stMethod.print());
         System.out.println("}");
     }
 
@@ -75,11 +76,11 @@ public class STInterface {
         return tkName;
     }
 
-    public void insertMethod(STMethod stMethod) throws SemanticException {
-        if(stMethods.get(stMethod.getHash()) == null)
-            stMethods.put(stMethod.getHash(), stMethod);
+    public void insertMethod(STMethodHeader stMethodHeader) throws SemanticException {
+        if(stMethodsHeaders.get(stMethodHeader.getHash()) == null)
+            stMethodsHeaders.put(stMethodHeader.getHash(), stMethodHeader);
         else{
-            SyntacticAnalyzer.symbolTable.addError(new SemanticError(stMethod.getTKName(), "el método " + stMethod.getHash() + " ya estaba definido"));
+            SyntacticAnalyzer.symbolTable.addError(new SemanticError(stMethodHeader.getTKName(), "el método " + stMethodHeader.getHash() + " ya estaba definido"));
             SyntacticAnalyzer.symbolTable.throwExceptionIfErrorsWereFound();
         }
     }

@@ -425,14 +425,14 @@ public class SyntacticAnalyzer {
             returnType = TipoMetodoEstatico();
         else
             returnType = TipoMetodo();
-        STMethod stMethod = new STMethod(currentToken, isStatic, returnType);
-        symbolTable.setCurrentSTMethod(stMethod);
+        STMethodHeader stMethodHeader = new STMethodHeader(currentToken, isStatic, returnType);
+        symbolTable.setCurrentSTMethodHeader(stMethodHeader);
         match("idMetVar");
         try {
-            stMethod.insertArguments(ArgsFormales());
+            stMethodHeader.insertArguments(ArgsFormales());
         } catch (SemanticException ignored) {}
         try {
-            symbolTable.getCurrentSTInterface().insertMethod(stMethod);
+            symbolTable.getCurrentSTInterface().insertMethod(stMethodHeader);
         } catch (SemanticException ignored) {}
     }
 

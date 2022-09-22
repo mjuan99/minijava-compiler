@@ -62,6 +62,9 @@ public class STClass {
             if(!SyntacticAnalyzer.symbolTable.stInterfaceExists(tkInterface.getLexeme()))
                 SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " no fue declarada"));
         });
+        stAttributes.forEach((key, stAttribute) -> stAttribute.checkDeclaration());
+        stMethods.forEach((key, stMethod) -> stMethod.checkDeclaration());
+        stConstructors.forEach((key, stConstructor) -> stConstructor.checkDeclaration());
     }
 
     private boolean cyclicInheritance(Token tkAncestorClass) {

@@ -25,4 +25,8 @@ public class STAttribute {
     public String getHash() {
         return tkName.getLexeme();
     }
+
+    public void checkDeclaration() {
+        stType.checkDeclaration();
+    }
 }
