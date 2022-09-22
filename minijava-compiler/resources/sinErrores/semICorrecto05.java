@@ -19,3 +19,7 @@ interface MiInterfaz4 extends MiInterfaz5{
 interface MiInterfaz5{
     MiInterfaz1 metodoDeLaInterfaz5();
 }
+
+class MiClase{
+    static int main(){}
+}

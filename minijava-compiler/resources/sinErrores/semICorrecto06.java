@@ -16,4 +16,5 @@ class MiClase implements MiInterfaz1, MiInterfaz2, MiInterfaz3{
     int m1(){}
     void m2(){}
     String m3(){}
+    static boolean main(){}
 }

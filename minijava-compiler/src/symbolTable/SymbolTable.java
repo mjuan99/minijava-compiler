@@ -19,12 +19,14 @@ public class SymbolTable {
     private STConstructor currentSTConstructor;
     private final LinkedList<CompilerError> compilerErrorList;
     private STMethodHeader currentSTMethodHeader;
+    private boolean hasMain;
 
     public SymbolTable(){
         stClasses = new HashMap<>();
         stInterfaces = new HashMap<>();
         compilerErrorList = new LinkedList<>();
         loadDefaultValues();
+        hasMain = false;
     }
 
     private void loadDefaultValues() {
@@ -144,9 +146,15 @@ public class SymbolTable {
         stInterfaces.forEach((key, stInterface) -> stInterface.print());
     }
 
+    public void setHasMain(){
+        hasMain = true;
+    }
+
     public void checkDeclarations(){
         stClasses.forEach((key, stClass) -> stClass.checkDeclaration());
         stInterfaces.forEach((key, stInterface) -> stInterface.checkDeclaration());
+        if(!hasMain)
+            ST.symbolTable.addError(new SemanticError(new Token("idMetVar", "main", 0), "ninguna clase tiene un metodo estatico main"));
     }
     public void consolidate(){
         stClasses.forEach((key, stClass) -> stClass.consolidate());

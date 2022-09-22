@@ -11,4 +11,5 @@ interface MiInterfaz2{
 class MiClase implements MiInterfaz1{
     MiClase m1(){}
     static void m2(){}
+    static void main(){}
 }

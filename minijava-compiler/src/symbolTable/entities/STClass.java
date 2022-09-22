@@ -142,8 +142,11 @@ public class STClass {
     }
 
     public void insertMethod(STMethod stMethod) throws SemanticException {
-        if(stMethods.get(stMethod.getHash()) == null)
+        if(stMethods.get(stMethod.getHash()) == null) {
             stMethods.put(stMethod.getHash(), stMethod);
+            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main"))
+                ST.symbolTable.setHasMain();
+        }
         else{
             ST.symbolTable.addError(new SemanticError(stMethod.getTKName(), "el método " + stMethod.getHash() + " ya estaba definido"));
             ST.symbolTable.throwExceptionIfErrorsWereFound();
