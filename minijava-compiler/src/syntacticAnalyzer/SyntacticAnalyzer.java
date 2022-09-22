@@ -419,13 +419,13 @@ public class SyntacticAnalyzer {
 
     private void EncabezadoMetodo() throws IOException, SyntacticException {
         STType returnType;
-        boolean isStatic = checkCurrentToken("static");
+        Token tkStatic = checkCurrentToken("static") ? currentToken : null;
         EstaticoOpt();
-        if(isStatic)
+        if(tkStatic != null)
             returnType = TipoMetodoEstatico();
         else
             returnType = TipoMetodo();
-        STMethodHeader stMethodHeader = new STMethodHeader(currentToken, isStatic, returnType);
+        STMethodHeader stMethodHeader = new STMethodHeader(currentToken, tkStatic, returnType);
         symbolTable.setCurrentSTMethodHeader(stMethodHeader);
         match("idMetVar");
         try {

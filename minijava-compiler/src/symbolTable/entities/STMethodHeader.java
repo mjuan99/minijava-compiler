@@ -11,21 +11,21 @@ import java.util.LinkedList;
 
 public class STMethodHeader {
     private Token tkName;
-    private boolean isStatic;
+    private Token tkStatic;
     private STType returnType;
     private HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
 
-    public STMethodHeader(Token tkName, boolean isStatic, STType returnType){
+    public STMethodHeader(Token tkName, Token tkStatic, STType returnType){
         this.tkName = tkName;
-        this.isStatic = isStatic;
+        this.tkStatic = tkStatic;
         this.returnType = returnType;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
     }
 
     public void print() {
-        System.out.print("    " + (isStatic ? "static " : "") + returnType + " " + tkName.getLexeme() + "(");
+        System.out.print("    " + (tkStatic != null ? "static " : "") + returnType + " " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
         System.out.println(")");
@@ -62,6 +62,8 @@ public class STMethodHeader {
     }
 
     public void checkDeclaration() {
+        if(tkStatic != null)
+            SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkStatic, "metodo estatico en una interfaz"));
         returnType.checkDeclaration();
     }
 }

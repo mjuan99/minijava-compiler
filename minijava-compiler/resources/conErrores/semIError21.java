@@ -1,4 +1,4 @@
-//[Error:MiInterfaz3|3]
+//[Error:static|4]
 
 interface MiInterfaz{
     static int m1();
