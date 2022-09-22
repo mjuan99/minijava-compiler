@@ -13,21 +13,21 @@ import java.util.LinkedList;
 public class STMethod {
     private final Token tkName;
     private final boolean isStatic;
-    private final STType returnType;
+    private final STType stReturnType;
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
     //private STBlock block;
 
-    public STMethod(Token tkName, boolean isStatic, STType returnType){
+    public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
         this.isStatic = isStatic;
-        this.returnType = returnType;
+        this.stReturnType = stReturnType;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
     }
 
     public void print() {
-        System.out.print("    " + (isStatic ? "static " : "") + returnType + " " + tkName.getLexeme() + "(");
+        System.out.print("    " + (isStatic ? "static " : "") + stReturnType + " " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
         System.out.println("){}");
@@ -69,7 +69,15 @@ public class STMethod {
     }
 
     public void checkDeclaration() {
-        returnType.checkDeclaration();
+        stReturnType.checkDeclaration();
         stArguments.forEach((key, stArgument) -> stArgument.checkDeclaration());
+    }
+
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public STType getSTReturnType() {
+        return stReturnType;
     }
 }

@@ -7,4 +7,8 @@ public class STTypeVoid implements STType{
 
     public void checkDeclaration() {
     }
+
+    public boolean equals(STType stType){
+        return stType instanceof STTypeVoid;
+    }
 }

@@ -102,20 +102,28 @@ public class STClass {
                         addMethodsAndAttributesFromParentSTClass(stClassItExtends);
                     }
                 }
-                tkInterfacesItImplements.forEach((key, tkInterface) -> {
-                    STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
-                    if(stInterface != null){
-                        stInterface.consolidate();
-                        checkInterfaceMethodsImplementation(stInterface);
-                    }
-                });
+                checkInterfacesImplementation();
             }
             consolidated = true;
         }
     }
 
-    private void checkInterfaceMethodsImplementation(STInterface stInterface) {
-        //TODO IMPLEMENTAR
+    private void checkInterfacesImplementation() {
+        tkInterfacesItImplements.forEach((key, tkInterface) -> {
+            STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
+            if(stInterface != null){
+                stInterface.consolidate();
+                stInterface.getSTMethodsHeaders().forEach((key2, stMethodHeader) -> {
+                    STMethod stImplementedMethod = stMethods.get(stMethodHeader.getHash());
+                    if(stImplementedMethod == null)
+                        ST.symbolTable.addError(new SemanticError(tkInterface, "no se implementa el metodo " + stMethodHeader.getHash() + " de la interfaz " + tkInterface.getLexeme()));
+                    else if(!stMethodHeader.getSTReturnType().equals(stImplementedMethod.getSTReturnType()))
+                        ST.symbolTable.addError(new SemanticError(stImplementedMethod.getTKName(), "el metodo " + stMethodHeader.getHash() + " implementado de la interfaz " + tkInterface.getLexeme() + " deberia ser tipo " + stMethodHeader.getSTReturnType().toString()));
+                    else if(stImplementedMethod.isStatic() && !stMethodHeader.isStatic())
+                        ST.symbolTable.addError(new SemanticError(stImplementedMethod.getTKName(), "el metodo " + stMethodHeader.getHash() + " implementado de la interfaz " + tkInterface.getLexeme() + " no debe ser estatico"));
+                });
+            }
+        });
     }
 
     private void addMethodsAndAttributesFromParentSTClass(STClass stClassItExtends) {

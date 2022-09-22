@@ -86,7 +86,7 @@ public class STInterface {
                 stMethodsHeaders.putIfAbsent(stMethodHeader.getHash(), stMethodHeader));
     }
 
-    private HashMap<String, STMethodHeader> getSTMethodsHeaders() {
+    public HashMap<String, STMethodHeader> getSTMethodsHeaders() {
         return stMethodsHeaders;
     }
 

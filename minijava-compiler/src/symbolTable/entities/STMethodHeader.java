@@ -13,20 +13,20 @@ import java.util.LinkedList;
 public class STMethodHeader {
     private final Token tkName;
     private final Token tkStatic;
-    private final STType returnType;
+    private final STType stReturnType;
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
 
-    public STMethodHeader(Token tkName, Token tkStatic, STType returnType){
+    public STMethodHeader(Token tkName, Token tkStatic, STType stReturnType){
         this.tkName = tkName;
         this.tkStatic = tkStatic;
-        this.returnType = returnType;
+        this.stReturnType = stReturnType;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
     }
 
     public void print() {
-        System.out.print("    " + (tkStatic != null ? "static " : "") + returnType + " " + tkName.getLexeme() + "(");
+        System.out.print("    " + (tkStatic != null ? "static " : "") + stReturnType + " " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
         System.out.println(");");
@@ -65,7 +65,15 @@ public class STMethodHeader {
     public void checkDeclaration() {
         if(tkStatic != null)
             ST.symbolTable.addError(new SemanticError(tkStatic, "metodo estatico en una interfaz"));
-        returnType.checkDeclaration();
+        stReturnType.checkDeclaration();
         stArguments.forEach((key, stArgument) -> stArgument.checkDeclaration());
+    }
+
+    public boolean isStatic() {
+        return tkStatic != null;
+    }
+
+    public STType getSTReturnType() {
+        return stReturnType;
     }
 }

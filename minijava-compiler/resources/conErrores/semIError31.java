@@ -1,7 +1,7 @@
-//prueba de consolidación clases (interfaces implementadas)
+//[Error:MiInterfaz1|11]
 
 interface MiInterfaz1 extends MiInterfaz2{
-    MiClase m1();
+    int m1();
 }
 
 interface MiInterfaz2{
@@ -9,6 +9,5 @@ interface MiInterfaz2{
 }
 
 class MiClase implements MiInterfaz1{
-    MiClase m1(){}
-    static void m2(){}
+    int m1(){}
 }
