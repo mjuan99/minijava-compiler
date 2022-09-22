@@ -1,4 +1,4 @@
-//[Error:MiInterfaz3|3]
+//[Error:MiInterfaz7|13]
 
 interface MiInterfaz1 extends MiInterfaz2, MiInterfaz3{}
 

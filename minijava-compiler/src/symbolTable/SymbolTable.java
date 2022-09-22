@@ -156,4 +156,12 @@ public class SymbolTable {
         if(!compilerErrorList.isEmpty())
             throw new SemanticException(compilerErrorList);
     }
+
+    public Token getTKParentClass(Token tkClass) {
+        return stClasses.get(tkClass.getLexeme()).getTKClassItExtends();
+    }
+
+    public HashMap<String, Token> getTKParentsInterfaces(Token tkInterface) {
+        return stInterfaces.get(tkInterface.getLexeme()).getTKInterfacesItExtends();
+    }
 }

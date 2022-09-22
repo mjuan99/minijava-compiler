@@ -6,6 +6,7 @@ import lexicalAnalyzer.Token;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class STInterface {
@@ -34,10 +35,28 @@ public class STInterface {
     }
 
     public void checkDeclaration() {
-        tkInterfacesItExtends.forEach((key, tkInterface) -> {
-            if(!SyntacticAnalyzer.symbolTable.stInterfaceExists(tkInterface.getLexeme()))
-                SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " no fue declarada"));
+        HashSet<String> ancestorsInterfaces = new HashSet<>();
+        ancestorsInterfaces.add(tkName.getLexeme());
+        tkInterfacesItExtends.forEach((key, tkParentInterface) -> {
+            if(SyntacticAnalyzer.symbolTable.stInterfaceExists(tkParentInterface.getLexeme())){
+                if(cyclicInheritance(tkParentInterface, ancestorsInterfaces))
+                    SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " produce herencia circular"));
+            }else
+                SyntacticAnalyzer.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " no fue declarada"));
         });
+    }
+
+    private boolean cyclicInheritance(Token tkAncestorInterface, HashSet<String> ancestorsInterfaces) {
+        if(ancestorsInterfaces.contains(tkAncestorInterface.getLexeme()))
+            return true;
+        else{
+            ancestorsInterfaces.add(tkAncestorInterface.getLexeme());
+            for(Token tkAncestorParentInterface : SyntacticAnalyzer.symbolTable.getTKParentsInterfaces(tkAncestorInterface).values())
+                if(cyclicInheritance(tkAncestorParentInterface, ancestorsInterfaces))
+                    return true;
+            ancestorsInterfaces.remove(tkAncestorInterface.getLexeme());
+        }
+        return false;
     }
 
     public void consolidate() {
@@ -67,5 +86,9 @@ public class STInterface {
 
     public String getHash() {
         return tkName.getLexeme();
+    }
+
+    public HashMap<String, Token> getTKInterfacesItExtends() {
+        return tkInterfacesItExtends;
     }
 }
