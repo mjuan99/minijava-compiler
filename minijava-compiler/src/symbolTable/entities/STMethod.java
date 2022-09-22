@@ -68,5 +68,6 @@ public class STMethod {
     }
 
     public void checkDeclaration() {
+        returnType.checkDeclaration();
     }
 }

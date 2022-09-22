@@ -1,10 +1,6 @@
-//[Error:MiInterfaz3|3]
-
-class MiClase{}
+//[Error:MiClase2|5]
 
 interface MiInterfaz{
     static MiInterfaz m1();
-    MiClase m2();
     static MiClase2 m3();
-    MiClase3 m4();
 }

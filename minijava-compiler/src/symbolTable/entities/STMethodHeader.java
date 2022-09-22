@@ -62,5 +62,6 @@ public class STMethodHeader {
     }
 
     public void checkDeclaration() {
+        returnType.checkDeclaration();
     }
 }
