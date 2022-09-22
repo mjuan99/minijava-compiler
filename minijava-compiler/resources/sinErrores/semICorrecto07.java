@@ -1,4 +1,4 @@
-//prueba de consolidación clases (atributos de las clases extendidas)
+//prueba de consolidación clases (atributos heredados)
 
 class MiClase{
     int a;

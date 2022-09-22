@@ -118,7 +118,17 @@ public class STClass {
     }
 
     private void addMethodsFromParentSTClass(STClass stClass) {
-        //TODO IMPLEMENTAR
+        stClass.stMethods.forEach((key, stParentMethod) -> {
+            STMethod stMyMethod = stMethods.get(stParentMethod.getHash());
+            if(stMyMethod == null)
+                stMethods.put(stParentMethod.getHash(), stParentMethod);
+            else if(!stMyMethod.getSTReturnType().equals(stParentMethod.getSTReturnType()))
+                ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el tipo de retorno de " + stMyMethod.getHash() + " no coincide con el tipo " + stParentMethod.getSTReturnType() + " del metodo redefinido"));
+            else if(stMyMethod.isStatic() && !stParentMethod.isStatic())
+                ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " es estatico pero el metodo que redefine no lo es"));
+            else if(!stMyMethod.isStatic() && stParentMethod.isStatic())
+                ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " no es estatico pero el metodo que redefine si lo es"));
+        });
     }
 
     private void checkInterfacesImplementation() {

@@ -1,4 +1,4 @@
-//prueba de consolidación clases (interfaces implementadas)
+//prueba de consolidación clases (metodos heredados/redefinidos)
 
 class MiClase{
     int m1(char a, String b){}
@@ -11,9 +11,8 @@ class MiClase{
 class MiClase2 extends MiClase{
     char m1(){}
     void m2(boolean e, MiClase f){}
-    int m2(){}
-    static String m4(){}
-    void m4(char i, String j){}
+    String m4(){}
+    static void m4(char i, String j){}
 
     static void main(){}
 }
