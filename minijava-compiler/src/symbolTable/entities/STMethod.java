@@ -17,6 +17,7 @@ public class STMethod {
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
     //private STBlock block;
+    private boolean errorFound;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -24,6 +25,11 @@ public class STMethod {
         this.stReturnType = stReturnType;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
+        errorFound = false;
+    }
+
+    public boolean errorFound(){
+        return errorFound;
     }
 
     public void print() {

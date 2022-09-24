@@ -16,6 +16,7 @@ public class STMethodHeader {
     private final STType stReturnType;
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
+    private boolean errorFound;
 
     public STMethodHeader(Token tkName, Token tkStatic, STType stReturnType){
         this.tkName = tkName;
@@ -23,6 +24,11 @@ public class STMethodHeader {
         this.stReturnType = stReturnType;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
+        errorFound = false;
+    }
+
+    public boolean errorFound(){
+        return errorFound;
     }
 
     public void print() {

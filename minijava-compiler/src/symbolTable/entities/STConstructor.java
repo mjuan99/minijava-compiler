@@ -13,11 +13,17 @@ public class STConstructor {
     private final Token tkName;
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
+    private boolean errorFound;
 
     public STConstructor(Token tkName) {
         this.tkName = tkName;
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
+        errorFound = false;
+    }
+
+    public boolean errorFound(){
+        return errorFound;
     }
 
     public void print() {

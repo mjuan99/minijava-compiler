@@ -20,6 +20,7 @@ public class STClass {
     private final HashSet<String> ancestorsClasses;
     private boolean consolidated;
     private boolean cyclicInheritance;
+    private boolean errorFound;
 
     public STClass(Token tkName){
         this.tkName = tkName;
@@ -30,6 +31,11 @@ public class STClass {
         ancestorsClasses = new HashSet<>();
         consolidated = false;
         cyclicInheritance = false;
+        errorFound = false;
+    }
+
+    public boolean errorFound(){
+        return errorFound;
     }
 
     public Token getTKName(){
@@ -99,8 +105,10 @@ public class STClass {
                     STClass stClassItExtends = ST.symbolTable.getSTClass(tkClassItExtends.getLexeme());
                     if(stClassItExtends != null){
                         stClassItExtends.consolidate();
-                        addMethodsFromParentSTClass(stClassItExtends);
-                        addAttributesFromParentSTClass(stClassItExtends);
+                        if(!stClassItExtends.errorFound()) {
+                            addMethodsFromParentSTClass(stClassItExtends);
+                            addAttributesFromParentSTClass(stClassItExtends);
+                        }
                     }
                 }
                 checkInterfacesImplementation();
@@ -111,39 +119,44 @@ public class STClass {
 
     private void addAttributesFromParentSTClass(STClass stClass) {
         stClass.stAttributes.forEach((key, stAttribute) -> {
-            if(stAttributes.get(stAttribute.getHash()) == null)
-                stAttributes.put(stAttribute.getHash(), stAttribute); //TODO QUE PASA SI ERA PRIVADO
-            else ; //TODO QUE PASA SI YA ESTABA
+            if(!stAttribute.errorFound())
+                if(stAttributes.get(stAttribute.getHash()) == null)
+                    stAttributes.put(stAttribute.getHash(), stAttribute); //TODO QUE PASA SI ERA PRIVADO
+                else ; //TODO QUE PASA SI YA ESTABA
         });
     }
 
     private void addMethodsFromParentSTClass(STClass stClass) {
         stClass.stMethods.forEach((key, stParentMethod) -> {
-            STMethod stMyMethod = stMethods.get(stParentMethod.getHash());
-            if(stMyMethod == null)
-                stMethods.put(stParentMethod.getHash(), stParentMethod);
-            else if(!stMyMethod.getSTReturnType().equals(stParentMethod.getSTReturnType()))
-                ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el tipo de retorno de " + stMyMethod.getHash() + " no coincide con el tipo " + stParentMethod.getSTReturnType() + " del metodo redefinido"));
-            else if(stMyMethod.isStatic() && !stParentMethod.isStatic())
-                ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " es estatico pero el metodo que redefine no lo es"));
-            else if(!stMyMethod.isStatic() && stParentMethod.isStatic())
-                ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " no es estatico pero el metodo que redefine si lo es"));
+            if(!stParentMethod.errorFound()) {
+                STMethod stMyMethod = stMethods.get(stParentMethod.getHash());
+                if (stMyMethod == null)
+                    stMethods.put(stParentMethod.getHash(), stParentMethod);
+                else if (!stMyMethod.getSTReturnType().equals(stParentMethod.getSTReturnType()))
+                    ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el tipo de retorno de " + stMyMethod.getHash() + " no coincide con el tipo " + stParentMethod.getSTReturnType() + " del metodo redefinido"));
+                else if (stMyMethod.isStatic() && !stParentMethod.isStatic())
+                    ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " es estatico pero el metodo que redefine no lo es"));
+                else if (!stMyMethod.isStatic() && stParentMethod.isStatic())
+                    ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " no es estatico pero el metodo que redefine si lo es"));
+            }
         });
     }
 
     private void checkInterfacesImplementation() {
         tkInterfacesItImplements.forEach((key, tkInterface) -> {
             STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
-            if(stInterface != null){
+            if(stInterface != null && !stInterface.errorFound()){
                 stInterface.consolidate();
                 stInterface.getSTMethodsHeaders().forEach((key2, stMethodHeader) -> {
-                    STMethod stImplementedMethod = stMethods.get(stMethodHeader.getHash());
-                    if(stImplementedMethod == null)
-                        ST.symbolTable.addError(new SemanticError(tkInterface, "no se implementa el metodo " + stMethodHeader.getHash() + " de la interfaz " + tkInterface.getLexeme()));
-                    else if(!stMethodHeader.getSTReturnType().equals(stImplementedMethod.getSTReturnType()))
-                        ST.symbolTable.addError(new SemanticError(stImplementedMethod.getTKName(), "el metodo " + stMethodHeader.getHash() + " implementado de la interfaz " + tkInterface.getLexeme() + " deberia ser tipo " + stMethodHeader.getSTReturnType().toString()));
-                    else if(stImplementedMethod.isStatic() && !stMethodHeader.isStatic())
-                        ST.symbolTable.addError(new SemanticError(stImplementedMethod.getTKName(), "el metodo " + stMethodHeader.getHash() + " implementado de la interfaz " + tkInterface.getLexeme() + " no debe ser estatico"));
+                    if(!stMethodHeader.errorFound()) {
+                        STMethod stImplementedMethod = stMethods.get(stMethodHeader.getHash());
+                        if (stImplementedMethod == null)
+                            ST.symbolTable.addError(new SemanticError(tkInterface, "no se implementa el metodo " + stMethodHeader.getHash() + " de la interfaz " + tkInterface.getLexeme()));
+                        else if (!stMethodHeader.getSTReturnType().equals(stImplementedMethod.getSTReturnType()))
+                            ST.symbolTable.addError(new SemanticError(stImplementedMethod.getTKName(), "el metodo " + stMethodHeader.getHash() + " implementado de la interfaz " + tkInterface.getLexeme() + " deberia ser tipo " + stMethodHeader.getSTReturnType().toString()));
+                        else if (stImplementedMethod.isStatic() && !stMethodHeader.isStatic())
+                            ST.symbolTable.addError(new SemanticError(stImplementedMethod.getTKName(), "el metodo " + stMethodHeader.getHash() + " implementado de la interfaz " + tkInterface.getLexeme() + " no debe ser estatico"));
+                    }
                 });
             }
         });
@@ -173,10 +186,11 @@ public class STClass {
     }
 
     public void insertAttribute(STAttribute stAttribute) throws SemanticException {
+        stAttribute.setTKClass(tkName);
         if(stAttributes.get(stAttribute.getHash()) == null)
             stAttributes.put(stAttribute.getHash(), stAttribute);
         else{
-            ST.symbolTable.addError(new SemanticError(stAttribute.getTKName(), "el atributo " + stAttribute.getHash() + " ya estaba definido"));
+            ST.symbolTable.addError(new SemanticError(stAttribute.getTKName(), "el atributo " + stAttribute.getTKName().getLexeme() + " ya estaba definido"));
             ST.symbolTable.throwExceptionIfErrorsWereFound();
         }
     }

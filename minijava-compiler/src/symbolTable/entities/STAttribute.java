@@ -5,13 +5,24 @@ import symbolTable.types.STType;
 
 public class STAttribute {
     private Token tkName;
+    private Token tkClass;
     private STType stType;
     private String visibility;
+    private boolean errorFound;
 
     public STAttribute(Token tkName, String visibility, STType stType) {
         this.tkName = tkName;
         this.visibility = visibility;
         this.stType = stType;
+        errorFound = false;
+    }
+
+    public void setTKClass(Token tkClass){
+        this.tkClass = tkClass;
+    }
+
+    public boolean errorFound(){
+        return errorFound;
     }
 
     public void print() {
@@ -23,7 +34,7 @@ public class STAttribute {
     }
 
     public String getHash() {
-        return tkName.getLexeme();
+        return tkClass.getLexeme() + "\\" + tkName.getLexeme();
     }
 
     public void checkDeclaration() {

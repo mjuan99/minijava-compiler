@@ -15,6 +15,7 @@ public class STInterface {
     private final HashMap<String, Token> tkInterfacesItExtends;
     private boolean consolidated;
     private boolean cyclicInheritance;
+    private boolean errorFound;
 
     public STInterface(Token tkName) {
         this.tkName = tkName;
@@ -22,6 +23,11 @@ public class STInterface {
         tkInterfacesItExtends = new HashMap<>();
         consolidated = false;
         cyclicInheritance = false;
+        errorFound = false;
+    }
+
+    public boolean errorFound(){
+        return errorFound;
     }
 
     public void setSTInterfacesItExtends(LinkedList<Token> tkInterfacesList) throws SemanticException {
@@ -71,7 +77,7 @@ public class STInterface {
             if(!cyclicInheritance){
                 tkInterfacesItExtends.forEach((key, tkInterface) -> {
                     STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
-                    if(stInterface != null){
+                    if(stInterface != null && !stInterface.errorFound()){
                         stInterface.consolidate();
                         addMethodsFromParentInterface(stInterface);
                     }
@@ -82,8 +88,10 @@ public class STInterface {
     }
 
     private void addMethodsFromParentInterface(STInterface stInterface) {
-        stInterface.getSTMethodsHeaders().forEach((key, stMethodHeader) ->
-                stMethodsHeaders.putIfAbsent(stMethodHeader.getHash(), stMethodHeader));
+        stInterface.getSTMethodsHeaders().forEach((key, stMethodHeader) -> {
+            if(!stMethodHeader.errorFound())
+                stMethodsHeaders.putIfAbsent(stMethodHeader.getHash(), stMethodHeader);
+        });
     }
 
     public HashMap<String, STMethodHeader> getSTMethodsHeaders() {
