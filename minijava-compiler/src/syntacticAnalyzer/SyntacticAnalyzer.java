@@ -1,6 +1,6 @@
 package syntacticAnalyzer;
 
-import Errors.*;
+import errors.*;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;

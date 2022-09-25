@@ -1,6 +1,6 @@
 package symbolTable.entities;
 
-import Errors.SemanticError;
+import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.types.STTypeVoid;
@@ -58,36 +58,38 @@ public class STClass {
     }
 
     public void checkDeclaration() {
-        if(tkClassItExtends != null) {
-            if(ST.symbolTable.stClassExists(tkClassItExtends.getLexeme())){
-                ancestorsClasses.add(tkName.getLexeme());
-                if(cyclicInheritance(tkClassItExtends)) {
-                    cyclicInheritance = true;
+        if(!errorFound) {
+            if (tkClassItExtends != null) {
+                if (ST.symbolTable.stClassExists(tkClassItExtends.getLexeme())) {
+                    ancestorsClasses.add(tkName.getLexeme());
+                    if (cyclicInheritance(tkClassItExtends)) {
+                        cyclicInheritance = true;
+                        errorFound = true;
+                        ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " produce herencia circular"));
+                    }
+                } else {
                     errorFound = true;
-                    ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " produce herencia circular"));
+                    ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " no fue declarada"));
                 }
-            }else {
-                errorFound = true;
-                ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " no fue declarada"));
             }
+            tkInterfacesItImplements.forEach((key, tkInterface) -> {
+                if (!ST.symbolTable.stInterfaceExists(tkInterface.getLexeme())) {
+                    errorFound = true;
+                    ST.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " no fue declarada"));
+                }
+            });
+            if (stConstructors.isEmpty())
+                addDefaultConstructor();
+            stAttributes.forEach((key, stAttribute) -> {
+                if (!stAttribute.errorFound()) stAttribute.checkDeclaration();
+            });
+            stMethods.forEach((key, stMethod) -> {
+                if (!stMethod.errorFound()) stMethod.checkDeclaration();
+            });
+            stConstructors.forEach((key, stConstructor) -> {
+                if (!stConstructor.errorFound()) stConstructor.checkDeclaration();
+            });
         }
-        tkInterfacesItImplements.forEach((key, tkInterface) -> {
-            if(!ST.symbolTable.stInterfaceExists(tkInterface.getLexeme())) {
-                errorFound = true;
-                ST.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " no fue declarada"));
-            }
-        });
-        if(stConstructors.isEmpty())
-            addDefaultConstructor();
-        stAttributes.forEach((key, stAttribute) -> {
-            if(!stAttribute.errorFound()) stAttribute.checkDeclaration();
-        });
-        stMethods.forEach((key, stMethod) -> {
-            if(!stMethod.errorFound()) stMethod.checkDeclaration();
-        });
-        stConstructors.forEach((key, stConstructor) -> {
-            if(!stConstructor.errorFound()) stConstructor.checkDeclaration();
-        });
     }
 
     private void addDefaultConstructor() {
@@ -186,7 +188,7 @@ public class STClass {
         if(stOldMethod == null) {
             stMethods.put(stMethod.getHash(), stMethod);
             if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main()") && stMethod.getSTReturnType().equals(new STTypeVoid()))
-                ST.symbolTable.setHasMain();
+                ST.symbolTable.setSTMainMethod(stMethod);
         }
         else{
             stOldMethod.setErrorFound();

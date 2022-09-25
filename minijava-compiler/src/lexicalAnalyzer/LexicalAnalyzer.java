@@ -1,6 +1,6 @@
 package lexicalAnalyzer;
 
-import Errors.LexicalException;
+import errors.LexicalException;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.Objects;
 public class LexicalAnalyzer {
     private String lexeme;
     private char currentChar;
-    private SourceFileManager sourceFileManager;
+    private final SourceFileManager sourceFileManager;
     private HashMap<String, String> keywordsMap;
     private int multiLineCommentLineNumber;
     private int multiLineCommentColumnNumber;

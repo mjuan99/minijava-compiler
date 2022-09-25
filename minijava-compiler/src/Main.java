@@ -1,5 +1,5 @@
-import Errors.SemanticException;
-import Errors.SyntacticException;
+import errors.SemanticException;
+import errors.SyntacticException;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 import semanticAnalyzer.SemanticAnalyzer;

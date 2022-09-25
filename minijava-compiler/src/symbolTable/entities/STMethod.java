@@ -1,6 +1,6 @@
 package symbolTable.entities;
 
-import Errors.SemanticError;
+import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.types.STType;
@@ -70,11 +70,13 @@ public class STMethod {
     }
 
     public void checkDeclaration() {
-        if(!stReturnType.checkDeclaration())
-            errorFound = true;
-        for(STArgument stArgument : stArguments.values())
-            if(!stArgument.checkDeclaration())
+        if(!errorFound) {
+            if (!stReturnType.checkDeclaration())
                 errorFound = true;
+            for (STArgument stArgument : stArguments.values())
+                if (!stArgument.checkDeclaration())
+                    errorFound = true;
+        }
     }
 
     public boolean isStatic() {

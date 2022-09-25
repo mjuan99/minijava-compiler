@@ -38,7 +38,9 @@ public class STAttribute {
     }
 
     public void checkDeclaration() {
-        errorFound = !stType.checkDeclaration();
+        if(!errorFound)
+            if(stType.checkDeclaration())
+                errorFound = true;
     }
 
     public void setErrorFound() {

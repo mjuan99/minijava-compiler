@@ -1,10 +1,10 @@
-package Errors;
+package errors;
 
 public class LexicalException extends Exception{
-    private String lexeme;
-    private int lineNumber;
-    private int columnNumber;
-    private String line;
+    private final String lexeme;
+    private final int lineNumber;
+    private final int columnNumber;
+    private final String line;
     public LexicalException(String lexeme, int lineNumber, int columnNumber, String line, String message){
         super(message);
         this.lexeme = lexeme;

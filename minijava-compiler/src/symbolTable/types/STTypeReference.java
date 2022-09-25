@@ -1,13 +1,13 @@
 package symbolTable.types;
 
-import Errors.SemanticError;
+import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 
 import java.util.Objects;
 
 public class STTypeReference implements STType{
-    Token reference;
+    private final Token reference;
 
     public STTypeReference(Token reference){
         this.reference = reference;

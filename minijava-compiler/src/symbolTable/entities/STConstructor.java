@@ -1,6 +1,6 @@
 package symbolTable.entities;
 
-import Errors.SemanticError;
+import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 
@@ -64,9 +64,10 @@ public class STConstructor {
     }
 
     public void checkDeclaration() {
-        for(STArgument stArgument : stArguments.values())
-            if(!stArgument.checkDeclaration())
-                errorFound = true;
+        if(!errorFound)
+            for(STArgument stArgument : stArguments.values())
+                if(!stArgument.checkDeclaration())
+                    errorFound = true;
     }
 
     public void setErrorFound() {

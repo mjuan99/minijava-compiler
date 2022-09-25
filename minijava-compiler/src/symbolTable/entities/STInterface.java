@@ -1,6 +1,6 @@
 package symbolTable.entities;
 
-import Errors.SemanticError;
+import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 
@@ -41,23 +41,25 @@ public class STInterface {
     }
 
     public void checkDeclaration() {
-        HashSet<String> ancestorsInterfaces = new HashSet<>();
-        ancestorsInterfaces.add(tkName.getLexeme());
-        tkInterfacesItExtends.forEach((key, tkParentInterface) -> {
-            if(ST.symbolTable.stInterfaceExists(tkParentInterface.getLexeme())){
-                if(cyclicInheritance(tkParentInterface, ancestorsInterfaces)) {
-                    cyclicInheritance = true;
+        if(!errorFound) {
+            HashSet<String> ancestorsInterfaces = new HashSet<>();
+            ancestorsInterfaces.add(tkName.getLexeme());
+            tkInterfacesItExtends.forEach((key, tkParentInterface) -> {
+                if (ST.symbolTable.stInterfaceExists(tkParentInterface.getLexeme())) {
+                    if (cyclicInheritance(tkParentInterface, ancestorsInterfaces)) {
+                        cyclicInheritance = true;
+                        errorFound = true;
+                        ST.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " produce herencia circular"));
+                    }
+                } else {
                     errorFound = true;
-                    ST.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " produce herencia circular"));
+                    ST.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " no fue declarada"));
                 }
-            }else {
-                errorFound = true;
-                ST.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " no fue declarada"));
-            }
-        });
-        stMethodsHeaders.forEach((key, stMethodsHeader) -> {
-            if(!stMethodsHeader.errorFound()) stMethodsHeader.checkDeclaration();
-        });
+            });
+            stMethodsHeaders.forEach((key, stMethodsHeader) -> {
+                if (!stMethodsHeader.errorFound()) stMethodsHeader.checkDeclaration();
+            });
+        }
     }
 
     private boolean cyclicInheritance(Token tkAncestorInterface, HashSet<String> ancestorsInterfaces) {

@@ -1,6 +1,6 @@
 package symbolTable.entities;
 
-import Errors.SemanticError;
+import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.types.STType;
@@ -69,15 +69,17 @@ public class STMethodHeader {
     }
 
     public void checkDeclaration() {
-        if(tkStatic != null) {
-            ST.symbolTable.addError(new SemanticError(tkStatic, "metodo estatico en una interfaz"));
-            errorFound = true;
-        }
-        if(!stReturnType.checkDeclaration())
-            errorFound = true;
-        for(STArgument stArgument : stArguments.values())
-            if(!stArgument.checkDeclaration())
+        if(!errorFound) {
+            if (tkStatic != null) {
+                ST.symbolTable.addError(new SemanticError(tkStatic, "metodo estatico en una interfaz"));
                 errorFound = true;
+            }
+            if (!stReturnType.checkDeclaration())
+                errorFound = true;
+            for (STArgument stArgument : stArguments.values())
+                if (!stArgument.checkDeclaration())
+                    errorFound = true;
+        }
     }
 
     public boolean isStatic() {

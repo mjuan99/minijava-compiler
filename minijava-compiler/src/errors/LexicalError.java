@@ -1,8 +1,8 @@
-package Errors;
+package errors;
 
 public class LexicalError implements CompilerError{
-    private String lexeme;
-    private int lineNumber;
+    private final String lexeme;
+    private final int lineNumber;
 
     public LexicalError(String lexeme, int lineNumber){
         this.lexeme = lexeme;

@@ -1,6 +1,6 @@
 package semanticAnalyzer;
 
-import Errors.SemanticException;
+import errors.SemanticException;
 import symbolTable.SymbolTable;
 import syntacticAnalyzer.SyntacticAnalyzer;
 

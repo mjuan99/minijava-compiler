@@ -1,12 +1,12 @@
-package Errors;
+package errors;
 
 import lexicalAnalyzer.Token;
 
 import java.util.Objects;
 
 public class SyntacticError implements CompilerError{
-    private Token found;
-    private String expected;
+    private final Token found;
+    private final String expected;
 
     public SyntacticError(Token found, String expected){
         this.found = found;

@@ -1,8 +1,8 @@
 package symbolTable;
 
-import Errors.CompilerError;
-import Errors.SemanticError;
-import Errors.SemanticException;
+import errors.CompilerError;
+import errors.SemanticError;
+import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.entities.*;
 import symbolTable.types.*;
@@ -19,15 +19,15 @@ public class SymbolTable {
     private STConstructor currentSTConstructor;
     private final LinkedList<CompilerError> compilerErrorList;
     private STMethodHeader currentSTMethodHeader;
-    private boolean hasMain;
     private Token tkEOF;
+    private STMethod stMainMethod;
 
     public SymbolTable(){
         stClasses = new HashMap<>();
         stInterfaces = new HashMap<>();
         compilerErrorList = new LinkedList<>();
         loadPredefinedClasses();
-        hasMain = false;
+        stMainMethod = null;
     }
 
     public void setTKEOF(Token tkEOF){
@@ -169,14 +169,21 @@ public class SymbolTable {
         stInterfaces.forEach((key, stInterface) -> stInterface.print());
     }
 
-    public void setHasMain(){
-        hasMain = true;
+    public void setSTMainMethod(STMethod stMainMethod){
+        if(this.stMainMethod == null)
+            this.stMainMethod = stMainMethod;
+        else{
+            this.stMainMethod.setErrorFound();
+            stMainMethod.setErrorFound();
+            addError(new SemanticError(this.stMainMethod.getTKName(), "hay mas de un metodo static void main() definido"));
+            addError(new SemanticError(stMainMethod.getTKName(), "hay mas de un metodo static void main() definido"));
+        }
     }
 
     public void checkDeclarations(){
         stClasses.forEach((key, stClass) -> stClass.checkDeclaration());
         stInterfaces.forEach((key, stInterface) -> stInterface.checkDeclaration());
-        if(!hasMain)
+        if(stMainMethod == null)
             ST.symbolTable.addError(new SemanticError(tkEOF, "no se encontro un metodo static void main()"));
     }
     public void consolidate(){
