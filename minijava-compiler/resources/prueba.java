@@ -1,14 +1,9 @@
-//prueba de consolidación clases (interfaces implementadas)
+//[Error:|10]
 
-class MiClase1{
-
+class A extends B{
+    int m1(){}
 }
 
-class MiClase2{
-    MiClase2(int a){}
-}
-
-class MiClase3{
-    MiClase3(){}
-    MiClase3(int a){}
+class B{
+    int m1(){}
 }

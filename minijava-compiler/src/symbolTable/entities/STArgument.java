@@ -40,7 +40,12 @@ public class STArgument {
         return stType;
     }
 
-    public void checkDeclaration() {
-        stType.checkDeclaration();
+    public boolean checkDeclaration() {
+        if(stType.checkDeclaration())
+            return true;
+        else{
+            errorFound = true;
+            return false;
+        }
     }
 }

@@ -1,9 +1,9 @@
 package symbolTable.entities;
 
 import Errors.SemanticError;
-import Errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.types.STTypeVoid;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,18 +46,15 @@ public class STClass {
         this.tkClassItExtends = stClassItExtends;
     }
 
-    public void setTkInterfacesItImplements(LinkedList<Token> tkInterfacesList) throws SemanticException {
-        boolean error = false;
+    public void setTkInterfacesItImplements(LinkedList<Token> tkInterfacesList) {
         for(Token tkInterface : tkInterfacesList){
             if(tkInterfacesItImplements.get(tkInterface.getLexeme()) == null)
                 tkInterfacesItImplements.put(tkInterface.getLexeme(), tkInterface);
             else {
-                error = true;
+                errorFound = true;
                 ST.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " ya estaba siendo implementada"));
             }
         }
-        if(error)
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
     }
 
     public void checkDeclaration() {
@@ -65,21 +62,32 @@ public class STClass {
             if(ST.symbolTable.stClassExists(tkClassItExtends.getLexeme())){
                 ancestorsClasses.add(tkName.getLexeme());
                 if(cyclicInheritance(tkClassItExtends)) {
-                    ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " produce herencia circular"));
                     cyclicInheritance = true;
+                    errorFound = true;
+                    ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " produce herencia circular"));
                 }
-            }else
+            }else {
+                errorFound = true;
                 ST.symbolTable.addError(new SemanticError(tkClassItExtends, "la clase " + tkClassItExtends.getLexeme() + " no fue declarada"));
+            }
         }
         tkInterfacesItImplements.forEach((key, tkInterface) -> {
-            if(!ST.symbolTable.stInterfaceExists(tkInterface.getLexeme()))
+            if(!ST.symbolTable.stInterfaceExists(tkInterface.getLexeme())) {
+                errorFound = true;
                 ST.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " no fue declarada"));
+            }
         });
         if(stConstructors.isEmpty())
             addDefaultConstructor();
-        stAttributes.forEach((key, stAttribute) -> stAttribute.checkDeclaration());
-        stMethods.forEach((key, stMethod) -> stMethod.checkDeclaration());
-        stConstructors.forEach((key, stConstructor) -> stConstructor.checkDeclaration());
+        stAttributes.forEach((key, stAttribute) -> {
+            if(!stAttribute.errorFound()) stAttribute.checkDeclaration();
+        });
+        stMethods.forEach((key, stMethod) -> {
+            if(!stMethod.errorFound()) stMethod.checkDeclaration();
+        });
+        stConstructors.forEach((key, stConstructor) -> {
+            if(!stConstructor.errorFound()) stConstructor.checkDeclaration();
+        });
     }
 
     private void addDefaultConstructor() {
@@ -173,25 +181,29 @@ public class STClass {
         System.out.println("}");
     }
 
-    public void insertMethod(STMethod stMethod) throws SemanticException {
-        if(stMethods.get(stMethod.getHash()) == null) {
+    public void insertMethod(STMethod stMethod) {
+        STMethod stOldMethod = stMethods.get(stMethod.getHash());
+        if(stOldMethod == null) {
             stMethods.put(stMethod.getHash(), stMethod);
-            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main()"))
+            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main()") && stMethod.getSTReturnType().equals(new STTypeVoid()))
                 ST.symbolTable.setHasMain();
         }
         else{
+            stOldMethod.setErrorFound();
             ST.symbolTable.addError(new SemanticError(stMethod.getTKName(), "el método " + stMethod.getHash() + " ya estaba definido"));
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
+            ST.symbolTable.addError(new SemanticError(stOldMethod.getTKName(), "el método " + stOldMethod.getHash() + " ya estaba definido"));
         }
     }
 
-    public void insertAttribute(STAttribute stAttribute) throws SemanticException {
+    public void insertAttribute(STAttribute stAttribute) {
         stAttribute.setTKClass(tkName);
-        if(stAttributes.get(stAttribute.getHash()) == null)
+        STAttribute stOldAttribute = stAttributes.get(stAttribute.getHash());
+        if(stOldAttribute == null)
             stAttributes.put(stAttribute.getHash(), stAttribute);
         else{
+            stOldAttribute.setErrorFound();
             ST.symbolTable.addError(new SemanticError(stAttribute.getTKName(), "el atributo " + stAttribute.getTKName().getLexeme() + " ya estaba definido"));
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
+            ST.symbolTable.addError(new SemanticError(stOldAttribute.getTKName(), "el atributo " + stOldAttribute.getTKName().getLexeme() + " ya estaba definido"));
         }
     }
 
@@ -199,23 +211,24 @@ public class STClass {
         return tkName.getLexeme();
     }
 
-    public void insertConstructor(STConstructor stConstructor) throws SemanticException {
+    public void insertConstructor(STConstructor stConstructor) {
+        STConstructor stOldConstructor = stConstructors.get(stConstructor.getHash());
         if(!Objects.equals(stConstructor.getTKName().getLexeme(), tkName.getLexeme())){
             ST.symbolTable.addError(new SemanticError(stConstructor.getTKName(), "el tipo del constructor " + stConstructor.getTKName().getLexeme() + " no coincide con el tipo de la clase " + tkName.getLexeme()));
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
-        }else if(stConstructors.get(stConstructor.getHash()) == null)
+        }else if(stOldConstructor == null)
             stConstructors.put(stConstructor.getHash(), stConstructor);
         else{
+            stOldConstructor.setErrorFound();
             ST.symbolTable.addError(new SemanticError(stConstructor.getTKName(), "el constructor " + stConstructor.getHash() + " ya estaba definido"));
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
+            ST.symbolTable.addError(new SemanticError(stOldConstructor.getTKName(), "el constructor " + stOldConstructor.getHash() + " ya estaba definido"));
         }
-    }
-
-    public void insertMethodUnchecked(STMethod stMethod) {
-        stMethods.put(stMethod.getHash(), stMethod);
     }
 
     public Token getTKClassItExtends() {
         return tkClassItExtends;
+    }
+
+    public void setErrorFound() {
+        errorFound = true;
     }
 }

@@ -21,5 +21,5 @@ interface MiInterfaz5{
 }
 
 class MiClase{
-    static int main(){}
+    static void main(){}
 }

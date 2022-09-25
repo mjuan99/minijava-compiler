@@ -97,7 +97,8 @@ public class SyntacticAnalyzer {
 
         if(!checkCurrentToken("EOF")){
             addError(new SyntacticError(currentToken, "declaracion de clase o interfaz"));
-        }
+        }else
+            ST.symbolTable.setTKEOF(currentToken);
     }
 
     private void ListaClases() throws IOException {
@@ -129,9 +130,7 @@ public class SyntacticAnalyzer {
             STClass stClass = new STClass(tkClass);
             ST.symbolTable.setCurrentSTClass(stClass);
             stClass.setSTClassItExtends(HeredaDe());
-            try {
-                stClass.setTkInterfacesItImplements(ImplementaA());
-            } catch (SemanticException ignored) {}
+            stClass.setTkInterfacesItImplements(ImplementaA());
             match("{");
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound("{");
@@ -144,9 +143,7 @@ public class SyntacticAnalyzer {
             discardTokensUntilValidTokenIsFound("}");
             updateCurrentToken();
         }
-        try {
-            ST.symbolTable.insertSTClass(ST.symbolTable.getCurrentSTClass());
-        } catch (SemanticException ignored) {}
+        ST.symbolTable.insertSTClass(ST.symbolTable.getCurrentSTClass());
     }
 
     private Token ClaseGenerica() throws IOException, SyntacticException {
@@ -178,15 +175,11 @@ public class SyntacticAnalyzer {
             Token tkInterface = ClaseGenerica();
             STInterface stInterface = new STInterface(tkInterface);
             ST.symbolTable.setCurrentSTInterface(stInterface);
-            try {
-                stInterface.setSTInterfacesItExtends(ExtiendeA());
-            } catch (SemanticException ignored) {}
+            stInterface.setSTInterfacesItExtends(ExtiendeA());
             match("{");
             ListaEncabezados();
             match("}");
-            try {
-                ST.symbolTable.insertSTInterface(ST.symbolTable.getCurrentSTInterface());
-            } catch (SemanticException ignored) {}
+            ST.symbolTable.insertSTInterface(ST.symbolTable.getCurrentSTInterface());
         }catch(SyntacticException e){
             discardTokensUntilValidTokenIsFound("}");
             updateCurrentToken();
@@ -317,9 +310,7 @@ public class SyntacticAnalyzer {
         LinkedList<Token> tkAttributesList = ListaDecAtrs();
         match(";");
         for(Token tkAttribute : tkAttributesList) {
-            try {
-                ST.symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, visibility, stType));
-            } catch (SemanticException ignored) {}
+            ST.symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, visibility, stType));
         }
     }
 
@@ -329,13 +320,9 @@ public class SyntacticAnalyzer {
         STMethod stMethod = new STMethod(currentToken, true, returnType);
         ST.symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
-        try {
-            stMethod.insertArguments(ArgsFormales());
-        } catch (SemanticException ignored) {}
+        stMethod.insertArguments(ArgsFormales());
         Bloque();
-        try {
-            ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
-        } catch (SemanticException ignored) {}
+        ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
     private void MetodoNoEstVoid() throws IOException, SyntacticException {
@@ -343,13 +330,9 @@ public class SyntacticAnalyzer {
         STMethod stMethod = new STMethod(currentToken, false, new STTypeVoid());
         ST.symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
-        try {
-            stMethod.insertArguments(ArgsFormales());
-        } catch (SemanticException ignored) {}
+        stMethod.insertArguments(ArgsFormales());
         Bloque();
-        try {
-            ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
-        } catch (SemanticException ignored) {}
+        ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
     private void AtributoOMetodoTipoPri() throws IOException, SyntacticException {
@@ -365,20 +348,14 @@ public class SyntacticAnalyzer {
             match(";");
             tkAttributesList.add(idMetVar);
             for(Token tkAttribute : tkAttributesList) {
-                try {
-                    ST.symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, "public", stType));
-                } catch (SemanticException ignored) {}
+                ST.symbolTable.getCurrentSTClass().insertAttribute(new STAttribute(tkAttribute, "public", stType));
             }
         }else if(checkCurrentToken("(")) {
             STMethod stMethod = new STMethod(idMetVar, false, stType);
             ST.symbolTable.setCurrentSTMethod(stMethod);
-            try {
-                stMethod.insertArguments(ArgsFormales());
-            } catch (SemanticException ignored) {}
+            stMethod.insertArguments(ArgsFormales());
             Bloque();
-            try {
-                ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
-            } catch (SemanticException ignored) {}
+            ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
         }else {
             addError(new SyntacticError(currentToken, "',', ; o argumentos formales"));
             throw new SyntacticException(compilerErrorList);
@@ -408,13 +385,9 @@ public class SyntacticAnalyzer {
     private void RestoConstructor(Token idClass) throws IOException, SyntacticException {
         STConstructor stConstructor = new STConstructor(idClass);
         ST.symbolTable.setCurrentSTConstructor(stConstructor);
-        try {
-            stConstructor.insertArguments(ArgsFormales());
-        } catch (SemanticException ignored) {}
+        stConstructor.insertArguments(ArgsFormales());
         Bloque();
-        try {
-            ST.symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
-        } catch (SemanticException ignored) {}
+        ST.symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
     }
 
     private void EncabezadoMetodo() throws IOException, SyntacticException {
@@ -428,12 +401,8 @@ public class SyntacticAnalyzer {
         STMethodHeader stMethodHeader = new STMethodHeader(currentToken, tkStatic, returnType);
         ST.symbolTable.setCurrentSTMethodHeader(stMethodHeader);
         match("idMetVar");
-        try {
-            stMethodHeader.insertArguments(ArgsFormales());
-        } catch (SemanticException ignored) {}
-        try {
-            ST.symbolTable.getCurrentSTInterface().insertMethod(stMethodHeader);
-        } catch (SemanticException ignored) {}
+        stMethodHeader.insertArguments(ArgsFormales());
+        ST.symbolTable.getCurrentSTInterface().insertMethodHeader(stMethodHeader);
     }
 
     private String Visibilidad() throws IOException, SyntacticException {

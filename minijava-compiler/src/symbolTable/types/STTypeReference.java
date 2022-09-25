@@ -17,9 +17,12 @@ public class STTypeReference implements STType{
         return reference.getLexeme();
     }
 
-    public void checkDeclaration(){
-        if(!ST.symbolTable.stClassExists(reference.getLexeme()) && !ST.symbolTable.stInterfaceExists(reference.getLexeme()))
+    public boolean checkDeclaration(){
+        if(!ST.symbolTable.stClassExists(reference.getLexeme()) && !ST.symbolTable.stInterfaceExists(reference.getLexeme())) {
             ST.symbolTable.addError(new SemanticError(reference, "la clase " + reference.getLexeme() + " no fue declarada"));
+            return false;
+        }else
+            return true;
     }
 
     public boolean equals(STType stType){

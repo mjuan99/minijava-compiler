@@ -16,7 +16,7 @@ class A {
 }
 
 class B extends A{
-    static int m1() //aca decia dynamic en vez de static
+    static int m1()
     {}
 }
 

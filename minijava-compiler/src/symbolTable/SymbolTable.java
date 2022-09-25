@@ -20,20 +20,25 @@ public class SymbolTable {
     private final LinkedList<CompilerError> compilerErrorList;
     private STMethodHeader currentSTMethodHeader;
     private boolean hasMain;
+    private Token tkEOF;
 
     public SymbolTable(){
         stClasses = new HashMap<>();
         stInterfaces = new HashMap<>();
         compilerErrorList = new LinkedList<>();
-        loadDefaultValues();
+        loadPredefinedClasses();
         hasMain = false;
     }
 
-    private void loadDefaultValues() {
+    public void setTKEOF(Token tkEOF){
+        this.tkEOF = tkEOF;
+    }
+
+    private void loadPredefinedClasses() {
         STClass stClassObject = new STClass(new Token("idClase", "Object", 0));
         STMethod stMethodDebugPrint = new STMethod(new Token("idMetVar", "debugPrint", 0), true, new STTypeVoid());
-        stMethodDebugPrint.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
-        stClassObject.insertMethodUnchecked(stMethodDebugPrint);
+        stMethodDebugPrint.insertArgument(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
+        stClassObject.insertMethod(stMethodDebugPrint);
         stClasses.put(stClassObject.getHash(), stClassObject);
 
 
@@ -56,25 +61,25 @@ public class SymbolTable {
         STMethod stMethodPrintIln = new STMethod(new Token("idMetVar", "printIln", 0), true, new STTypeVoid());
         STMethod stMethodPrintSln = new STMethod(new Token("idMetVar", "printSln", 0), true, new STTypeVoid());
 
-        stMethodPrintB.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "b", 0), new STTypeBoolean(), 0));
-        stMethodPrintC.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "c", 0), new STTypeChar(), 0));
-        stMethodPrintI.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
-        stMethodPrintS.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "s", 0), new STTypeReference(new Token("idClase", "String", 0)), 0));
-        stMethodPrintBln.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "b", 0), new STTypeBoolean(), 0));
-        stMethodPrintCln.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "c", 0), new STTypeChar(), 0));
-        stMethodPrintIln.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
-        stMethodPrintSln.insertArtumentUnchecked(new STArgument(new Token("idMetVar", "s", 0), new STTypeReference(new Token("idClase", "String", 0)), 0));
+        stMethodPrintB.insertArgument(new STArgument(new Token("idMetVar", "b", 0), new STTypeBoolean(), 0));
+        stMethodPrintC.insertArgument(new STArgument(new Token("idMetVar", "c", 0), new STTypeChar(), 0));
+        stMethodPrintI.insertArgument(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
+        stMethodPrintS.insertArgument(new STArgument(new Token("idMetVar", "s", 0), new STTypeReference(new Token("idClase", "String", 0)), 0));
+        stMethodPrintBln.insertArgument(new STArgument(new Token("idMetVar", "b", 0), new STTypeBoolean(), 0));
+        stMethodPrintCln.insertArgument(new STArgument(new Token("idMetVar", "c", 0), new STTypeChar(), 0));
+        stMethodPrintIln.insertArgument(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
+        stMethodPrintSln.insertArgument(new STArgument(new Token("idMetVar", "s", 0), new STTypeReference(new Token("idClase", "String", 0)), 0));
 
-        stClassSystem.insertMethodUnchecked(stMethodRead);
-        stClassSystem.insertMethodUnchecked(stMethodPrintB);
-        stClassSystem.insertMethodUnchecked(stMethodPrintC);
-        stClassSystem.insertMethodUnchecked(stMethodPrintI);
-        stClassSystem.insertMethodUnchecked(stMethodPrintS);
-        stClassSystem.insertMethodUnchecked(stMethodPrintln);
-        stClassSystem.insertMethodUnchecked(stMethodPrintBln);
-        stClassSystem.insertMethodUnchecked(stMethodPrintCln);
-        stClassSystem.insertMethodUnchecked(stMethodPrintIln);
-        stClassSystem.insertMethodUnchecked(stMethodPrintSln);
+        stClassSystem.insertMethod(stMethodRead);
+        stClassSystem.insertMethod(stMethodPrintB);
+        stClassSystem.insertMethod(stMethodPrintC);
+        stClassSystem.insertMethod(stMethodPrintI);
+        stClassSystem.insertMethod(stMethodPrintS);
+        stClassSystem.insertMethod(stMethodPrintln);
+        stClassSystem.insertMethod(stMethodPrintBln);
+        stClassSystem.insertMethod(stMethodPrintCln);
+        stClassSystem.insertMethod(stMethodPrintIln);
+        stClassSystem.insertMethod(stMethodPrintSln);
 
         stClasses.put(stClassSystem.getHash(), stClassSystem);
     }
@@ -115,12 +120,21 @@ public class SymbolTable {
         return currentSTConstructor;
     }
 
-    public void insertSTClass(STClass stClass) throws SemanticException {
-        if(stClasses.get(stClass.getHash()) == null && stInterfaces.get(stClass.getHash()) == null)
-            stClasses.put(stClass.getHash(), stClass);
+    public void insertSTClass(STClass stClass) {
+        STClass stOldClass = stClasses.get(stClass.getHash());
+        STInterface stOldInterface = stInterfaces.get(stClass.getHash());
+        if(stOldClass == null)
+            if(stOldInterface == null)
+                stClasses.put(stClass.getHash(), stClass);
+            else{
+                stOldInterface.setErrorFound();
+                addError(new SemanticError(stClass.getTKName(), "la clase " + stClass.getTKName().getLexeme() + " ya fue definida"));
+                addError(new SemanticError(stOldInterface.getTKName(), "la clase " + stOldInterface.getTKName().getLexeme() + " ya fue definida"));
+            }
         else {
-            addError(new SemanticError(stClass.getTKName(), "la clase " + stClass.getTKName().getLexeme() + " ya estaba definida"));
-            throw new SemanticException(compilerErrorList);
+            stOldClass.setErrorFound();
+            addError(new SemanticError(stClass.getTKName(), "la clase " + stClass.getTKName().getLexeme() + " ya fue definida"));
+            addError(new SemanticError(stOldClass.getTKName(), "la clase " + stOldClass.getTKName().getLexeme() + " ya fue definida"));
         }
     }
 
@@ -128,12 +142,21 @@ public class SymbolTable {
         return stClasses.get(stClassName) != null;
     }
 
-    public void insertSTInterface(STInterface stInterface) throws SemanticException {
-        if(stClasses.get(stInterface.getHash()) == null && stInterfaces.get(stInterface.getHash()) == null)
-            stInterfaces.put(stInterface.getHash(), stInterface);
+    public void insertSTInterface(STInterface stInterface) {
+        STClass stOldClass = stClasses.get(stInterface.getHash());
+        STInterface stOldInterface = stInterfaces.get(stInterface.getHash());
+        if(stOldClass == null)
+            if(stOldInterface == null)
+                stInterfaces.put(stInterface.getHash(), stInterface);
+            else{
+                stOldInterface.setErrorFound();
+                addError(new SemanticError(stInterface.getTKName(), "la clase " + stInterface.getTKName().getLexeme() + " ya fue definida"));
+                addError(new SemanticError(stOldInterface.getTKName(), "la clase " + stOldInterface.getTKName().getLexeme() + " ya fue definida"));
+            }
         else{
-            addError(new SemanticError(stInterface.getTKName(), "la clase " + stInterface.getTKName().getLexeme() + " ya estaba definida"));
-            throw new SemanticException(compilerErrorList);
+            stOldClass.setErrorFound();
+            addError(new SemanticError(stInterface.getTKName(), "la clase " + stInterface.getTKName().getLexeme() + " ya fue definida"));
+            addError(new SemanticError(stOldClass.getTKName(), "la clase " + stOldClass.getTKName().getLexeme() + " ya fue definida"));
         }
     }
 
@@ -154,7 +177,7 @@ public class SymbolTable {
         stClasses.forEach((key, stClass) -> stClass.checkDeclaration());
         stInterfaces.forEach((key, stInterface) -> stInterface.checkDeclaration());
         if(!hasMain)
-            ST.symbolTable.addError(new SemanticError(new Token("idMetVar", "main", 0), "ninguna clase tiene un metodo estatico main"));
+            ST.symbolTable.addError(new SemanticError(tkEOF, "no se encontro un metodo static void main()"));
     }
     public void consolidate(){
         stClasses.forEach((key, stClass) -> stClass.consolidate());

@@ -1,7 +1,6 @@
 package symbolTable.entities;
 
 import Errors.SemanticError;
-import Errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 
@@ -37,19 +36,16 @@ public class STConstructor {
         return tkName;
     }
 
-    public void insertArguments(LinkedList<STArgument> stArguments) throws SemanticException {
-        boolean error = false;
+    public void insertArguments(LinkedList<STArgument> stArguments) {
         for(STArgument stArgument : stArguments)
             if(this.stArguments.get(stArgument.getHash()) == null)
                 this.stArguments.put(stArgument.getHash(), stArgument);
             else{
-                error = true;
+                errorFound = true;
                 ST.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
         stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
-        if(error)
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
     }
 
     private String getArgumentsSignature(){
@@ -68,6 +64,12 @@ public class STConstructor {
     }
 
     public void checkDeclaration() {
-        stArguments.forEach((key, stArgument) -> stArgument.checkDeclaration());
+        for(STArgument stArgument : stArguments.values())
+            if(!stArgument.checkDeclaration())
+                errorFound = true;
+    }
+
+    public void setErrorFound() {
+        errorFound = true;
     }
 }

@@ -5,7 +5,8 @@ public class STTypeBoolean implements STPrimitiveType{
         return "boolean";
     }
 
-    public void checkDeclaration() {
+    public boolean checkDeclaration() {
+        return true;
     }
 
     public boolean equals(STType stType){

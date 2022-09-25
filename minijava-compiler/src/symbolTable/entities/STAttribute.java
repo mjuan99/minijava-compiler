@@ -4,10 +4,10 @@ import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 
 public class STAttribute {
-    private Token tkName;
-    private Token tkClass;
-    private STType stType;
-    private String visibility;
+    private final Token tkName;
+    private Token tkClass; // TODO ver que sea automatico
+    private final STType stType;
+    private final String visibility;
     private boolean errorFound;
 
     public STAttribute(Token tkName, String visibility, STType stType) {
@@ -26,7 +26,7 @@ public class STAttribute {
     }
 
     public void print() {
-        System.out.println("    " + visibility + " " + stType + " " + tkName.getLexeme());
+        System.out.println("    " + visibility + " " + stType + " " + tkName.getLexeme() + "\\" + tkClass.getLexeme());
     }
 
     public Token getTKName() {
@@ -34,10 +34,14 @@ public class STAttribute {
     }
 
     public String getHash() {
-        return tkClass.getLexeme() + "\\" + tkName.getLexeme();
+        return tkName.getLexeme() + "\\" + tkClass.getLexeme();
     }
 
     public void checkDeclaration() {
-        stType.checkDeclaration();
+        errorFound = !stType.checkDeclaration();
+    }
+
+    public void setErrorFound() {
+        errorFound = true;
     }
 }

@@ -5,7 +5,8 @@ public class STTypeVoid implements STType{
         return "void";
     }
 
-    public void checkDeclaration() {
+    public boolean checkDeclaration() {
+        return true;
     }
 
     public boolean equals(STType stType){

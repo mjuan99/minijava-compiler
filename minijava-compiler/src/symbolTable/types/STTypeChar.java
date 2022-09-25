@@ -5,7 +5,8 @@ public class STTypeChar implements STPrimitiveType{
         return "char";
     }
 
-    public void checkDeclaration() {
+    public boolean checkDeclaration() {
+        return true;
     }
 
     public boolean equals(STType stType){

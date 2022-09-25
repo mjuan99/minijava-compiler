@@ -1,7 +1,6 @@
 package symbolTable.entities;
 
 import Errors.SemanticError;
-import Errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 
@@ -30,18 +29,15 @@ public class STInterface {
         return errorFound;
     }
 
-    public void setSTInterfacesItExtends(LinkedList<Token> tkInterfacesList) throws SemanticException {
-        boolean error = false;
+    public void setSTInterfacesItExtends(LinkedList<Token> tkInterfacesList) {
         for(Token tkInterface : tkInterfacesList){
             if(tkInterfacesItExtends.get(tkInterface.getLexeme()) == null)
                 tkInterfacesItExtends.put(tkInterface.getLexeme(), tkInterface);
             else {
-                error = true;
+                errorFound = true;
                 ST.symbolTable.addError(new SemanticError(tkInterface, "la interfaz " + tkInterface.getLexeme() + " ya estaba siendo extendida"));
             }
         }
-        if(error)
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
     }
 
     public void checkDeclaration() {
@@ -51,12 +47,17 @@ public class STInterface {
             if(ST.symbolTable.stInterfaceExists(tkParentInterface.getLexeme())){
                 if(cyclicInheritance(tkParentInterface, ancestorsInterfaces)) {
                     cyclicInheritance = true;
+                    errorFound = true;
                     ST.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " produce herencia circular"));
                 }
-            }else
+            }else {
+                errorFound = true;
                 ST.symbolTable.addError(new SemanticError(tkParentInterface, "la interfaz " + tkParentInterface.getLexeme() + " no fue declarada"));
+            }
         });
-        stMethodsHeaders.forEach((key, stMethodsHeader) -> stMethodsHeader.checkDeclaration());
+        stMethodsHeaders.forEach((key, stMethodsHeader) -> {
+            if(!stMethodsHeader.errorFound()) stMethodsHeader.checkDeclaration();
+        });
     }
 
     private boolean cyclicInheritance(Token tkAncestorInterface, HashSet<String> ancestorsInterfaces) {
@@ -111,12 +112,14 @@ public class STInterface {
         return tkName;
     }
 
-    public void insertMethod(STMethodHeader stMethodHeader) throws SemanticException {
-        if(stMethodsHeaders.get(stMethodHeader.getHash()) == null)
+    public void insertMethodHeader(STMethodHeader stMethodHeader) {
+        STMethodHeader stOldMethodHeader = stMethodsHeaders.get(stMethodHeader.getHash());
+        if(stOldMethodHeader == null)
             stMethodsHeaders.put(stMethodHeader.getHash(), stMethodHeader);
         else{
-            ST.symbolTable.addError(new SemanticError(stMethodHeader.getTKName(), "el método " + stMethodHeader.getHash() + " ya estaba definido"));
-            ST.symbolTable.throwExceptionIfErrorsWereFound();
+            stOldMethodHeader.setErrorFound();
+            ST.symbolTable.addError(new SemanticError(stMethodHeader.getTKName(), "el método " + stMethodHeader.getHash() + " ya fue definido"));
+            ST.symbolTable.addError(new SemanticError(stOldMethodHeader.getTKName(), "el método " + stOldMethodHeader.getHash() + " ya fue definido"));
         }
     }
 
@@ -126,5 +129,9 @@ public class STInterface {
 
     public HashMap<String, Token> getTKInterfacesItExtends() {
         return tkInterfacesItExtends;
+    }
+
+    public void setErrorFound() {
+        errorFound = true;
     }
 }

@@ -1,6 +1,6 @@
 package symbolTable.types;
 
 public interface STType {
-    void checkDeclaration();
+    boolean checkDeclaration();
     boolean equals(STType stType);
 }
