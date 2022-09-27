@@ -68,8 +68,10 @@ public class STInterface {
         else{
             ancestorsInterfaces.add(tkAncestorInterface.getLexeme());
             for(Token tkAncestorParentInterface : ST.symbolTable.getTKParentsInterfaces(tkAncestorInterface).values())
-                if(cyclicInheritance(tkAncestorParentInterface, ancestorsInterfaces))
+                if(cyclicInheritance(tkAncestorParentInterface, ancestorsInterfaces)) {
+                    ancestorsInterfaces.remove(tkAncestorInterface.getLexeme());
                     return true;
+                }
             ancestorsInterfaces.remove(tkAncestorInterface.getLexeme());
         }
         return false;

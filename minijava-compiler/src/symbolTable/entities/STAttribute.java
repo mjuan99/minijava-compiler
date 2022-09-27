@@ -39,7 +39,7 @@ public class STAttribute {
 
     public void checkDeclaration() {
         if(!errorFound)
-            if(stType.checkDeclaration())
+            if(!stType.checkDeclaration())
                 errorFound = true;
     }
 

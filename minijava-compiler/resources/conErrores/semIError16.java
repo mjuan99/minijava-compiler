@@ -1,6 +1,6 @@
 //[Error:MiClase3|5]
 
 class MiClase{
-    MiClase a2;
-    MiClase3 a4;
+    public MiClase a2;
+    private MiClase3 a4;
 }
