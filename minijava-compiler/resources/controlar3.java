@@ -11,4 +11,6 @@ class B extends A{
 
 class C extends B{
     public int a1;
+
+    static void main(){}
 }
