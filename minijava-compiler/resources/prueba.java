@@ -1,5 +1,12 @@
-class A implements I1{
+interface I1{
+    int m1();
+}
+
+interface I2 extends I1{
+    void m1();
+}
+
+class A implements I2/*, I1*/{
+    void m1(){}
     static void main(){}
 }
-interface I1 extends I2{}
-interface I2 extends I1{}

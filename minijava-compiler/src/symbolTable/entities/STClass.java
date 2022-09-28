@@ -131,8 +131,9 @@ public class STClass {
         stClass.stAttributes.forEach((key, stAttribute) -> {
             if(!stAttribute.errorFound())
                 if(stAttributes.get(stAttribute.getHash()) == null)
-                    stAttributes.put(stAttribute.getHash(), stAttribute); //TODO QUE PASA SI ERA PRIVADO
-                else ; //TODO QUE PASA SI YA ESTABA
+                    stAttributes.put(key, stAttribute);
+                else
+                    stAttributes.put(stAttribute.getHash() + "\\" + stAttribute.getClassName(), stAttribute);
         });
     }
 
@@ -177,7 +178,10 @@ public class STClass {
         for(Token token : tkInterfacesItImplements.values())
             interfaces.append(token.getLexeme()).append(", ");
         System.out.println("class " + tkName.getLexeme() + (tkClassItExtends != null ? " extends " + tkClassItExtends.getLexeme() : "") + (!interfaces.toString().equals("") ? " implements " + interfaces : "") + " {");
-        stAttributes.forEach((key, stAttribute) -> stAttribute.print());
+        stAttributes.forEach((key, stAttribute) -> {
+            stAttribute.print();
+            System.out.println("        Hash: " + key);
+        });
         stMethods.forEach((key, stMethod) -> stMethod.print());
         stConstructors.forEach((key, stConstructor) -> stConstructor.print());
         System.out.println("}");

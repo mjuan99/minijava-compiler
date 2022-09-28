@@ -21,12 +21,16 @@ public class STAttribute {
         this.tkClass = tkClass;
     }
 
+    public String getClassName(){
+        return tkClass.getLexeme();
+    }
+
     public boolean errorFound(){
         return errorFound;
     }
 
     public void print() {
-        System.out.println("    " + visibility + " " + stType + " " + tkName.getLexeme() + "\\" + tkClass.getLexeme());
+        System.out.println("    " + visibility + " " + stType + " " + tkName.getLexeme());
     }
 
     public Token getTKName() {
@@ -34,7 +38,7 @@ public class STAttribute {
     }
 
     public String getHash() {
-        return tkName.getLexeme() + "\\" + tkClass.getLexeme();
+        return tkName.getLexeme();
     }
 
     public void checkDeclaration() {

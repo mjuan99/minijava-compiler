@@ -84,7 +84,7 @@ public class STInterface {
                     STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
                     if(stInterface != null && !stInterface.errorFound()){
                         stInterface.consolidate();
-                        addMethodsFromParentInterface(stInterface);
+                        addMethodsFromParentSTInterface(stInterface);
                     }
                 });
             }
@@ -92,10 +92,15 @@ public class STInterface {
         }
     }
 
-    private void addMethodsFromParentInterface(STInterface stInterface) {
-        stInterface.getSTMethodsHeaders().forEach((key, stMethodHeader) -> {
-            if(!stMethodHeader.errorFound())
-                stMethodsHeaders.putIfAbsent(stMethodHeader.getHash(), stMethodHeader);
+    private void addMethodsFromParentSTInterface(STInterface stInterface) {
+        stInterface.getSTMethodsHeaders().forEach((key, stParentMethodHeader) -> {
+            if(!stParentMethodHeader.errorFound()) {
+                STMethodHeader stMyMethodHeader = stMethodsHeaders.get(stParentMethodHeader.getHash());
+                if(stMyMethodHeader == null)
+                    stMethodsHeaders.put(stParentMethodHeader.getHash(), stParentMethodHeader);
+                else if(!stMyMethodHeader.getSTReturnType().equals(stParentMethodHeader.getSTReturnType()))
+                    ST.symbolTable.addError(new SemanticError(stMyMethodHeader.getTKName(), "el tipo de retorno de " + stMyMethodHeader.getHash() + " no coincide con el tipo " + stParentMethodHeader.getSTReturnType() + " del metodo redefinido"));
+            }
         });
     }
 
