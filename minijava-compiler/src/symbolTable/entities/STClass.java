@@ -130,7 +130,7 @@ public class STClass {
     private void addAttributesFromParentSTClass(STClass stClass) {
         stClass.stAttributes.forEach((key, stAttribute) -> {
             if(!stAttribute.errorFound())
-                if(stAttributes.get(stAttribute.getHash()) == null)
+                if(stAttributes.get(stAttribute.getHash()) == null && stAttribute.isPublic())
                     stAttributes.put(key, stAttribute);
                 else
                     stAttributes.put(stAttribute.getHash() + "\\" + stAttribute.getClassName(), stAttribute);

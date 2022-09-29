@@ -1,7 +1,7 @@
 class A{
     private int a1;
     private String a2;
-    private boolean a3;
+    private boolean a3; //TODO QUE PASA CUANDO HEREDAN ESTE
 }
 
 class B extends A{

@@ -3,6 +3,8 @@ package symbolTable.entities;
 import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 
+import java.util.Objects;
+
 public class STAttribute {
     private final Token tkName;
     private Token tkClass;
@@ -49,5 +51,9 @@ public class STAttribute {
 
     public void setErrorFound() {
         errorFound = true;
+    }
+
+    public boolean isPublic() {
+        return Objects.equals(visibility, "public");
     }
 }
