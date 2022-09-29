@@ -129,12 +129,12 @@ public class SymbolTable {
             else{
                 stOldInterface.setErrorFound();
                 addError(new SemanticError(stClass.getTKName(), "la clase " + stClass.getTKName().getLexeme() + " ya fue definida"));
-                addError(new SemanticError(stOldInterface.getTKName(), "la clase " + stOldInterface.getTKName().getLexeme() + " ya fue definida"));
+                addError(new SemanticError(stOldInterface.getTKName(), ""));
             }
         else {
             stOldClass.setErrorFound();
             addError(new SemanticError(stClass.getTKName(), "la clase " + stClass.getTKName().getLexeme() + " ya fue definida"));
-            addError(new SemanticError(stOldClass.getTKName(), "la clase " + stOldClass.getTKName().getLexeme() + " ya fue definida"));
+            addError(new SemanticError(stOldClass.getTKName(), ""));
         }
     }
 
@@ -151,12 +151,12 @@ public class SymbolTable {
             else{
                 stOldInterface.setErrorFound();
                 addError(new SemanticError(stInterface.getTKName(), "la clase " + stInterface.getTKName().getLexeme() + " ya fue definida"));
-                addError(new SemanticError(stOldInterface.getTKName(), "la clase " + stOldInterface.getTKName().getLexeme() + " ya fue definida"));
+                addError(new SemanticError(stOldInterface.getTKName(), ""));
             }
         else{
             stOldClass.setErrorFound();
             addError(new SemanticError(stInterface.getTKName(), "la clase " + stInterface.getTKName().getLexeme() + " ya fue definida"));
-            addError(new SemanticError(stOldClass.getTKName(), "la clase " + stOldClass.getTKName().getLexeme() + " ya fue definida"));
+            addError(new SemanticError(stOldClass.getTKName(), ""));
         }
     }
 
@@ -175,8 +175,8 @@ public class SymbolTable {
         else{
             this.stMainMethod.setErrorFound();
             stMainMethod.setErrorFound();
-            addError(new SemanticError(this.stMainMethod.getTKName(), "hay mas de un metodo static void main() definido"));
-            addError(new SemanticError(stMainMethod.getTKName(), "hay mas de un metodo static void main() definido"));
+            addError(new SemanticError(this.stMainMethod.getTKName(), ""));
+            addError(new SemanticError(stMainMethod.getTKName(), "el metodo static void main() ya fue definido"));
         }
     }
 

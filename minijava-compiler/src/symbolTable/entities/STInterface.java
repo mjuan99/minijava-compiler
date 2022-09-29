@@ -128,7 +128,7 @@ public class STInterface {
         else{
             stOldMethodHeader.setErrorFound();
             ST.symbolTable.addError(new SemanticError(stMethodHeader.getTKName(), "el método " + stMethodHeader.getHash() + " ya fue definido"));
-            ST.symbolTable.addError(new SemanticError(stOldMethodHeader.getTKName(), "el método " + stOldMethodHeader.getHash() + " ya fue definido"));
+            ST.symbolTable.addError(new SemanticError(stOldMethodHeader.getTKName(), ""));
         }
     }
 

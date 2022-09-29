@@ -196,8 +196,8 @@ public class STClass {
         }
         else{
             stOldMethod.setErrorFound();
-            ST.symbolTable.addError(new SemanticError(stMethod.getTKName(), "el método " + stMethod.getHash() + " ya estaba definido"));
-            ST.symbolTable.addError(new SemanticError(stOldMethod.getTKName(), "el método " + stOldMethod.getHash() + " ya estaba definido"));
+            ST.symbolTable.addError(new SemanticError(stMethod.getTKName(), "el método " + stMethod.getHash() + " ya fue definido"));
+            ST.symbolTable.addError(new SemanticError(stOldMethod.getTKName(), ""));
         }
     }
 
@@ -208,8 +208,8 @@ public class STClass {
             stAttributes.put(stAttribute.getHash(), stAttribute);
         else{
             stOldAttribute.setErrorFound();
-            ST.symbolTable.addError(new SemanticError(stAttribute.getTKName(), "el atributo " + stAttribute.getTKName().getLexeme() + " ya estaba definido"));
-            ST.symbolTable.addError(new SemanticError(stOldAttribute.getTKName(), "el atributo " + stOldAttribute.getTKName().getLexeme() + " ya estaba definido"));
+            ST.symbolTable.addError(new SemanticError(stAttribute.getTKName(), "el atributo " + stAttribute.getTKName().getLexeme() + " ya fue definido"));
+            ST.symbolTable.addError(new SemanticError(stOldAttribute.getTKName(), ""));
         }
     }
 
@@ -225,8 +225,8 @@ public class STClass {
             stConstructors.put(stConstructor.getHash(), stConstructor);
         else{
             stOldConstructor.setErrorFound();
-            ST.symbolTable.addError(new SemanticError(stConstructor.getTKName(), "el constructor " + stConstructor.getHash() + " ya estaba definido"));
-            ST.symbolTable.addError(new SemanticError(stOldConstructor.getTKName(), "el constructor " + stOldConstructor.getHash() + " ya estaba definido"));
+            ST.symbolTable.addError(new SemanticError(stConstructor.getTKName(), "el constructor " + stConstructor.getHash() + " ya fue definido"));
+            ST.symbolTable.addError(new SemanticError(stOldConstructor.getTKName(), ""));
         }
     }
 
