@@ -15,7 +15,6 @@ public class STMethod {
     private final STType stReturnType;
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
-    //private STBlock block;
     private boolean errorFound;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){

@@ -5,7 +5,7 @@ import symbolTable.types.STType;
 
 public class STAttribute {
     private final Token tkName;
-    private Token tkClass; // TODO ver que sea automatico
+    private Token tkClass;
     private final STType stType;
     private final String visibility;
     private boolean errorFound;

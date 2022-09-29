@@ -1,12 +1,6 @@
-interface I1{
-    int m1();
-}
+//[Error:MiClase2|5]
 
-interface I2 extends I1{
-    void m1();
-}
-
-class A implements I2/*, I1*/{
-    void m1(){}
-    static void main(){}
+interface MiInterfaz{
+    static MiInterfaz m1();
+    static MiClase2 m3();
 }

@@ -220,7 +220,7 @@ public class STClass {
     public void insertConstructor(STConstructor stConstructor) {
         STConstructor stOldConstructor = stConstructors.get(stConstructor.getHash());
         if(!Objects.equals(stConstructor.getTKName().getLexeme(), tkName.getLexeme())){
-            ST.symbolTable.addError(new SemanticError(stConstructor.getTKName(), "el tipo del constructor " + stConstructor.getTKName().getLexeme() + " no coincide con el tipo de la clase " + tkName.getLexeme()));
+            ST.symbolTable.addError(new SemanticError(stConstructor.getTKName(), "el nombre del constructor " + stConstructor.getTKName().getLexeme() + " no coincide con el nombre de la clase " + tkName.getLexeme()));
         }else if(stOldConstructor == null)
             stConstructors.put(stConstructor.getHash(), stConstructor);
         else{
