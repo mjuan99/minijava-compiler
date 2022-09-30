@@ -8,9 +8,9 @@ class B extends A{
     public int a1;
     public char a2;
 }
-
-class C extends B{
+interface I1{int m1();}
+class C extends B implements I1{
     public int a1;
-
-    static void main(){}
+    void m1(){}
+    static int main(){}
 }
