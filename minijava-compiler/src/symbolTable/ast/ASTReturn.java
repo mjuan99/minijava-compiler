@@ -1,16 +1,17 @@
 package symbolTable.ast;
 
 public class ASTReturn implements ASTSentence{
-    private final ASTExpression astExpression;
+    private final ASTExpression returnExpression;
 
-    public ASTReturn(ASTExpression astExpression){
-        this.astExpression = astExpression;
+    public ASTReturn(ASTExpression returnExpression){
+        this.returnExpression = returnExpression;
     }
 
     @Override
     public void print() {
         System.out.print("return ");
-        astExpression.print();
+        if(returnExpression != null)
+            returnExpression.print();
         System.out.println(";");
     }
 }

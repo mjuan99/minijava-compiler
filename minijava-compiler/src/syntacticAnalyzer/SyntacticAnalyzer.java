@@ -808,22 +808,24 @@ public class SyntacticAnalyzer {
     }
 
     private ASTSentence While() throws IOException {
+        ASTExpression condition = null;
+        ASTSentence astSentence = null;
         try{
             match("while");
             match("(");
             try {
-                Expresion();
+                condition = Expresion();
             } catch (SyntacticException e) {
                 discardTokensUntilValidTokenIsFound(")", ";", "{");
             }
             match(")");
-            Sentencia();
+            astSentence = Sentencia();
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(";", "{");
             if(checkCurrentToken("{"))
                 Sentencia();
         }
-        return null; //TODO agregar
+        return new ASTWhile(condition, astSentence);
     }
 
     private ASTExpression Expresion() throws IOException, SyntacticException {

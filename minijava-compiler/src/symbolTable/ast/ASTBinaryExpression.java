@@ -3,22 +3,22 @@ package symbolTable.ast;
 import lexicalAnalyzer.Token;
 
 public class ASTBinaryExpression implements ASTExpression{
-    private final ASTExpression astExpressionLeftSide;
+    private final ASTExpression leftSide;
     private final Token tkBinaryOperator;
-    private final ASTUnaryExpression astUnaryExpRightSide;
+    private final ASTUnaryExpression rightSide;
     private final ASTChaining astChaining;
 
-    public ASTBinaryExpression(ASTExpression astExpressionLeftSide, Token tkBinaryOperator, ASTUnaryExpression astUnaryExpRightSide, ASTChaining astChaining) {
-        this.astExpressionLeftSide = astExpressionLeftSide;
+    public ASTBinaryExpression(ASTExpression leftSide, Token tkBinaryOperator, ASTUnaryExpression astUnaryExpRightSide, ASTChaining astChaining) {
+        this.leftSide = leftSide;
         this.tkBinaryOperator = tkBinaryOperator;
-        this.astUnaryExpRightSide = astUnaryExpRightSide;
+        this.rightSide = astUnaryExpRightSide;
         this.astChaining = astChaining;
     }
 
     @Override
     public void print() {
-        astExpressionLeftSide.print();
+        leftSide.print();
         System.out.print(tkBinaryOperator.getLexeme());
-        astUnaryExpRightSide.print();
+        rightSide.print();
     }
 }

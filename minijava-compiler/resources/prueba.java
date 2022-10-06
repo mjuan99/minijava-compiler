@@ -1,14 +1,10 @@
 class A{
     int m1(){
-        return 5;
-        {
-            return 'c';
-            return null;
-            {
-                return "asd";
-            }
+        while(4 > 5 + 2){
+            while(1) while(2) return 3;
+            return 7+2;
+            while(3 * null) return;
         }
-        return 3 + 5 * null / true --false;
     }
 
     int m2(){return 3;}

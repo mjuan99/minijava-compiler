@@ -3,13 +3,13 @@ package symbolTable.ast;
 import lexicalAnalyzer.Token;
 
 public class ASTLiteral implements ASTOperand{
-    private final Token tkValue;
+    private final Token tkLiteral;
 
-    public ASTLiteral(Token tkValue) {
-        this.tkValue = tkValue;
+    public ASTLiteral(Token tkLiteral) {
+        this.tkLiteral = tkLiteral;
     }
 
     public void print() {
-        System.out.print(tkValue.getLexeme());
+        System.out.print(tkLiteral.getLexeme());
     }
 }
