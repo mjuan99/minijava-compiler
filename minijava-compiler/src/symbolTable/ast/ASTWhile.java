@@ -9,7 +9,6 @@ public class ASTWhile implements ASTSentence{
         this.astSentence = astSentence;
     }
 
-    @Override
     public void print() {
         System.out.print("while(");
         condition.print();
