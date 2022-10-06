@@ -1,8 +1,8 @@
 package symbolTable.ast;
 
 public class ASTWhile implements ASTSentence{
-    private ASTExpression condition;
-    private ASTSentence astSentence;
+    private final ASTExpression condition;
+    private final ASTSentence astSentence;
 
     public ASTWhile(ASTExpression condition, ASTSentence astSentence) {
         this.condition = condition;
