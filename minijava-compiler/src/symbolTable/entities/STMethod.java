@@ -3,6 +3,7 @@ package symbolTable.entities;
 import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.ast.ASTBlock;
 import symbolTable.types.STType;
 
 import java.util.Comparator;
@@ -16,6 +17,7 @@ public class STMethod {
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
     private boolean errorFound;
+    private ASTBlock astBlock;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -34,7 +36,11 @@ public class STMethod {
         System.out.print("    " + (isStatic ? "static " : "") + stReturnType + " " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
-        System.out.println("){}");
+        System.out.print(")");
+        if(astBlock != null)
+            astBlock.print();
+        else
+            System.out.println("{}");
     }
 
     public Token getTKName() {
@@ -94,5 +100,12 @@ public class STMethod {
 
     public void setErrorFound() {
         errorFound = true;
+    }
+
+    public void checkSentences() {
+    }
+
+    public void insertASTBlock(ASTBlock astBlock) {
+        this.astBlock = astBlock;
     }
 }

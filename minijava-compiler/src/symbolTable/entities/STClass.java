@@ -237,4 +237,9 @@ public class STClass {
     public void setErrorFound() {
         errorFound = true;
     }
+
+    public void checkSentences() {
+        stMethods.forEach((key, stMethod) -> stMethod.checkSentences());
+        stConstructors.forEach((key, stConstructor) -> stConstructor.checkSentences());
+    }
 }

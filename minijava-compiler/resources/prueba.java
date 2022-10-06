@@ -1,16 +1,17 @@
 class A{
-    private int a1;
-    private String a2;
-    private boolean a3; //TODO QUE PASA CUANDO HEREDAN ESTE
-}
+    int m1(){
+        return 5;
+        {
+            return 'c';
+            return null;
+            {
+                return "asd";
+            }
+        }
+        return 3 + 5 * null / true --false;
+    }
 
-class B extends A{
-    public int a1;
-    public char a2;
-}
-interface I1{int m1();}
-class C extends B implements I1{
-    public int a1;
-    void m1(){}
-    static int main(){}
+    int m2(){return 3;}
+
+    static void main(){return 1;}
 }

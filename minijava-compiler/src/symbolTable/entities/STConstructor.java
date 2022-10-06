@@ -3,6 +3,7 @@ package symbolTable.entities;
 import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.ast.ASTBlock;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class STConstructor {
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
     private boolean errorFound;
+    private ASTBlock astBlock;
 
     public STConstructor(Token tkName) {
         this.tkName = tkName;
@@ -29,7 +31,11 @@ public class STConstructor {
         System.out.print("    " + tkName.getLexeme() + "(");
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
-        System.out.println("){}");
+        System.out.print(")");
+        if(astBlock != null)
+            astBlock.print();
+        else
+            System.out.println("{}");
     }
 
     public Token getTKName() {
@@ -72,5 +78,12 @@ public class STConstructor {
 
     public void setErrorFound() {
         errorFound = true;
+    }
+
+    public void checkSentences() {
+    }
+
+    public void insertASTBlock(ASTBlock astBlock) {
+        this.astBlock = astBlock;
     }
 }

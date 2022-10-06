@@ -4,6 +4,7 @@ import errors.*;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.ast.*;
 import symbolTable.entities.*;
 import symbolTable.SymbolTable;
 import symbolTable.types.*;
@@ -321,7 +322,7 @@ public class SyntacticAnalyzer {
         ST.symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
         stMethod.insertArguments(ArgsFormales());
-        Bloque();
+        stMethod.insertASTBlock(Bloque());
         ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
@@ -331,7 +332,7 @@ public class SyntacticAnalyzer {
         ST.symbolTable.setCurrentSTMethod(stMethod);
         match("idMetVar");
         stMethod.insertArguments(ArgsFormales());
-        Bloque();
+        stMethod.insertASTBlock(Bloque());
         ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
@@ -354,7 +355,7 @@ public class SyntacticAnalyzer {
             STMethod stMethod = new STMethod(idMetVar, false, stType);
             ST.symbolTable.setCurrentSTMethod(stMethod);
             stMethod.insertArguments(ArgsFormales());
-            Bloque();
+            stMethod.insertASTBlock(Bloque());
             ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
         }else {
             addError(new SyntacticError(currentToken, "',', ; o argumentos formales"));
@@ -386,7 +387,7 @@ public class SyntacticAnalyzer {
         STConstructor stConstructor = new STConstructor(idClass);
         ST.symbolTable.setCurrentSTConstructor(stConstructor);
         stConstructor.insertArguments(ArgsFormales());
-        Bloque();
+        stConstructor.insertASTBlock(Bloque());
         ST.symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
     }
 
@@ -553,22 +554,30 @@ public class SyntacticAnalyzer {
         return stArgument;
     }
 
-    private void Bloque() throws IOException, SyntacticException {
+    private ASTBlock Bloque() throws IOException, SyntacticException {
         match("{");
-        ListaSentencias();
+        ASTBlock astBlock = new ASTBlock(ST.symbolTable.getCurrentASTBlock());
+        ST.symbolTable.setCurrentASTBlock(astBlock);
+        LinkedList<ASTSentence> astSentences = ListaSentencias();
         try{
             match("}");
+            astBlock.setAstSentences(astSentences);
+            ST.symbolTable.setCurrentASTBlock(astBlock.getParentASTBlock());
+            return astBlock;
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound("}");
             updateCurrentToken();
+            return null;
         }
     }
 
-    private void ListaSentencias() throws IOException {
+    private LinkedList<ASTSentence> ListaSentencias() throws IOException {
         if(checkCurrentToken(";", "this", "idMetVar", "new", "idClase", "(", "var",
                 "return", "if", "while", "{", "boolean", "char", "int")){
-            Sentencia();
-            ListaSentencias();
+            ASTSentence astSentence = Sentencia();
+            LinkedList<ASTSentence> astSentences = ListaSentencias();
+            astSentences.add(0, astSentence);
+            return astSentences;
         }else if(invalidEpsilon("}")) {
             addError(new SyntacticError(currentToken, "sentencia o }"));
             discardTokensUntilValidTokenIsFound("}", ";", "this", "idMetVar", "new",
@@ -576,16 +585,19 @@ public class SyntacticAnalyzer {
             if(!checkCurrentToken("}")){
                 ListaSentencias();
             }
-        }
+            return new LinkedList<>();
+        }else
+            return new LinkedList<>();
     }
 
-    private void Sentencia() throws IOException {
+    private ASTSentence Sentencia() throws IOException {
+        ASTSentence astSentence = null;
         if(checkCurrentToken(";"))
             updateCurrentToken();
         else if(checkCurrentToken("this", "idMetVar", "new", "idClase", "(",
                 "boolean", "char", "int")){
             try {
-                AsignacionOLlamadaOVarClasica();
+                astSentence = AsignacionOLlamadaOVarClasica();
                 match(";");
             }catch (SyntacticException e){
                 discardTokensUntilValidTokenIsFound(";");
@@ -593,7 +605,7 @@ public class SyntacticAnalyzer {
             }
         }else if(checkCurrentToken("var")){
             try {
-                VarLocal();
+                astSentence = VarLocal();
                 match(";");
             }catch (SyntacticException e){
                 discardTokensUntilValidTokenIsFound(";");
@@ -601,19 +613,19 @@ public class SyntacticAnalyzer {
             }
         }else if(checkCurrentToken("return")){
             try {
-                Return();
+                astSentence = Return();
                 match(";");
             }catch (SyntacticException e){
                 discardTokensUntilValidTokenIsFound(";");
                 updateCurrentToken();
             }
         }else if(checkCurrentToken("if"))
-            If();
+            astSentence = If();
         else if(checkCurrentToken("while"))
-            While();
+            astSentence = While();
         else if(checkCurrentToken("{"))
             try {
-                Bloque();
+                astSentence = Bloque();
             }catch (SyntacticException ignored){}
         else {
             addError(new SyntacticError(currentToken, "sentencia"));
@@ -621,9 +633,10 @@ public class SyntacticAnalyzer {
             if(checkCurrentToken(";"))
                 updateCurrentToken();
         }
+        return astSentence;
     }
 
-    private void AsignacionOLlamadaOVarClasica() throws IOException, SyntacticException {
+    private ASTSentence AsignacionOLlamadaOVarClasica() throws IOException, SyntacticException {
         if(checkCurrentToken("this", "idMetVar", "new", "(")){
             AccesoNoMetEstatico();
             AsignacionOpt();
@@ -636,6 +649,7 @@ public class SyntacticAnalyzer {
             addError(new SyntacticError(currentToken, "asignacion, declaracion de variable o llamada"));
             throw new SyntacticException(compilerErrorList);
         }
+        return null; //TODO agregar
     }
 
     private void ListaDeclaraciones() throws IOException, SyntacticException {
@@ -725,7 +739,7 @@ public class SyntacticAnalyzer {
         }
     }
 
-    private void VarLocal() throws IOException, SyntacticException {
+    private ASTSentence VarLocal() throws IOException, SyntacticException {
         match("var");
         match("idMetVar");
         match("=");
@@ -734,28 +748,32 @@ public class SyntacticAnalyzer {
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(";");
         }
+        return null; //TODO agregar
     }
 
-    private void Return() throws IOException, SyntacticException {
+    private ASTSentence Return() throws IOException, SyntacticException {
         match("return");
         try {
-            ExpresionOpt();
+            ASTExpression astExpression = ExpresionOpt();
+            return new ASTReturn(astExpression);
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(";");
+            return null;
         }
     }
 
-    private void ExpresionOpt() throws IOException, SyntacticException {
+    private ASTExpression ExpresionOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("+", "-", "!", "null", "true", "false", "intLiteral",
                 "charLiteral", "stringLiteral", "this", "idMetVar", "new", "idClase", "("))
-            Expresion();
+            return Expresion();
         else if(invalidEpsilon(";")) {
             addError(new SyntacticError(currentToken, "expresion o ;"));
             throw new SyntacticException(compilerErrorList);
         }
+        return null;
     }
 
-    private void If() throws IOException {
+    private ASTSentence If() throws IOException {
         try{
             match("if");
             match("(");
@@ -774,6 +792,7 @@ public class SyntacticAnalyzer {
                 updateCurrentToken();
         }
         ElseOpt();
+        return null; //TODO agregar
     }
 
     private void ElseOpt() throws IOException {
@@ -788,7 +807,7 @@ public class SyntacticAnalyzer {
         }
     }
 
-    private void While() throws IOException {
+    private ASTSentence While() throws IOException {
         try{
             match("while");
             match("(");
@@ -804,26 +823,29 @@ public class SyntacticAnalyzer {
             if(checkCurrentToken("{"))
                 Sentencia();
         }
+        return null; //TODO agregar
     }
 
-    private void Expresion() throws IOException, SyntacticException {
-        ExpresionUnaria();
-        RestoExpresion();
+    private ASTExpression Expresion() throws IOException, SyntacticException {
+        ASTExpression astExpression = ExpresionUnaria();
+        return RestoExpresion(astExpression);
     }
 
-    private void RestoExpresion() throws IOException, SyntacticException {
+    private ASTExpression RestoExpresion(ASTExpression astExpressionLeftSide) throws IOException, SyntacticException {
         if(checkCurrentToken("||", "&&", "==", "!=", "<", ">", "<=", ">=", "+", "-", "*", "/", "%")){
-            OperadorBinario();
-            ExpresionUnaria();
-            RestoExpresion();
+            Token tkBinaryOperator = OperadorBinario();
+            ASTUnaryExpression astUnaryExpRightSide = ExpresionUnaria();
+            return RestoExpresion(new ASTBinaryExpression(astExpressionLeftSide, tkBinaryOperator, astUnaryExpRightSide, null));
         }
         else if(invalidEpsilon(",", ";", ")")) {
             addError(new SyntacticError(currentToken, "operador binario, ',', ) o ;"));
             throw new SyntacticException(compilerErrorList);
-        }
+        }else
+            return astExpressionLeftSide;
     }
 
-    private void OperadorBinario() throws IOException, SyntacticException {
+    private Token OperadorBinario() throws IOException, SyntacticException {
+        Token tkBinaryOperator = currentToken;
         if(checkCurrentToken("||"))
             match("||");
         else if(checkCurrentToken("&&"))
@@ -854,22 +876,27 @@ public class SyntacticAnalyzer {
             addError(new SyntacticError(currentToken, "operador binario"));
             throw new SyntacticException(compilerErrorList);
         }
+        return tkBinaryOperator;
     }
 
-    private void ExpresionUnaria() throws IOException, SyntacticException {
+    private ASTUnaryExpression ExpresionUnaria() throws IOException, SyntacticException {
         if(checkCurrentToken("+", "-", "!")){
-            OperadorUnario();
-            Operando();
+            Token tkUnaryOperator = OperadorUnario();
+            ASTOperand astOperand = Operando();
+            return new ASTUnaryExpression(tkUnaryOperator, astOperand, null);
         }else if(checkCurrentToken("null", "true", "false", "intLiteral", "charLiteral",
-                "stringLiteral", "this", "idMetVar", "new", "idClase", "("))
-            Operando();
+                "stringLiteral", "this", "idMetVar", "new", "idClase", "(")) {
+            ASTOperand astOperand = Operando();
+            return new ASTUnaryExpression(null, astOperand, null);
+        }
         else {
             addError(new SyntacticError(currentToken, "operando"));
             throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void OperadorUnario() throws IOException, SyntacticException {
+    private Token OperadorUnario() throws IOException, SyntacticException {
+        Token tkUnaryOperator = currentToken;
         if(checkCurrentToken("+"))
             match("+");
         else if(checkCurrentToken("-"))
@@ -880,20 +907,22 @@ public class SyntacticAnalyzer {
             addError(new SyntacticError(currentToken, "operador unario"));
             throw new SyntacticException(compilerErrorList);
         }
+        return tkUnaryOperator;
     }
 
-    private void Operando() throws IOException, SyntacticException {
+    private ASTOperand Operando() throws IOException, SyntacticException {
         if(checkCurrentToken("null", "true", "false", "intLiteral", "charLiteral", "stringLiteral"))
-            Literal();
+            return Literal();
         else if(checkCurrentToken("this", "idMetVar", "new", "idClase", "("))
-            Acceso();
+            return Acceso();
         else {
             addError(new SyntacticError(currentToken, "literal o acceso"));
             throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void Literal() throws IOException, SyntacticException {
+    private ASTOperand Literal() throws IOException, SyntacticException {
+        ASTOperand astOperand = new ASTLiteral(currentToken);
         if(checkCurrentToken("null"))
             match("null");
         else if(checkCurrentToken("true"))
@@ -910,9 +939,10 @@ public class SyntacticAnalyzer {
             addError(new SyntacticError(currentToken, "literal"));
             throw new SyntacticException(compilerErrorList);
         }
+        return astOperand;
     }
 
-    private void Acceso() throws IOException, SyntacticException {
+    private ASTOperand Acceso() throws IOException, SyntacticException {
         if(checkCurrentToken("idClase"))
             AccesoMetodoEstatico();
         else if(checkCurrentToken("this", "idMetVar", "new", "("))
@@ -921,6 +951,7 @@ public class SyntacticAnalyzer {
             addError(new SyntacticError(currentToken, "acceso"));
             throw new SyntacticException(compilerErrorList);
         }
+        return null;//TODO agregar
     }
 
     private void AccesoNoMetEstatico() throws IOException, SyntacticException {

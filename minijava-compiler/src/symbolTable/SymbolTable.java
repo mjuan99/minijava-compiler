@@ -4,6 +4,7 @@ import errors.CompilerError;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
+import symbolTable.ast.ASTBlock;
 import symbolTable.entities.*;
 import symbolTable.types.*;
 
@@ -21,6 +22,15 @@ public class SymbolTable {
     private STMethodHeader currentSTMethodHeader;
     private Token tkEOF;
     private STMethod stMainMethod;
+    private ASTBlock currentASTBlock;
+
+    public ASTBlock getCurrentASTBlock() {
+        return currentASTBlock;
+    }
+
+    public void setCurrentASTBlock(ASTBlock currentASTBlock) {
+        this.currentASTBlock = currentASTBlock;
+    }
 
     public SymbolTable(){
         stClasses = new HashMap<>();
@@ -28,6 +38,7 @@ public class SymbolTable {
         compilerErrorList = new LinkedList<>();
         loadPredefinedClasses();
         stMainMethod = null;
+        currentASTBlock = null;
     }
 
     public void setTKEOF(Token tkEOF){
@@ -189,6 +200,10 @@ public class SymbolTable {
     public void consolidate(){
         stClasses.forEach((key, stClass) -> stClass.consolidate());
         stInterfaces.forEach((key, stInterface) -> stInterface.consolidate());
+    }
+
+    public void checkSentences(){
+        stClasses.forEach((key, stClass) -> stClass.checkSentences());
     }
 
     public void throwExceptionIfErrorsWereFound() throws SemanticException{
