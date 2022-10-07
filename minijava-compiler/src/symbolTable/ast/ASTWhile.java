@@ -15,4 +15,10 @@ public class ASTWhile implements ASTSentence{
         System.out.print(") ");
         astSentence.print();
     }
+
+    @Override
+    public void checkSentences() {
+        //TODO implementar
+
+    }
 }

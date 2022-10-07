@@ -21,4 +21,9 @@ public class ASTIf implements ASTSentence{
             elseSentence.print();
         }
     }
+
+    @Override
+    public void checkSentences() {
+        //TODO implementar
+    }
 }

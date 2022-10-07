@@ -14,4 +14,10 @@ public class ASTReturn implements ASTSentence{
             returnExpression.print();
         System.out.println(";");
     }
+
+    @Override
+    public void checkSentences() {
+        //TODO implementar
+
+    }
 }

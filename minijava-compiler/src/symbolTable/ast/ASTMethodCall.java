@@ -11,4 +11,10 @@ public class ASTMethodCall implements ASTSentence{
         astAccess.print();
         System.out.println(";");
     }
+
+    @Override
+    public void checkSentences() {
+        //TODO implementar
+
+    }
 }

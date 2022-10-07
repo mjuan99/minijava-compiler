@@ -26,6 +26,7 @@ public class STMethod {
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
         errorFound = false;
+        astBlock = new ASTBlock(null);
     }
 
     public boolean errorFound(){
@@ -37,10 +38,7 @@ public class STMethod {
         for(STArgument stArgument : stArgumentsList)
             stArgument.print();
         System.out.print(")");
-        if(astBlock != null)
-            astBlock.print();
-        else
-            System.out.println("{}");
+        astBlock.print();
     }
 
     public Token getTKName() {
@@ -103,6 +101,8 @@ public class STMethod {
     }
 
     public void checkSentences() {
+        ST.symbolTable.setCurrentSTMethod(this);
+        astBlock.checkSentences();
     }
 
     public void insertASTBlock(ASTBlock astBlock) {

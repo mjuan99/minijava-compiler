@@ -1,5 +1,7 @@
 package symbolTable.ast;
 
+import symbolTable.ST;
+
 import java.util.LinkedList;
 
 public class ASTBlock implements ASTSentence{
@@ -12,6 +14,7 @@ public class ASTBlock implements ASTSentence{
 
     public ASTBlock(ASTBlock parentASTBlock) {
         this.parentASTBlock = parentASTBlock;
+        astSentences = new LinkedList<>();
     }
 
     public void print() {
@@ -38,6 +41,13 @@ public class ASTBlock implements ASTSentence{
             astBlock = astBlock.parentASTBlock;
         }
         return level;
+    }
+
+    public void checkSentences(){
+        ST.symbolTable.setCurrentASTBlock(this);
+        for(ASTSentence astSentence : astSentences)
+            astSentence.checkSentences();
+        ST.symbolTable.setCurrentASTBlock(parentASTBlock);
     }
 
     public ASTBlock getParentASTBlock() {

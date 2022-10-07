@@ -19,4 +19,10 @@ public class ASTAssignment implements ASTSentence{
         value.print();
         System.out.println(";");
     }
+
+    @Override
+    public void checkSentences() {
+        //TODO implementar
+
+    }
 }

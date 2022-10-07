@@ -239,6 +239,7 @@ public class STClass {
     }
 
     public void checkSentences() {
+        ST.symbolTable.setCurrentSTClass(this);
         stMethods.forEach((key, stMethod) -> stMethod.checkSentences());
         stConstructors.forEach((key, stConstructor) -> stConstructor.checkSentences());
     }
