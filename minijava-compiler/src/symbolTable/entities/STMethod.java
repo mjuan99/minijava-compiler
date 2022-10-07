@@ -70,7 +70,9 @@ public class STMethod {
     }
 
     public String getHash() {
-        return tkName.getLexeme() + getArgumentsSignature();
+        return tkName.getLexeme();
+        //return tkName.getLexeme() + getArgumentsSignature();
+        //TODO rompi la sobrecarga
     }
 
     public void checkDeclaration() {

@@ -254,4 +254,12 @@ public class STClass {
         else
             return null;
     }
+
+    public STType getMethodType(String methodName) {
+        STMethod stMethod = stMethods.get(methodName);
+        if(stMethod != null)
+            return stMethod.getSTReturnType();
+        else
+            return null;
+    }
 }

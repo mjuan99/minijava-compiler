@@ -1,7 +1,9 @@
 package symbolTable.ast.expressions.access;
 
+import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
+import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 
@@ -37,6 +39,17 @@ public class ASTMethodChaining implements ASTChaining{
 
     @Override
     public STType check(STType previousType) throws SemanticException {
-        return null;//TODO implementar
+        if(!previousType.isTypeReference())
+            throw new SemanticException(new SemanticError(tkMethod, "no se puede aplicar encadenado a un tipo primitivo o void"));
+        STType stType = ST.symbolTable.getSTClass(previousType.toString()).getMethodType(tkMethod.getLexeme());
+        if(stType == null)
+            throw new SemanticException(new SemanticError(tkMethod, "el tipo " + previousType + " no tiene un metodo llamado " + tkMethod.getLexeme()));
+        if(astChaining == null)
+            return stType;
+        else{
+            STType chainingType = astChaining.check(stType);
+            endsWithVariable = astChaining.endsWithVariable();
+            return chainingType;
+        }
     }
 }
