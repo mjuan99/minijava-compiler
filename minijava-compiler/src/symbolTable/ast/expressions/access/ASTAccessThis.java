@@ -34,8 +34,11 @@ public class ASTAccessThis implements ASTAccess{
     public STType check() throws SemanticException {
         if(astChaining == null)
             return new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName());
-        else
-            return astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
+        else{
+            STType chainingType = astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
+            endsWithVariable = astChaining.endsWithVariable();
+            return chainingType;
+        }
     }
 
     public void setASTChainng(ASTChaining astChaining) {
