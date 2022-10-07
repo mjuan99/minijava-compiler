@@ -1,5 +1,5 @@
 package symbolTable.ast;
 
-public interface ASTAccess extends ASTSentence, ASTOperand{
+public interface ASTAccess extends ASTOperand{
     void setASTChainng(ASTChaining astChaining);
 }

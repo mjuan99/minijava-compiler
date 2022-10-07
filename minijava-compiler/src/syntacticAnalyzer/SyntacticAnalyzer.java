@@ -644,7 +644,7 @@ public class SyntacticAnalyzer {
             Token tkAssignment = currentToken;
             ASTExpression assignmentExpression = AsignacionOpt();
             if(assignmentExpression == null)
-                return astAccess;
+                return new ASTMethodCall(astAccess);
             else
                 return new ASTAssignment(astAccess, tkAssignment, assignmentExpression);
         }else if(checkCurrentToken("boolean", "char", "int")){
@@ -708,7 +708,7 @@ public class SyntacticAnalyzer {
             Token tkAssignment = currentToken;
             ASTExpression assignmentExpression = AsignacionOpt();
             if(assignmentExpression == null)
-                return astAccess;
+                return new ASTMethodCall(astAccess);
             else
                 return new ASTAssignment(astAccess, tkAssignment, assignmentExpression);
         }else {
