@@ -35,7 +35,10 @@ public class ASTAccessMethod implements ASTAccess{
 
     @Override
     public Token getToken() {
-        return null;//TODO implementar
+        if(astChaining == null)
+            return tkMethod;
+        else
+            return astChaining.getToken();
     }
 
     @Override

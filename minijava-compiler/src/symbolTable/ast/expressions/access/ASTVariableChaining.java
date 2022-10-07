@@ -43,4 +43,12 @@ public class ASTVariableChaining implements ASTChaining{
         if(astChaining != null)
             astChaining.print();
     }
+
+    @Override
+    public Token getToken() {
+        if(astChaining == null)
+            return tkVariable;
+        else
+            return astChaining.getToken();
+    }
 }

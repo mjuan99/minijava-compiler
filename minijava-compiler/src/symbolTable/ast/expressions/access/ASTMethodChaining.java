@@ -52,4 +52,12 @@ public class ASTMethodChaining implements ASTChaining{
             return chainingType;
         }
     }
+
+    @Override
+    public Token getToken() {
+        if(astChaining == null)
+            return tkMethod;
+        else
+            return astChaining.getToken();
+    }
 }

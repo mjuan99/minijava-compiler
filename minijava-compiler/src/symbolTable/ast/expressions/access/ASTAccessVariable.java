@@ -25,7 +25,10 @@ public class ASTAccessVariable implements ASTAccess{
 
     @Override
     public Token getToken() {
-        return null;//TODO implementar
+        if(astChaining == null)
+            return tkVariable;
+        else
+            return astChaining.getToken();
     }
 
     @Override

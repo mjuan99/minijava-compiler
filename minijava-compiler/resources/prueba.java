@@ -1,20 +1,17 @@
 // Prueba un lado izquierdo simple
 
 class A {
-    public int a1;
-
-
-    void m1(){
-        a1 = 4;
-
+    int a(){}
+    C c(){}
+    B b(){}
+    A m1(){
+        return b();
     }
-
+    static void main(){}
 }
 
+class B extends A{}
 
-class Init{
-    static void main()
-    { }
-}
+class C{}
 
 

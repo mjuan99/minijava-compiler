@@ -31,7 +31,7 @@ public class ASTUnaryExpression implements ASTExpression{
 
     @Override
     public Token getToken() {
-        return null; //TODO implementar
+        return astOperand.getToken();
     }
 
     @Override
