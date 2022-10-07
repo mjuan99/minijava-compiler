@@ -1,5 +1,5 @@
 package symbolTable.ast;
 
-public interface ASTExpression {
+public interface ASTExpression extends ASTAccess{
     void print();
 }

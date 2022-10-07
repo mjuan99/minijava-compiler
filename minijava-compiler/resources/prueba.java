@@ -1,10 +1,7 @@
 class A{
     int m1(){
-        while(4 > 5 + 2){
-            while(1) while(2) return 3;
-            return 7+2;
-            while(3 * null) return;;;
-        }
+        A.m1().a.m1(5, 3*7, null).b;
+        B.m2(4, 3*2, null).m1().a.m2(7/true, false * null);
     }
 
     int m2(){return 3;}

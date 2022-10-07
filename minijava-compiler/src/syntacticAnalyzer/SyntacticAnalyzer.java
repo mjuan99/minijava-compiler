@@ -640,18 +640,23 @@ public class SyntacticAnalyzer {
 
     private ASTSentence AsignacionOLlamadaOVarClasica() throws IOException, SyntacticException {
         if(checkCurrentToken("this", "idMetVar", "new", "(")){
-            AccesoNoMetEstatico();
-            AsignacionOpt();
+            ASTAccess astAccess = AccesoNoMetEstatico();
+            Token tkAssignment = currentToken;
+            ASTExpression assignmentExpression = AsignacionOpt();
+            if(assignmentExpression == null)
+                return astAccess;
+            else
+                return new ASTAssignment(astAccess, tkAssignment, assignmentExpression);
         }else if(checkCurrentToken("boolean", "char", "int")){
             TipoPrimitivo();
             ListaDeclaraciones();
         }else if(checkCurrentToken("idClase"))
-            VarClaseOAccesoMetEstaticoYAsignacionOpt();
+            return VarClaseOAccesoMetEstaticoYAsignacionOpt();
         else {
             addError(new SyntacticError(currentToken, "asignacion, declaracion de variable o llamada"));
             throw new SyntacticException(compilerErrorList);
         }
-        return null; //TODO agregar
+        return null;
     }
 
     private void ListaDeclaraciones() throws IOException, SyntacticException {
@@ -688,36 +693,45 @@ public class SyntacticAnalyzer {
         }
     }
 
-    private void VarClaseOAccesoMetEstaticoYAsignacionOpt() throws IOException, SyntacticException {
+    private ASTSentence VarClaseOAccesoMetEstaticoYAsignacionOpt() throws IOException, SyntacticException {
+        Token tkClassName = currentToken;
         match("idClase");
-        ListaDecORestoAccesoMetEstYAsigOpt();
+        return ListaDecORestoAccesoMetEstYAsigOpt(tkClassName);
     }
 
-    private void ListaDecORestoAccesoMetEstYAsigOpt() throws IOException, SyntacticException {
+    private ASTSentence ListaDecORestoAccesoMetEstYAsigOpt(Token tkClassName) throws IOException, SyntacticException {
         if(checkCurrentToken("<", "idMetVar")) {
             GenericidadOpt();
             ListaDeclaraciones();
         }else if(checkCurrentToken(".")){
-            RestoAccesoMetEst();
-            AsignacionOpt();
+            ASTAccess astAccess = RestoAccesoMetEst(tkClassName);
+            Token tkAssignment = currentToken;
+            ASTExpression assignmentExpression = AsignacionOpt();
+            if(assignmentExpression == null)
+                return astAccess;
+            else
+                return new ASTAssignment(astAccess, tkAssignment, assignmentExpression);
         }else {
             addError(new SyntacticError(currentToken, "identificador de variable o llamada a método estático"));
             throw new SyntacticException(compilerErrorList);
         }
+        return null;
     }
 
-    private void RestoAccesoMetEst() throws IOException, SyntacticException {
+    private ASTAccess RestoAccesoMetEst(Token tkClassName) throws IOException, SyntacticException {
         match(".");
+        Token tkMethod = currentToken;
         match("idMetVar");
-        ArgsActuales();
-        EncadenadoOpt();
+        LinkedList<ASTExpression> arguments = ArgsActuales();
+        ASTChaining astChaining = EncadenadoOpt();
+        return new ASTAccessStaticMethod(tkClassName, tkMethod, arguments, astChaining);
     }
 
-    private void AsignacionOpt() throws IOException, SyntacticException {
+    private ASTExpression AsignacionOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("=", "+=", "-=")){
             TipoDeAsignacion();
             try {
-                Expresion();
+                return Expresion();
             }catch (SyntacticException e){
                 discardTokensUntilValidTokenIsFound(";");
             }
@@ -726,6 +740,7 @@ public class SyntacticAnalyzer {
             addError(new SyntacticError(currentToken, "asignacion o ;"));
             throw new SyntacticException(compilerErrorList);
         }
+        return null;
     }
 
     private void TipoDeAsignacion() throws IOException, SyntacticException {
@@ -743,14 +758,16 @@ public class SyntacticAnalyzer {
 
     private ASTSentence VarLocal() throws IOException, SyntacticException {
         match("var");
+        Token tkVariable = currentToken;
+        ASTExpression value = null;
         match("idMetVar");
         match("=");
         try {
-            Expresion();
+            value = Expresion();
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(";");
         }
-        return null; //TODO agregar
+        return new ASTLocalVariable(tkVariable, value);
     }
 
     private ASTSentence Return() throws IOException, SyntacticException {
@@ -776,16 +793,19 @@ public class SyntacticAnalyzer {
     }
 
     private ASTSentence If() throws IOException {
+        ASTExpression condition = null;
+        ASTSentence thenSentence = null;
+        ASTSentence elseSentence;
         try{
             match("if");
             match("(");
             try {
-                Expresion();
+                condition = Expresion();
             } catch (SyntacticException e) {
                 discardTokensUntilValidTokenIsFound(")", ";", "{");
             }
             match(")");
-            Sentencia();
+            thenSentence = Sentencia();
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound("{", ";");
             if(checkCurrentToken("{"))
@@ -793,20 +813,21 @@ public class SyntacticAnalyzer {
             else
                 updateCurrentToken();
         }
-        ElseOpt();
-        return null; //TODO agregar
+        elseSentence = ElseOpt();
+        return new ASTIf(condition, thenSentence, elseSentence);
     }
 
-    private void ElseOpt() throws IOException {
+    private ASTSentence ElseOpt() throws IOException {
         if(checkCurrentToken("else")){
             updateCurrentToken();
-            Sentencia();
+            return Sentencia();
         }else if(invalidEpsilon(";", "this", "idMetVar", "new", "(", "boolean", "char",
                 "int", "idClase", "var", "return", "if", "while", "{", "}", "else")) {
             addError(new SyntacticError(currentToken, "else, sentencia o }"));
             discardTokensUntilValidTokenIsFound(";", "this", "idMetVar", "new", "(", "boolean",
                     "char", "int", "idClase", "var", "return", "if", "while", "{", "}", "else");
         }
+        return null;
     }
 
     private ASTSentence While() throws IOException {
@@ -946,69 +967,82 @@ public class SyntacticAnalyzer {
         return astOperand;
     }
 
-    private ASTOperand Acceso() throws IOException, SyntacticException {
+    private ASTAccess Acceso() throws IOException, SyntacticException {
         if(checkCurrentToken("idClase"))
-            AccesoMetodoEstatico();
+            return AccesoMetodoEstatico();
         else if(checkCurrentToken("this", "idMetVar", "new", "("))
-            AccesoNoMetEstatico();
+            return AccesoNoMetEstatico();
         else {
             addError(new SyntacticError(currentToken, "acceso"));
             throw new SyntacticException(compilerErrorList);
         }
-        return null;//TODO agregar
     }
 
-    private void AccesoNoMetEstatico() throws IOException, SyntacticException {
-        PrimarioNoMetEstatico();
-        EncadenadoOpt();
+    private ASTAccess AccesoNoMetEstatico() throws IOException, SyntacticException {
+        ASTAccess astAccess = PrimarioNoMetEstatico();
+        ASTChaining astChaining = EncadenadoOpt();
+        astAccess.setASTChainng(astChaining);
+        return astAccess;
     }
 
-    private void AccesoMetodoEstatico() throws IOException, SyntacticException {
+    private ASTAccess AccesoMetodoEstatico() throws IOException, SyntacticException {
+        Token tkClassName = currentToken;
         match("idClase");
         match(".");
+        Token tkMethod = currentToken;
         match("idMetVar");
-        ArgsActuales();
-        EncadenadoOpt();
+        LinkedList<ASTExpression> arguments = ArgsActuales();
+        ASTChaining astChaining = EncadenadoOpt();
+        return new ASTAccessStaticMethod(tkClassName, tkMethod, arguments, astChaining);
     }
 
-    private void PrimarioNoMetEstatico() throws IOException, SyntacticException {
+    private ASTAccess PrimarioNoMetEstatico() throws IOException, SyntacticException {
         if(checkCurrentToken("this"))
-            AccesoThis();
+            return AccesoThis();
         else if(checkCurrentToken("idMetVar"))
-            AccesoVarOMetodo();
+            return AccesoVarOMetodo();
         else if(checkCurrentToken("new"))
-            AccesoConstructor();
+            return AccesoConstructor();
         else if(checkCurrentToken("("))
-            ExpresionParentizada();
+            return ExpresionParentizada();
         else {
             addError(new SyntacticError(currentToken, "this, identificador de metodo o variable, new o ("));
             throw new SyntacticException(compilerErrorList);
         }
     }
 
-    private void AccesoVarOMetodo() throws IOException, SyntacticException {
+    private ASTAccess AccesoVarOMetodo() throws IOException, SyntacticException {
+        Token tkMetVar = currentToken;
         match("idMetVar");
-        ArgActualesMetodoOpt();
+        LinkedList<ASTExpression> arguments = ArgActualesMetodoOpt();
+        if(arguments == null)
+            return new ASTAccessVariable(tkMetVar, null);
+        else
+            return new ASTAccessMethod(tkMetVar, arguments, null);
     }
 
-    private void ArgActualesMetodoOpt() throws IOException, SyntacticException {
+    private LinkedList<ASTExpression> ArgActualesMetodoOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("("))
-            ArgsActuales();
+            return ArgsActuales();
         else if(invalidEpsilon("=", "+=", "-=", ";", "||", "&&", "==", "!=", "<",
                 ">", "<=", ">=", "+", "-", "*", "/", "%", ",", ")", ".")) {
             addError(new SyntacticError(currentToken, "argumentos actuales, asignacion, operador binario, ',', ) o ;"));
             throw new SyntacticException(compilerErrorList);
-        }
+        }else
+            return null;
     }
 
-    private void AccesoThis() throws IOException, SyntacticException {
+    private ASTAccess AccesoThis() throws IOException, SyntacticException {
         match("this");
+        return new ASTAccessThis(null);
     }
 
-    private void AccesoConstructor() throws IOException, SyntacticException {
+    private ASTAccess AccesoConstructor() throws IOException, SyntacticException {
         match("new");
+        Token tkClassName = currentToken;
         ClaseGenericaConstructor();
         ArgsActuales();
+        return new ASTAccessConstructor(tkClassName, null);
     }
 
     private void ClaseGenericaConstructor() throws IOException, SyntacticException {
@@ -1036,65 +1070,79 @@ public class SyntacticAnalyzer {
         }
     }
 
-    private void ExpresionParentizada() throws IOException, SyntacticException {
+    private ASTAccess ExpresionParentizada() throws IOException, SyntacticException {
+        ASTExpression astExpression = null;
         match("(");
         try {
-            Expresion();
+            astExpression = Expresion();
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(")");
         }
         match(")");
+        return astExpression;
     }
 
-    private void ArgsActuales() throws IOException, SyntacticException {
+    private LinkedList<ASTExpression> ArgsActuales() throws IOException, SyntacticException {
         match("(");
-        ListaExpsOpt();
+        LinkedList<ASTExpression> arguments = ListaExpsOpt();
         match(")");
+        return arguments;
     }
 
-    private void ListaExpsOpt() throws IOException, SyntacticException {
+    private LinkedList<ASTExpression> ListaExpsOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("+", "-", "!", "null", "true", "false", "intLiteral",
                 "charLiteral", "stringLiteral", "this", "idMetVar", "new", "idClase", "("))
-            ListaExps();
+            return ListaExps();
         else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "expresion o )"));
             throw new SyntacticException(compilerErrorList);
-        }
+        }else
+            return new LinkedList<>();
     }
 
-    private void ListaExps() throws IOException, SyntacticException {
+    private LinkedList<ASTExpression> ListaExps() throws IOException, SyntacticException {
+        ASTExpression astExpression = null;
         try {
-            Expresion();
+            astExpression = Expresion();
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(",", ")");
         }
-        RestoListaExpsOpt();
+        LinkedList<ASTExpression> astExpressions = RestoListaExpsOpt();
+        astExpressions.add(0, astExpression);
+        return astExpressions;
     }
 
-    private void RestoListaExpsOpt() throws IOException, SyntacticException {
+    private LinkedList<ASTExpression> RestoListaExpsOpt() throws IOException, SyntacticException {
         if(checkCurrentToken(",")) {
             match(",");
-            ListaExps();
+            return ListaExps();
         }else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "',' o )"));
             throw new SyntacticException(compilerErrorList);
-        }
+        }else
+            return new LinkedList<>();
     }
 
-    private void EncadenadoOpt() throws IOException, SyntacticException {
+    private ASTChaining EncadenadoOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("."))
-            VarOMetodoEncadenado();
+            return VarOMetodoEncadenado();
         else if(invalidEpsilon("=", "+=", "-=", ";", "||", "&&", "==", "!=", "<",
                 ">", "<=", ">=", "+", "-", "*", "/", "%", ",", ")")) {
             addError(new SyntacticError(currentToken, "encadenado, asignacion, operador binario, ',', ) o ;"));
             throw new SyntacticException(compilerErrorList);
-        }
+        }else
+            return null;
     }
 
-    private void VarOMetodoEncadenado() throws IOException, SyntacticException {
+    private ASTChaining VarOMetodoEncadenado() throws IOException, SyntacticException {
         match(".");
+        Token tkMetVar = currentToken;
         match("idMetVar");
-        ArgActualesMetodoOpt();
-        EncadenadoOpt();
+        LinkedList<ASTExpression> arguments = ArgActualesMetodoOpt();
+        ASTChaining astChaining = EncadenadoOpt();
+        if(arguments == null)
+            return new ASTVariableChaining(tkMetVar, astChaining);
+        else
+            return new ASTMethodChaining(tkMetVar, arguments, astChaining);
     }
 }
