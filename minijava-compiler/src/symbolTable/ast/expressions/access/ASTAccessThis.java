@@ -1,13 +1,18 @@
 package symbolTable.ast.expressions.access;
 
+import errors.SemanticException;
 import lexicalAnalyzer.Token;
+import symbolTable.ST;
 import symbolTable.types.STType;
+import symbolTable.types.STTypeReference;
 
 public class ASTAccessThis implements ASTAccess{
-    ASTChaining astChaining;
+    private ASTChaining astChaining;
+    private boolean endsWithVariable;
 
     public ASTAccessThis(ASTChaining astChaining) {
         this.astChaining = astChaining;
+        endsWithVariable = false;
     }
 
     public void print() {
@@ -18,12 +23,19 @@ public class ASTAccessThis implements ASTAccess{
 
     @Override
     public Token getToken() {
-        return null;//TODO implementar
+        if(astChaining == null)
+            //TODO ver de donde saco el token
+            return new Token("pr_this", "this", 0);
+        else
+            return astChaining.getToken();
     }
 
     @Override
-    public STType check() {
-        return null;//TODO implementar
+    public STType check() throws SemanticException {
+        if(astChaining == null)
+            return new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName());
+        else
+            return astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
     }
 
     public void setASTChainng(ASTChaining astChaining) {
@@ -32,6 +44,6 @@ public class ASTAccessThis implements ASTAccess{
 
     @Override
     public boolean endsWithVariable() {
-        return false;//TODO implementar
+        return endsWithVariable;
     }
 }

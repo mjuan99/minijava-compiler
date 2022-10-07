@@ -1,11 +1,10 @@
-//[Error:b|8]
+//[Error:d|7]
 
 class A{
     public A a;
     B b(){}
     int m1(int a){
-        return this.a.b().c;
-        return a.b().c;
+        return this.a.b().c.d;
     }
 
     static void main(){}
