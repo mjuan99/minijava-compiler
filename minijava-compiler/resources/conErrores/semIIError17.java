@@ -1,12 +1,10 @@
-//[Error:b|9]
+//[Error:d|7]
 
 class A{
     public A a;
     B b(){}
-    A m1(){
-        return C.a();
-        return C.a().a;
-        return C.a().b();
+    int m1(){
+        return C.a().a.b().c.d;
     }
 
     static void main(){}
