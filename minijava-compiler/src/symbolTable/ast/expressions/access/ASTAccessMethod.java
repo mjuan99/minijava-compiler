@@ -1,6 +1,9 @@
 package symbolTable.ast.expressions.access;
 
+import errors.SemanticError;
+import errors.SemanticException;
 import lexicalAnalyzer.Token;
+import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 
@@ -10,11 +13,13 @@ public class ASTAccessMethod implements ASTAccess{
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
     private ASTChaining astChaining;
+    private boolean endsWithVariable;
 
     public ASTAccessMethod(Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkMethod = tkMethod;
         this.arguments = arguments;
         this.astChaining = astChaining;
+        endsWithVariable = false;
     }
 
     public void print() {
@@ -34,8 +39,17 @@ public class ASTAccessMethod implements ASTAccess{
     }
 
     @Override
-    public STType check() {
-        return null;//TODO implementar
+    public STType check() throws SemanticException {
+        STType returnType = ST.symbolTable.getCurrentSTClass().getMethodReturnType(tkMethod.getLexeme());
+        if(returnType == null)
+            throw new SemanticException(new SemanticError(tkMethod, "el metodo " + tkMethod.getLexeme() + " no fue declarado en la clase " + ST.symbolTable.getCurrentSTClass().getTKName().getLexeme()));
+        if(astChaining == null)
+            return returnType;
+        else{
+            STType chainingType = astChaining.check(returnType);
+            endsWithVariable = astChaining.endsWithVariable();
+            return chainingType;
+        }
     }
 
     public void setASTChainng(ASTChaining astChaining) {
@@ -44,6 +58,6 @@ public class ASTAccessMethod implements ASTAccess{
 
     @Override
     public boolean endsWithVariable() {
-        return false;//TODO implementar
+        return endsWithVariable;
     }
 }

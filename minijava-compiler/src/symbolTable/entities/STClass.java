@@ -193,7 +193,7 @@ public class STClass {
         STMethod stOldMethod = stMethods.get(stMethod.getHash());
         if(stOldMethod == null) {
             stMethods.put(stMethod.getHash(), stMethod);
-            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main()") && stMethod.getSTReturnType().equals(new STTypeVoid()))
+            if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main") && stMethod.getArguments().isEmpty() && stMethod.getSTReturnType().equals(new STTypeVoid()))
                 ST.symbolTable.setSTMainMethod(stMethod);
         }
         else{
@@ -255,7 +255,7 @@ public class STClass {
             return null;
     }
 
-    public STType getMethodType(String methodName) {
+    public STType getMethodReturnType(String methodName) {
         STMethod stMethod = stMethods.get(methodName);
         if(stMethod != null)
             return stMethod.getSTReturnType();

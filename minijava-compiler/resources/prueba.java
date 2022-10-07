@@ -1,17 +1,20 @@
-//[Error:c|8]
+// Prueba un lado izquierdo simple
 
-class A{
-    public A a1;
-    A a(){}
-    B b(){}
-    int m1(){
-        return a1.b().a().c().b();
+class A {
+    public int a1;
+
+
+    void m1(){
+        a1 = 4;
+
     }
 
-    static void main(){}
 }
 
-class B{
-    A a(){}
-    int c(){}
+
+class Init{
+    static void main()
+    { }
 }
+
+

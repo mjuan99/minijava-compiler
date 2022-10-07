@@ -119,4 +119,8 @@ public class STMethod {
         else
             return null;
     }
+
+    public LinkedList<STArgument> getArguments() {
+        return stArgumentsList;
+    }
 }
