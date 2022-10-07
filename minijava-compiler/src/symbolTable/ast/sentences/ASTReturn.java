@@ -32,7 +32,7 @@ public class ASTReturn implements ASTSentence{
         }else{
             STType returnType = returnExpression.check();
             if(!returnType.conformsWith(ST.symbolTable.getCurrentSTMethod().getSTReturnType()))
-                throw new SemanticException(new SemanticError(returnExpression.getToken(), "el tipo de retorno " + returnType + " no conforma con el tipo de retorno del método " + ST.symbolTable.getCurrentSTMethod().getSTReturnType().toString()));
+                throw new SemanticException(new SemanticError(returnExpression.getToken(), "el tipo retornado " + returnType + " no conforma con el tipo de retorno del método (" + ST.symbolTable.getCurrentSTMethod().getSTReturnType().toString() + ")"));
         }
     }
 }

@@ -1,17 +1,10 @@
 // Prueba un lado izquierdo simple
 
 class A {
-    int a(){}
-    C c(){}
-    B b(){}
-    A m1(){
-        return b();
+    int m1(){
+        return null;
     }
     static void main(){}
 }
-
-class B extends A{}
-
-class C{}
 
 

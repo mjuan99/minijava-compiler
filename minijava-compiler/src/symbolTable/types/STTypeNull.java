@@ -20,4 +20,8 @@ public class STTypeNull implements STType{
     public boolean equals(STType stType) {
         return stType instanceof STTypeNull;
     }
+
+    public String toString(){
+        return "null";
+    }
 }
