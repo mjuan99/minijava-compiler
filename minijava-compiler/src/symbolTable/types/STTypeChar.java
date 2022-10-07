@@ -12,4 +12,14 @@ public class STTypeChar implements STPrimitiveType{
     public boolean equals(STType stType){
         return stType instanceof STTypeChar;
     }
+
+    @Override
+    public boolean conformsWith(STType stType) {
+        return stType instanceof STTypeChar;
+    }
+
+    @Override
+    public boolean isTypeReference() {
+        return false;
+    }
 }

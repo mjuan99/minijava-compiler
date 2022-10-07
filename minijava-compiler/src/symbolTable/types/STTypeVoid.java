@@ -12,4 +12,14 @@ public class STTypeVoid implements STType{
     public boolean equals(STType stType){
         return stType instanceof STTypeVoid;
     }
+
+    @Override
+    public boolean conformsWith(STType stType) {
+        return false;
+    }
+
+    @Override
+    public boolean isTypeReference() {
+        return false;
+    }
 }

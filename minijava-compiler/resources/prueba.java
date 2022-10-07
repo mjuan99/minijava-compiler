@@ -1,10 +1,13 @@
 class A{
+    public A a;
+    public B b;
     int m1(){
-        A.m1().a.m1(5, 3*7, null).b;
-        B.m2(4, 3*2, null).m1().a.m2(7/true, false * null);
+        return a.c.b.c;
     }
 
-    int m2(){return 3;}
+    static void main(){}
+}
 
-    static void main(){return 1;}
+class B{
+    public int c;
 }

@@ -1,4 +1,4 @@
-package symbolTable.ast;
+package symbolTable.ast.sentences;
 
 public class ASTEmptySentence implements ASTSentence{
     public void print(){

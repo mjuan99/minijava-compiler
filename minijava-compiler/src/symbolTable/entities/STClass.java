@@ -1,8 +1,10 @@
 package symbolTable.entities;
 
 import errors.SemanticError;
+import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.types.STType;
 import symbolTable.types.STTypeVoid;
 
 import java.util.HashMap;
@@ -238,9 +240,18 @@ public class STClass {
         errorFound = true;
     }
 
-    public void checkSentences() {
+    public void checkSentences() throws SemanticException {
         ST.symbolTable.setCurrentSTClass(this);
-        stMethods.forEach((key, stMethod) -> stMethod.checkSentences());
+        for(STMethod stMethod : stMethods.values())
+            stMethod.checkSentences();
         stConstructors.forEach((key, stConstructor) -> stConstructor.checkSentences());
+    }
+
+    public STType getAttributeType(String attributeName) {
+        STAttribute stAttribute = stAttributes.get(attributeName);
+        if(stAttribute != null)
+            return stAttribute.getSTType();
+        else
+            return null;
     }
 }

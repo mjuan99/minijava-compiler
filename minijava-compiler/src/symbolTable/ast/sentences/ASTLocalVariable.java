@@ -1,6 +1,7 @@
-package symbolTable.ast;
+package symbolTable.ast.sentences;
 
 import lexicalAnalyzer.Token;
+import symbolTable.ast.expressions.ASTExpression;
 
 public class ASTLocalVariable implements ASTSentence{
     private final Token tkVariable;

@@ -3,7 +3,7 @@ package symbolTable.entities;
 import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
-import symbolTable.ast.ASTBlock;
+import symbolTable.ast.sentences.ASTBlock;
 
 import java.util.Comparator;
 import java.util.HashMap;

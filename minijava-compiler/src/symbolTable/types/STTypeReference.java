@@ -25,10 +25,34 @@ public class STTypeReference implements STType{
             return true;
     }
 
+    @Override
+    public boolean conformsWith(STType stType) {
+        if(!(stType instanceof STTypeReference))
+            return false;
+        else
+            if(Objects.equals(stType.toString(), "Object"))
+                return true;
+            else
+                return isSubtype(reference.getLexeme(), stType.toString());
+    }
+
+    private boolean isSubtype(String subType, String parentType){
+        if(Objects.equals(subType, parentType))
+            return true;
+        else if(Objects.equals(subType, "Object"))
+            return false;
+        else return isSubtype(ST.symbolTable.getSTClass(subType).getTKClassItExtends().getLexeme(), parentType);
+    }
+
     public boolean equals(STType stType){
         if(stType instanceof STTypeReference){
             return Objects.equals(reference.getLexeme(), ((STTypeReference) stType).reference.getLexeme());
         }else
             return false;
+    }
+
+    @Override
+    public boolean isTypeReference() {
+        return true;
     }
 }

@@ -9,7 +9,17 @@ public class STTypeInt implements STPrimitiveType{
         return true;
     }
 
+    @Override
+    public boolean conformsWith(STType stType) {
+        return stType instanceof STTypeInt;
+    }
+
     public boolean equals(STType stType){
         return stType instanceof STTypeInt;
+    }
+
+    @Override
+    public boolean isTypeReference() {
+        return false;
     }
 }

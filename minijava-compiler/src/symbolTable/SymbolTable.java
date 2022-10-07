@@ -4,7 +4,7 @@ import errors.CompilerError;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
-import symbolTable.ast.ASTBlock;
+import symbolTable.ast.sentences.ASTBlock;
 import symbolTable.entities.*;
 import symbolTable.types.*;
 
@@ -202,8 +202,9 @@ public class SymbolTable {
         stInterfaces.forEach((key, stInterface) -> stInterface.consolidate());
     }
 
-    public void checkSentences(){
-        stClasses.forEach((key, stClass) -> stClass.checkSentences());
+    public void checkSentences() throws SemanticException {
+        for(STClass stClass : stClasses.values())
+            stClass.checkSentences();
     }
 
     public void throwExceptionIfErrorsWereFound() throws SemanticException{

@@ -1,6 +1,8 @@
-package symbolTable.ast;
+package symbolTable.ast.sentences;
 
 import lexicalAnalyzer.Token;
+import symbolTable.ast.expressions.ASTExpression;
+import symbolTable.ast.expressions.access.ASTAccess;
 
 public class ASTAssignment implements ASTSentence{
     private final ASTAccess astAccess;

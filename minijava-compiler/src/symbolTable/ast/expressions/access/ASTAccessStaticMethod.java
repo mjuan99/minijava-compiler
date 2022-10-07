@@ -1,6 +1,8 @@
-package symbolTable.ast;
+package symbolTable.ast.expressions.access;
 
 import lexicalAnalyzer.Token;
+import symbolTable.ast.expressions.ASTExpression;
+import symbolTable.types.STType;
 
 import java.util.LinkedList;
 
@@ -28,7 +30,23 @@ public class ASTAccessStaticMethod implements ASTAccess{
             astChaining.print();
     }
 
+    @Override
+    public Token getToken() {
+        return null;//TODO implementar
+    }
+
+    @Override
+    public STType check() {
+        //TODO implementar
+        return null;
+    }
+
     public void setASTChainng(ASTChaining astChaining) {
         this.astChaining = astChaining;
+    }
+
+    @Override
+    public boolean endsWithVariable() {
+        return false;//TODO implementar
     }
 }

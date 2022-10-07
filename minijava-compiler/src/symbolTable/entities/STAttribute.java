@@ -56,4 +56,8 @@ public class STAttribute {
     public boolean isPublic() {
         return Objects.equals(visibility, "public");
     }
+
+    public STType getSTType() {
+        return stType;
+    }
 }

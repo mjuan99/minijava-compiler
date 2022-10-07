@@ -1,4 +1,6 @@
-package symbolTable.ast;
+package symbolTable.ast.sentences;
+
+import symbolTable.ast.expressions.ASTExpression;
 
 public class ASTWhile implements ASTSentence{
     private final ASTExpression condition;

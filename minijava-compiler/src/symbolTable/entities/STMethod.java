@@ -1,9 +1,10 @@
 package symbolTable.entities;
 
 import errors.SemanticError;
+import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
-import symbolTable.ast.ASTBlock;
+import symbolTable.ast.sentences.ASTBlock;
 import symbolTable.types.STType;
 
 import java.util.Comparator;
@@ -100,12 +101,20 @@ public class STMethod {
         errorFound = true;
     }
 
-    public void checkSentences() {
+    public void checkSentences() throws SemanticException {
         ST.symbolTable.setCurrentSTMethod(this);
         astBlock.checkSentences();
     }
 
     public void insertASTBlock(ASTBlock astBlock) {
         this.astBlock = astBlock;
+    }
+
+    public STType getArgumentType(String argumentName) {
+        STArgument stArgument = stArguments.get(argumentName);
+        if(stArgument != null)
+            return stArgument.getType();
+        else
+            return null;
     }
 }

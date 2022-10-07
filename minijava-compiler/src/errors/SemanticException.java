@@ -9,6 +9,11 @@ public class SemanticException extends Exception{
         this.errors = errors;
     }
 
+    public SemanticException(CompilerError error){
+        errors = new LinkedList<>();
+        errors.add(error);
+    }
+
     public String getMessage(){
         StringBuilder message = new StringBuilder();
         for(CompilerError error : errors)

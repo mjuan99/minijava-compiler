@@ -1,6 +1,8 @@
-package symbolTable.ast;
+package symbolTable.ast.expressions;
 
 import lexicalAnalyzer.Token;
+import symbolTable.ast.expressions.access.ASTChaining;
+import symbolTable.types.STType;
 
 public class ASTBinaryExpression implements ASTExpression{
     private final ASTExpression leftSide;
@@ -26,7 +28,22 @@ public class ASTBinaryExpression implements ASTExpression{
             astChaining.print();
     }
 
+    @Override
+    public Token getToken() {
+        return null;//TODO implementar
+    }
+
+    @Override
+    public STType check() {
+        return null;//TODO implementar
+    }
+
     public void setASTChainng(ASTChaining astChaining) {
         this.astChaining = astChaining;
+    }
+
+    @Override
+    public boolean endsWithVariable() {
+        return false;//TODO implementar
     }
 }
