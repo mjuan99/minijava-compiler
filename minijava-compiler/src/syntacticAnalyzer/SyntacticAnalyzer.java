@@ -592,8 +592,10 @@ public class SyntacticAnalyzer {
 
     private ASTSentence Sentencia() throws IOException {
         ASTSentence astSentence = null;
-        if(checkCurrentToken(";"))
+        if(checkCurrentToken(";")) {
             updateCurrentToken();
+            astSentence = new ASTEmptySentence();
+        }
         else if(checkCurrentToken("this", "idMetVar", "new", "idClase", "(",
                 "boolean", "char", "int")){
             try {

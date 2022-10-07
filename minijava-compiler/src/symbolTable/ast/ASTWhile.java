@@ -12,7 +12,7 @@ public class ASTWhile implements ASTSentence{
     public void print() {
         System.out.print("while(");
         condition.print();
-        System.out.print(")");
+        System.out.print(") ");
         astSentence.print();
     }
 }

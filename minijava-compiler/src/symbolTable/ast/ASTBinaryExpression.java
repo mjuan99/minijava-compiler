@@ -18,7 +18,7 @@ public class ASTBinaryExpression implements ASTExpression{
     @Override
     public void print() {
         leftSide.print();
-        System.out.print(tkBinaryOperator.getLexeme());
+        System.out.print(" " + tkBinaryOperator.getLexeme() + " ");
         rightSide.print();
     }
 }
