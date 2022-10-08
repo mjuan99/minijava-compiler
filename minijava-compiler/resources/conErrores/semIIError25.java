@@ -1,9 +1,9 @@
-//[Error:null|6]
+//[Error:a|6]
 
 class A{
-    void m1(){
+    void m1(int a){
         var b = 'c';
-        var a = null;
+        var a = 7;
     }
 
     static void main(){}

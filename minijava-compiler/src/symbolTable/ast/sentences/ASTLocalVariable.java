@@ -1,11 +1,17 @@
 package symbolTable.ast.sentences;
 
+import errors.SemanticError;
+import errors.SemanticException;
 import lexicalAnalyzer.Token;
+import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
+import symbolTable.types.STType;
+import symbolTable.types.STTypeNull;
 
 public class ASTLocalVariable implements ASTSentence{
     private final Token tkVariable;
     private final ASTExpression value;
+    private STType variableType;
 
     public ASTLocalVariable(Token tkVariable, ASTExpression value) {
         this.tkVariable = tkVariable;
@@ -19,8 +25,18 @@ public class ASTLocalVariable implements ASTSentence{
     }
 
     @Override
-    public void checkSentences() {
-        //TODO implementar
+    public void checkSentences() throws SemanticException {
+        if(ST.symbolTable.getCurrentSTMethod().getArgumentType(tkVariable.getLexeme()) != null)
+            throw new SemanticException(new SemanticError(tkVariable, "el nombre de la variable " + tkVariable.getLexeme() + " coincide con el nombre de un argumento"));
+        else if(ST.symbolTable.getCurrentASTBlock().getVariableType(tkVariable.getLexeme()) != null)
+            throw new SemanticException(new SemanticError(tkVariable, "la variable " + tkVariable.getLexeme() + " ya fue declarada"));
+        variableType = value.check();
+        if(variableType.equals(new STTypeNull()))
+            throw new SemanticException(new SemanticError(value.getToken(), "declaracion de variable con valor null"));
+        ST.symbolTable.getCurrentASTBlock().insertVariable(tkVariable.getLexeme(), this);
+    }
 
+    public STType getVariableType() {
+        return variableType;
     }
 }

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public class ASTBlock implements ASTSentence{
     private LinkedList<ASTSentence> astSentences;
     private final ASTBlock parentASTBlock;
-    private final HashMap<String, STType> variablesTypes;
+    private final HashMap<String, ASTLocalVariable> variables;
 
     public void setAstSentences(LinkedList<ASTSentence> astSentences) {
         this.astSentences = astSentences;
@@ -19,15 +19,19 @@ public class ASTBlock implements ASTSentence{
     public ASTBlock(ASTBlock parentASTBlock) {
         this.parentASTBlock = parentASTBlock;
         astSentences = new LinkedList<>();
-        variablesTypes = new HashMap<>();
+        variables = new HashMap<>();
     }
 
-    public void addVariable(String name, STType type){
-        variablesTypes.put(name, type);
+    public void insertVariable(String name, ASTLocalVariable variable){
+        variables.put(name, variable);
     }
 
     public STType getVariableType(String name){
-        return variablesTypes.get(name);
+        ASTLocalVariable variable = variables.get(name);
+        if(variable == null)
+            return null;
+        else
+            return variable.getVariableType();
     }
 
     public void print() {
