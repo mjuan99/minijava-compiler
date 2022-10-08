@@ -1,18 +1,13 @@
-//[Error:b|10]
+//[Error:5|9]
 
 class A{
     public A a;
-    public B b;
-    public C c;
+    public A b;
     public Object o;
     boolean m1(){
         return a != o && (a == b);
-        return c != b && (a == b);
+        return a != 5 && (a == b);
     }
 
     static void main(){}
 }
-
-class B extends A{}
-
-class C{}
