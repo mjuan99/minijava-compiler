@@ -775,8 +775,12 @@ public class SyntacticAnalyzer {
     private ASTSentence Return() throws IOException, SyntacticException {
         match("return");
         try {
+            Token tkReturnExpression = currentToken;
             ASTExpression astExpression = ExpresionOpt();
-            return new ASTReturn(astExpression);
+            if(astExpression == null)
+                return new ASTReturn(tkReturnExpression);
+            else
+                return new ASTReturn(astExpression);
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(";");
             return null;

@@ -10,9 +10,16 @@ import symbolTable.types.STTypeVoid;
 
 public class ASTReturn implements ASTSentence{
     private final ASTExpression returnExpression;
+    private final Token tkEmptyReturn;
+
+    public ASTReturn(Token tkEmptyReturn) {
+        returnExpression = null;
+        this.tkEmptyReturn = tkEmptyReturn;
+    }
 
     public ASTReturn(ASTExpression returnExpression){
         this.returnExpression = returnExpression;
+        tkEmptyReturn = null;
     }
 
     @Override
@@ -28,7 +35,7 @@ public class ASTReturn implements ASTSentence{
         if(returnExpression == null) {
             if (!ST.symbolTable.getCurrentSTMethod().getSTReturnType().equals(new STTypeVoid()))
                 //TODO ver de donde saco el token
-                throw new SemanticException(new SemanticError(new Token("pr_return", "return", 0), "retorno vacio en un metodo no void"));
+                throw new SemanticException(new SemanticError(tkEmptyReturn, "retorno vacio en un metodo no void"));
         }else{
             STType returnType = returnExpression.check();
             if(!returnType.conformsWith(ST.symbolTable.getCurrentSTMethod().getSTReturnType()))
