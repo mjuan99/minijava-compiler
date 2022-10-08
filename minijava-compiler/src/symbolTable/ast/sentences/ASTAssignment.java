@@ -32,7 +32,7 @@ public class ASTAssignment implements ASTSentence{
     public void checkSentences() throws SemanticException {
         STType accessType = astAccess.check();
         if(!astAccess.isValidVariable())
-            throw new SemanticException(new SemanticError(astAccess.getToken(), "sentencia incorrecta, asignacion a una llamada"));
+            throw new SemanticException(new SemanticError(tkAssignment, "sentencia incorrecta, asignacion a una llamada"));
         STType valueType = value.check();
         if(Objects.equals(tkAssignment.getLexeme(), "=")) {
             if (!valueType.conformsWith(accessType))

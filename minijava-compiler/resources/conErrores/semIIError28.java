@@ -1,4 +1,4 @@
-//[Error:m1|11]
+//[Error:=|11]
 
 class A{
     public int a;
