@@ -260,12 +260,4 @@ public class STClass {
     public STMethod getMethod(String methodName) {
         return stMethods.get(methodName);
     }
-
-    public STType getStaticMethodReturnType(String methodName) {
-        STMethod stMethod = stMethods.get(methodName);
-        if(stMethod != null && stMethod.isStatic())
-            return stMethod.getSTReturnType();
-        else
-            return null;
-    }
 }

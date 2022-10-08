@@ -6,6 +6,7 @@ import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.entities.STClass;
+import symbolTable.entities.STMethod;
 import symbolTable.types.STType;
 
 import java.util.LinkedList;
@@ -47,13 +48,13 @@ public class ASTAccessStaticMethod implements ASTAccess{
         STClass stClass = ST.symbolTable.getSTClass(tkClassName.getLexeme());
         if(stClass == null)
             throw new SemanticException(new SemanticError(tkClassName, "la clase " + tkClassName.getLexeme() + " no fue declarada"));
-        STType returnType = stClass.getStaticMethodReturnType(tkMethod.getLexeme());
-        if(returnType == null)
+        STMethod stMethod = stClass.getMethod(tkMethod.getLexeme());
+        if(stMethod == null || !stMethod.isStatic())
             throw new SemanticException(new SemanticError(tkMethod, "el metodo estatico " + tkMethod.getLexeme() + " no fue declarado en la clase " + stClass.getTKName().getLexeme()));
         if(astChaining == null)
-            return returnType;
+            return stMethod.getSTReturnType();
         else
-            return astChaining.check(returnType);
+            return astChaining.check(stMethod.getSTReturnType());
     }
 
     public void setASTChainng(ASTChaining astChaining) {

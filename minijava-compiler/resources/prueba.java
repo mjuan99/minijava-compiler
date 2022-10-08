@@ -1,10 +1,13 @@
-//[Error:m1|8]
+//[Error:c|8]
 
-class A{
-    int m1(){}
-    static int m2(){}
-    static void main(){
-        m2();
-        m1();
+class A extends B{
+    void m1(){
+        a = b;
     }
+    static void main(){}
+}
+
+class B{
+    public int a;
+    public int b;
 }
