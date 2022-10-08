@@ -29,7 +29,10 @@ public class ASTBlock implements ASTSentence{
     public STType getVariableType(String name){
         ASTLocalVariable variable = variables.get(name);
         if(variable == null)
-            return null;
+            if(parentASTBlock == null)
+                return null;
+            else
+                return parentASTBlock.getVariableType(name);
         else
             return variable.getVariableType();
     }
