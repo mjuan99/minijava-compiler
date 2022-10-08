@@ -1035,8 +1035,9 @@ public class SyntacticAnalyzer {
     }
 
     private ASTAccess AccesoThis() throws IOException, SyntacticException {
+        Token tkThis = currentToken;
         match("this");
-        return new ASTAccessThis(null);
+        return new ASTAccessThis(tkThis, null);
     }
 
     private ASTAccess AccesoConstructor() throws IOException, SyntacticException {

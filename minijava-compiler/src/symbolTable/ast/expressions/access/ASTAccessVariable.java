@@ -35,8 +35,11 @@ public class ASTAccessVariable implements ASTAccess{
         variableType = ST.symbolTable.getCurrentASTBlock().getVariableType(tkVariable.getLexeme());
         if(variableType == null){
             variableType = ST.symbolTable.getCurrentSTMethod().getArgumentType(tkVariable.getLexeme());
-            if(variableType == null)
+            if(variableType == null) {
                 variableType = ST.symbolTable.getCurrentSTClass().getAttributeType(tkVariable.getLexeme());
+                if (variableType != null && ST.symbolTable.getCurrentSTMethod().isStatic())
+                    throw new SemanticException(new SemanticError(tkVariable, "acceso a atributo de instancia en metodo estatico"));
+            }
         }
         if(variableType == null)
             throw new SemanticException(new SemanticError(tkVariable, "la variable " + tkVariable.getLexeme() + " no fue delcarada"));

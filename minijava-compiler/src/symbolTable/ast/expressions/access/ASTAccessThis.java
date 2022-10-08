@@ -1,5 +1,6 @@
 package symbolTable.ast.expressions.access;
 
+import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
@@ -7,10 +8,12 @@ import symbolTable.types.STType;
 import symbolTable.types.STTypeReference;
 
 public class ASTAccessThis implements ASTAccess{
+    private final Token tkThis;
     private ASTChaining astChaining;
 
-    public ASTAccessThis(ASTChaining astChaining) {
+    public ASTAccessThis(Token tkThis, ASTChaining astChaining) {
         this.astChaining = astChaining;
+        this.tkThis = tkThis;
     }
 
     @Override
@@ -46,6 +49,8 @@ public class ASTAccessThis implements ASTAccess{
 
     @Override
     public STType check() throws SemanticException {
+        if(ST.symbolTable.getCurrentSTMethod().isStatic())
+            throw new SemanticException(new SemanticError(tkThis, "acceso a this en un metodo estatico"));
         if(astChaining == null)
             return new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName());
         else

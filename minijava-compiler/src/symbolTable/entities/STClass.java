@@ -257,12 +257,8 @@ public class STClass {
             return null;
     }
 
-    public STType getMethodReturnType(String methodName) {
-        STMethod stMethod = stMethods.get(methodName);
-        if(stMethod != null)
-            return stMethod.getSTReturnType();
-        else
-            return null;
+    public STMethod getMethod(String methodName) {
+        return stMethods.get(methodName);
     }
 
     public STType getStaticMethodReturnType(String methodName) {

@@ -35,7 +35,7 @@ public class ASTMethodChaining implements ASTChaining{
     public STType check(STType previousType) throws SemanticException {
         if(!previousType.isTypeReference())
             throw new SemanticException(new SemanticError(tkMethod, "no se puede aplicar encadenado a un tipo primitivo o void"));
-        STType stType = ST.symbolTable.getSTClass(previousType.toString()).getMethodReturnType(tkMethod.getLexeme());
+        STType stType = ST.symbolTable.getSTClass(previousType.toString()).getMethod(tkMethod.getLexeme()).getSTReturnType();
         if(stType == null)
             throw new SemanticException(new SemanticError(tkMethod, "el tipo " + previousType + " no tiene un metodo llamado " + tkMethod.getLexeme()));
         if(astChaining == null)
