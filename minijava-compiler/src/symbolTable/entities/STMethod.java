@@ -19,6 +19,7 @@ public class STMethod {
     private LinkedList<STArgument> stArgumentsList;
     private boolean errorFound;
     private ASTBlock astBlock;
+    private STClass stClass;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -122,5 +123,13 @@ public class STMethod {
 
     public LinkedList<STArgument> getArguments() {
         return stArgumentsList;
+    }
+
+    public STClass getSTClass() {
+        return stClass;
+    }
+
+    public void setSTClass(STClass stClass) {
+        this.stClass = stClass;
     }
 }

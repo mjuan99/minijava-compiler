@@ -193,6 +193,7 @@ public class STClass {
         STMethod stOldMethod = stMethods.get(stMethod.getHash());
         if(stOldMethod == null) {
             stMethods.put(stMethod.getHash(), stMethod);
+            stMethod.setSTClass(this);
             if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main") && stMethod.getArguments().isEmpty() && stMethod.getSTReturnType().equals(new STTypeVoid()))
                 ST.symbolTable.setSTMainMethod(stMethod);
         }
@@ -243,7 +244,8 @@ public class STClass {
     public void checkSentences() throws SemanticException {
         ST.symbolTable.setCurrentSTClass(this);
         for(STMethod stMethod : stMethods.values())
-            stMethod.checkSentences();
+            if(stMethod.getSTClass() == this)
+                stMethod.checkSentences();
         stConstructors.forEach((key, stConstructor) -> stConstructor.checkSentences());
     }
 
