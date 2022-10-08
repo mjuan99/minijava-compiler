@@ -20,7 +20,7 @@ public class ASTMethodCall implements ASTSentence{
     public void checkSentences() throws SemanticException{
         //TODO implementar
         astAccess.check();
-        if(astAccess.endsWithVariable())
+        if(!astAccess.isValidCall())
             throw new SemanticException(new SemanticError(astAccess.getToken(), "sentencia incorrecta, acceso a variable"));
     }
 }

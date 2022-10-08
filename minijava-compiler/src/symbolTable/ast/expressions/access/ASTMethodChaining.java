@@ -13,13 +13,11 @@ public class ASTMethodChaining implements ASTChaining{
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
     private final ASTChaining astChaining;
-    private boolean endsWithVariable;
 
     public ASTMethodChaining(Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkMethod = tkMethod;
         this.arguments = arguments;
         this.astChaining = astChaining;
-        endsWithVariable = false;
     }
 
     public void print(){
@@ -33,10 +31,6 @@ public class ASTMethodChaining implements ASTChaining{
             astChaining.print();
     }
 
-    public boolean endsWithVariable() {
-        return endsWithVariable;
-    }
-
     @Override
     public STType check(STType previousType) throws SemanticException {
         if(!previousType.isTypeReference())
@@ -47,9 +41,7 @@ public class ASTMethodChaining implements ASTChaining{
         if(astChaining == null)
             return stType;
         else{
-            STType chainingType = astChaining.check(stType);
-            endsWithVariable = astChaining.endsWithVariable();
-            return chainingType;
+            return astChaining.check(stType);
         }
     }
 
@@ -59,5 +51,21 @@ public class ASTMethodChaining implements ASTChaining{
             return tkMethod;
         else
             return astChaining.getToken();
+    }
+
+    @Override
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return true;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidVariable();
     }
 }

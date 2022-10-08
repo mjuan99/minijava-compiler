@@ -57,7 +57,18 @@ public class ASTUnaryExpression implements ASTExpression{
     }
 
     @Override
-    public boolean endsWithVariable() {
-        return false; //TODO implementar
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidVariable();
     }
 }

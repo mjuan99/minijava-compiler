@@ -9,12 +9,6 @@ import symbolTable.types.STType;
 public class ASTVariableChaining implements ASTChaining{
     private final Token tkVariable;
     private final ASTChaining astChaining;
-    private boolean endsWithVariable;
-
-    @Override
-    public boolean endsWithVariable() {
-        return endsWithVariable;
-    }
 
     @Override
     public STType check(STType previousType) throws SemanticException {
@@ -25,17 +19,13 @@ public class ASTVariableChaining implements ASTChaining{
             throw new SemanticException(new SemanticError(tkVariable, "el tipo " + previousType + " no tiene un atributo llamado " + tkVariable.getLexeme()));
         if(astChaining == null)
             return stType;
-        else{
-            STType chainingType = astChaining.check(stType);
-            endsWithVariable = astChaining.endsWithVariable();
-            return chainingType;
-        }
+        else
+            return astChaining.check(stType);
     }
 
     public ASTVariableChaining(Token tkVariable, ASTChaining astChaining) {
         this.tkVariable = tkVariable;
         this.astChaining = astChaining;
-        endsWithVariable = true;
     }
 
     public void print(){
@@ -50,5 +40,21 @@ public class ASTVariableChaining implements ASTChaining{
             return tkVariable;
         else
             return astChaining.getToken();
+    }
+
+    @Override
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return true;
+        else
+            return astChaining.isValidVariable();
     }
 }

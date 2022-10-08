@@ -8,7 +8,9 @@ public interface ASTChaining {
     void print();
     Token getToken();
 
-    boolean endsWithVariable();
+    boolean isValidCall();
+
+    boolean isValidVariable();
 
     STType check(STType previousType) throws SemanticException;
 }

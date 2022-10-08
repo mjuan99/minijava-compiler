@@ -11,12 +11,10 @@ import symbolTable.types.STTypeReference;
 public class ASTAccessConstructor implements ASTAccess{
     private final Token tkClassName;
     private ASTChaining astChaining;
-    private boolean endsWithVariable;
 
     public ASTAccessConstructor(Token tkClassName, ASTChaining astChaining) {
         this.tkClassName = tkClassName;
         this.astChaining = astChaining;
-        endsWithVariable = false;
     }
 
     public void setASTChainng(ASTChaining astChaining) {
@@ -24,8 +22,19 @@ public class ASTAccessConstructor implements ASTAccess{
     }
 
     @Override
-    public boolean endsWithVariable() {
-        return endsWithVariable;
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return true;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidVariable();
     }
 
     public void print() {
@@ -50,9 +59,7 @@ public class ASTAccessConstructor implements ASTAccess{
         if(astChaining == null)
             return new STTypeReference(tkClassName);
         else{
-            STType chainingType = astChaining.check(new STTypeReference(tkClassName));
-            endsWithVariable = astChaining.endsWithVariable();
-            return chainingType;
+            return astChaining.check(new STTypeReference(tkClassName));
         }
     }
 }

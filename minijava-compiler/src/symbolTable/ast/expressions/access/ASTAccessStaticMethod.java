@@ -15,14 +15,12 @@ public class ASTAccessStaticMethod implements ASTAccess{
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
     private ASTChaining astChaining;
-    private boolean endsWithVariable;
 
     public ASTAccessStaticMethod(Token tkClassName, Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkClassName = tkClassName;
         this.tkMethod = tkMethod;
         this.arguments = arguments;
         this.astChaining = astChaining;
-        endsWithVariable = false;
     }
 
     public void print() {
@@ -54,11 +52,8 @@ public class ASTAccessStaticMethod implements ASTAccess{
             throw new SemanticException(new SemanticError(tkMethod, "el metodo estatico " + tkMethod.getLexeme() + " no fue declarado en la clase " + stClass.getTKName().getLexeme()));
         if(astChaining == null)
             return returnType;
-        else{
-            STType chainingType = astChaining.check(returnType);
-            endsWithVariable = astChaining.endsWithVariable();
-            return chainingType;
-        }
+        else
+            return astChaining.check(returnType);
     }
 
     public void setASTChainng(ASTChaining astChaining) {
@@ -66,7 +61,18 @@ public class ASTAccessStaticMethod implements ASTAccess{
     }
 
     @Override
-    public boolean endsWithVariable() {
-        return endsWithVariable;
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return true;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidVariable();
     }
 }

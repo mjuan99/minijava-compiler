@@ -8,11 +8,25 @@ import symbolTable.types.STTypeReference;
 
 public class ASTAccessThis implements ASTAccess{
     private ASTChaining astChaining;
-    private boolean endsWithVariable;
 
     public ASTAccessThis(ASTChaining astChaining) {
         this.astChaining = astChaining;
-        endsWithVariable = false;
+    }
+
+    @Override
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidVariable();
     }
 
     public void print() {
@@ -34,19 +48,11 @@ public class ASTAccessThis implements ASTAccess{
     public STType check() throws SemanticException {
         if(astChaining == null)
             return new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName());
-        else{
-            STType chainingType = astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
-            endsWithVariable = astChaining.endsWithVariable();
-            return chainingType;
-        }
+        else
+            return astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
     }
 
     public void setASTChainng(ASTChaining astChaining) {
         this.astChaining = astChaining;
-    }
-
-    @Override
-    public boolean endsWithVariable() {
-        return endsWithVariable;
     }
 }

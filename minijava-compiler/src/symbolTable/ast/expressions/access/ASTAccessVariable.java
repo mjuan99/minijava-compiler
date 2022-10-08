@@ -9,12 +9,10 @@ import symbolTable.types.STType;
 public class ASTAccessVariable implements ASTAccess{
     private final Token tkVariable;
     private ASTChaining astChaining;
-    private boolean endsWithVariable;
 
     public ASTAccessVariable(Token tkVariable, ASTChaining astChaining) {
         this.tkVariable = tkVariable;
         this.astChaining = astChaining;
-        endsWithVariable = true;
     }
 
     public void print() {
@@ -44,11 +42,8 @@ public class ASTAccessVariable implements ASTAccess{
             throw new SemanticException(new SemanticError(tkVariable, "la variable " + tkVariable.getLexeme() + " no fue delcarada"));
         if(astChaining == null)
             return variableType;
-        else{
-            STType chainingType = astChaining.check(variableType);
-            endsWithVariable = astChaining.endsWithVariable();
-            return chainingType;
-        }
+        else
+            return astChaining.check(variableType);
     }
 
     public void setASTChainng(ASTChaining astChaining) {
@@ -56,7 +51,18 @@ public class ASTAccessVariable implements ASTAccess{
     }
 
     @Override
-    public boolean endsWithVariable() {
-        return endsWithVariable;
+    public boolean isValidCall() {
+        if(astChaining == null)
+            return false;
+        else
+            return astChaining.isValidCall();
+    }
+
+    @Override
+    public boolean isValidVariable() {
+        if(astChaining == null)
+            return true;
+        else
+            return astChaining.isValidVariable();
     }
 }
