@@ -3,6 +3,8 @@ package symbolTable.types;
 import errors.SemanticError;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.entities.STClass;
+import symbolTable.entities.STInterface;
 
 import java.util.Objects;
 
@@ -41,7 +43,25 @@ public class STTypeReference implements STType{
             return true;
         else if(Objects.equals(subType, "Object"))
             return false;
-        else return isSubtype(ST.symbolTable.getSTClass(subType).getTKClassItExtends().getLexeme(), parentType);
+        else {
+            STClass subTypeClass = ST.symbolTable.getSTClass(subType);
+            if(subTypeClass != null)
+                if(isSubtype(ST.symbolTable.getSTClass(subType).getTKClassItExtends().getLexeme(), parentType))
+                    return true;
+                else
+                    for(String interfaceName : subTypeClass.getInterfacesItImplements()) {
+                        if (isSubtype(interfaceName, parentType))
+                            return true;
+                    }
+            else{
+                STInterface subTypeInterface = ST.symbolTable.getSTInterface(subType);
+                for(Token tkInterface : subTypeInterface.getTKInterfacesItExtends().values()) {
+                    if (isSubtype(tkInterface.getLexeme(), parentType))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean equals(STType stType){

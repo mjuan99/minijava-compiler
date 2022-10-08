@@ -1,5 +1,3 @@
-//[Error:c1|29]
-
 class A{
     public I3b i3b;
     public C1 c1;
@@ -26,7 +24,6 @@ class A{
     I2a m5(){
         return c2;
         return c3;
-        return c1;
     }
     static void main(){}
 }

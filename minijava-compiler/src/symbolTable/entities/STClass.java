@@ -260,4 +260,11 @@ public class STClass {
     public STMethod getMethod(String methodName) {
         return stMethods.get(methodName);
     }
+
+    public LinkedList<String> getInterfacesItImplements() {
+        LinkedList<String> interfaces = new LinkedList<>();
+        for(Token tkInterface : tkInterfacesItImplements.values())
+            interfaces.add(tkInterface.getLexeme());
+        return interfaces;
+    }
 }
