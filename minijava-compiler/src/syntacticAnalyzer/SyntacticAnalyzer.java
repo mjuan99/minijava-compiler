@@ -1048,8 +1048,8 @@ public class SyntacticAnalyzer {
         match("new");
         Token tkClassName = currentToken;
         ClaseGenericaConstructor();
-        ArgsActuales();
-        return new ASTAccessConstructor(tkClassName, null);
+        LinkedList<ASTExpression> arguments = ArgsActuales();
+        return new ASTAccessConstructor(tkClassName, null, arguments.isEmpty());
     }
 
     private void ClaseGenericaConstructor() throws IOException, SyntacticException {

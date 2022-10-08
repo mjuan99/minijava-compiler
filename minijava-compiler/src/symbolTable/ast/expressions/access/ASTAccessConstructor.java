@@ -11,10 +11,12 @@ import symbolTable.types.STTypeReference;
 public class ASTAccessConstructor implements ASTAccess{
     private final Token tkClassName;
     private ASTChaining astChaining;
+    private final boolean hasArguments;
 
-    public ASTAccessConstructor(Token tkClassName, ASTChaining astChaining) {
+    public ASTAccessConstructor(Token tkClassName, ASTChaining astChaining, boolean hasArguments) {
         this.tkClassName = tkClassName;
         this.astChaining = astChaining;
+        this.hasArguments = hasArguments;
     }
 
     public void setASTChainng(ASTChaining astChaining) {
@@ -56,6 +58,8 @@ public class ASTAccessConstructor implements ASTAccess{
         STClass stClass = ST.symbolTable.getSTClass(tkClassName.getLexeme());
         if(stClass == null)
             throw new SemanticException(new SemanticError(tkClassName, "la clase " + tkClassName.getLexeme() + " no fue declarada"));
+        if(hasArguments)
+            throw new SemanticException(new SemanticError(tkClassName, "constructor de clase no deberia tener argumentos"));
         if(astChaining == null)
             return new STTypeReference(tkClassName);
         else{
