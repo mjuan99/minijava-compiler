@@ -1,6 +1,10 @@
 package symbolTable.ast.sentences;
 
+import errors.SemanticError;
+import errors.SemanticException;
 import symbolTable.ast.expressions.ASTExpression;
+import symbolTable.types.STType;
+import symbolTable.types.STTypeBoolean;
 
 public class ASTWhile implements ASTSentence{
     private final ASTExpression condition;
@@ -19,8 +23,10 @@ public class ASTWhile implements ASTSentence{
     }
 
     @Override
-    public void checkSentences() {
-        //TODO implementar
-
+    public void checkSentences() throws SemanticException {
+        STType conditionType = condition.check();
+        if(!conditionType.conformsWith(new STTypeBoolean()))
+            throw new SemanticException(new SemanticError(condition.getToken(), "la condición del while deberia ser tipo boolean pero es tipo " + conditionType));
+        astSentence.checkSentences();
     }
 }
