@@ -47,6 +47,14 @@ public class ASTAccessMethod implements ASTAccess{
             throw new SemanticException(new SemanticError(tkMethod, "el metodo " + tkMethod.getLexeme() + " no fue declarado en la clase " + ST.symbolTable.getCurrentSTClass().getTKName().getLexeme()));
         if(ST.symbolTable.getCurrentSTMethod().isStatic() && !stMethod.isStatic())
             throw new SemanticException(new SemanticError(tkMethod, "acceso a metodo dinamico en metodo estatico"));
+        if(arguments.size() != stMethod.getArguments().size())
+            throw new SemanticException(new SemanticError(tkMethod, "llamada al metodo " + tkMethod.getLexeme() + " con " + arguments.size() + " argumentos cuando se esperaban " + stMethod.getArguments().size() + " argumentos"));
+        for(int i = 0; i < arguments.size(); i++){
+            STType foundType = arguments.get(i).check();
+            STType expectedType = stMethod.getArguments().get(i).getType();
+            if(!foundType.conformsWith(expectedType))
+                throw new SemanticException(new SemanticError(tkMethod, "el tipo del " + (i + 1) + "° argumento actual (" + foundType + ") del método " + stMethod.getTKName().getLexeme() + " no conforma con el tipo del argumento formal (" + expectedType + ")"));
+        }
         if(astChaining == null)
             return stMethod.getSTReturnType();
         else

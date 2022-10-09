@@ -1,6 +1,6 @@
 //[Error:a3|11]
 
-class A extends B implements I1{
+class A extends B{
     int m1(){
         var v1 = 1;
         v1 = a1;

@@ -1,4 +1,4 @@
-//[Error:A|5]
+//[Error:A|6]
 
 class A{
     A m1(){

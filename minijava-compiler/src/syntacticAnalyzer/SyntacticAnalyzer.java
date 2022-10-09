@@ -1049,7 +1049,7 @@ public class SyntacticAnalyzer {
         Token tkClassName = currentToken;
         ClaseGenericaConstructor();
         LinkedList<ASTExpression> arguments = ArgsActuales();
-        return new ASTAccessConstructor(tkClassName, null, arguments.isEmpty());
+        return new ASTAccessConstructor(tkClassName, null, !arguments.isEmpty());
     }
 
     private void ClaseGenericaConstructor() throws IOException, SyntacticException {

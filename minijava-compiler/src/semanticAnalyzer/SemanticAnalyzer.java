@@ -10,7 +10,7 @@ public class SemanticAnalyzer {
         SymbolTable symbolTable = syntacticAnalyzer.getSymbolTable();
         symbolTable.checkDeclarations();
         symbolTable.consolidate();
-        symbolTable.checkSentences();
         symbolTable.throwExceptionIfErrorsWereFound();
+        symbolTable.checkSentences();
     }
 }

@@ -39,6 +39,14 @@ public class ASTMethodChaining implements ASTChaining{
         STMethod stMethod = ST.symbolTable.getSTClass(previousType.toString()).getMethod(tkMethod.getLexeme());
         if(stMethod == null)
             throw new SemanticException(new SemanticError(tkMethod, "el tipo " + previousType + " no tiene un metodo llamado " + tkMethod.getLexeme()));
+        if(arguments.size() != stMethod.getArguments().size())
+            throw new SemanticException(new SemanticError(tkMethod, "llamada al metodo " + tkMethod.getLexeme() + " con " + arguments.size() + " argumentos cuando se esperaban " + stMethod.getArguments().size() + " argumentos"));
+        for(int i = 0; i < arguments.size(); i++){
+            STType foundType = arguments.get(i).check();
+            STType expectedType = stMethod.getArguments().get(i).getType();
+            if(!foundType.conformsWith(expectedType))
+                throw new SemanticException(new SemanticError(tkMethod, "el tipo del " + (i + 1) + "° argumento actual (" + foundType + ") del método " + stMethod.getTKName().getLexeme() + " no conforma con el tipo del argumento formal (" + expectedType + ")"));
+        }
         if(astChaining == null)
             return stMethod.getSTReturnType();
         else{
