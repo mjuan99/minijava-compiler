@@ -6,6 +6,7 @@ import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.entities.STClass;
+import symbolTable.entities.STInterface;
 import symbolTable.entities.STMethod;
 import symbolTable.types.STType;
 
@@ -46,8 +47,13 @@ public class ASTAccessStaticMethod implements ASTAccess{
     @Override
     public STType check() throws SemanticException {
         STClass stClass = ST.symbolTable.getSTClass(tkClassName.getLexeme());
-        if(stClass == null)
-            throw new SemanticException(new SemanticError(tkClassName, "la clase " + tkClassName.getLexeme() + " no fue declarada"));
+        if(stClass == null) {
+            STInterface stInterface = ST.symbolTable.getSTInterface(tkClassName.getLexeme());
+            if(stInterface == null)
+                throw new SemanticException(new SemanticError(tkClassName, "la clase " + tkClassName.getLexeme() + " no fue declarada"));
+            else
+                throw new SemanticException(new SemanticError(tkMethod, "intento de acceso a metodo estatico de interfaz " + tkClassName.getLexeme()));
+        }
         STMethod stMethod = stClass.getMethod(tkMethod.getLexeme());
         if(stMethod == null || !stMethod.isStatic())
             throw new SemanticException(new SemanticError(tkMethod, "el metodo estatico " + tkMethod.getLexeme() + " no fue declarado en la clase " + stClass.getTKName().getLexeme()));

@@ -6,7 +6,7 @@ class A extends B{
     int m1(Object a, A b){
         m1(new A(), b);
         m2(7 * 5 + a1, a2 && true, b);
-        m3("asd", a3, new B());
+        m3("asd", m2(7 * 5 + a1, a2 && true, b), new B());
         m1(new A(), new B());
     }
     static void main(){}

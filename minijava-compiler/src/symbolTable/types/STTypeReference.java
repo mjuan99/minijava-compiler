@@ -46,7 +46,7 @@ public class STTypeReference implements STType{
         else {
             STClass subTypeClass = ST.symbolTable.getSTClass(subType);
             if(subTypeClass != null)
-                if(isSubtype(ST.symbolTable.getSTClass(subType).getTKClassItExtends().getLexeme(), parentType))
+                if(isSubtype(subTypeClass.getTKClassItExtends().getLexeme(), parentType))
                     return true;
                 else
                     for(String interfaceName : subTypeClass.getInterfacesItImplements()) {

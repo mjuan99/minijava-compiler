@@ -5,7 +5,9 @@ import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
-import symbolTable.entities.STMethod;
+import symbolTable.entities.STAbstractMethod;
+import symbolTable.entities.STClass;
+import symbolTable.entities.STInterface;
 import symbolTable.types.STType;
 
 import java.util.LinkedList;
@@ -36,7 +38,14 @@ public class ASTMethodChaining implements ASTChaining{
     public STType check(STType previousType) throws SemanticException {
         if(!previousType.isTypeReference())
             throw new SemanticException(new SemanticError(tkMethod, "no se puede aplicar encadenado a un tipo primitivo o void"));
-        STMethod stMethod = ST.symbolTable.getSTClass(previousType.toString()).getMethod(tkMethod.getLexeme());
+        STClass stClass = ST.symbolTable.getSTClass(previousType.toString());
+        STAbstractMethod stMethod;
+        if(stClass != null)
+            stMethod = stClass.getMethod(tkMethod.getLexeme());
+        else {
+            STInterface stInterface = ST.symbolTable.getSTInterface(previousType.toString());
+            stMethod = stInterface.getMethod(tkMethod.getLexeme());
+        }
         if(stMethod == null)
             throw new SemanticException(new SemanticError(tkMethod, "el tipo " + previousType + " no tiene un metodo llamado " + tkMethod.getLexeme()));
         if(arguments.size() != stMethod.getArguments().size())

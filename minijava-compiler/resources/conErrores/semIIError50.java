@@ -1,10 +1,8 @@
-//[Error:m3|7]
+//[Error:m2|5]
 
 class A{
-    public I a1;
     int m1(){
-        a1.m2();
-        a1.m3();
+        I.m2();
     }
     static void main(){}
 }

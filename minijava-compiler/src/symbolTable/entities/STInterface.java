@@ -143,4 +143,11 @@ public class STInterface {
     public void setErrorFound() {
         errorFound = true;
     }
+
+    public STAbstractMethod getMethod(String methodName) {
+        for(STMethodHeader stMethodHeader : stMethodsHeaders.values())
+            if(stMethodHeader.getHash().startsWith(methodName + "("))
+                return stMethodHeader;
+        return null;
+    }
 }

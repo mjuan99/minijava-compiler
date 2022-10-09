@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class STMethod {
+public class STMethod implements STAbstractMethod{
     private final Token tkName;
     private final boolean isStatic;
     private final STType stReturnType;

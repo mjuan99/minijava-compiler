@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class STMethodHeader {
+public class STMethodHeader implements STAbstractMethod{
     private final Token tkName;
     private final Token tkStatic;
     private final STType stReturnType;
@@ -84,6 +84,11 @@ public class STMethodHeader {
 
     public boolean isStatic() {
         return tkStatic != null;
+    }
+
+    @Override
+    public LinkedList<STArgument> getArguments() {
+        return stArgumentsList;
     }
 
     public STType getSTReturnType() {

@@ -4,6 +4,7 @@ import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.entities.STClass;
 import symbolTable.types.STType;
 
 public class ASTVariableChaining implements ASTChaining{
@@ -12,11 +13,16 @@ public class ASTVariableChaining implements ASTChaining{
 
     @Override
     public STType check(STType previousType) throws SemanticException {
+        STType stType;
         if(!previousType.isTypeReference())
             throw new SemanticException(new SemanticError(tkVariable, "no se puede aplicar encadenado a un tipo primitivo o void"));
-        STType stType = ST.symbolTable.getSTClass(previousType.toString()).getAttributeType(tkVariable.getLexeme());
-        if(stType == null)
-            throw new SemanticException(new SemanticError(tkVariable, "el tipo " + previousType + " no tiene un atributo llamado " + tkVariable.getLexeme()));
+        STClass previousTypeClass = ST.symbolTable.getSTClass(previousType.toString());
+        if(previousTypeClass != null) {
+            stType = previousTypeClass.getAttributeType(tkVariable.getLexeme());
+            if (stType == null)
+                throw new SemanticException(new SemanticError(tkVariable, "el tipo " + previousType + " no tiene un atributo llamado " + tkVariable.getLexeme()));
+        }else
+            throw new SemanticException(new SemanticError(tkVariable, "intento de acceso a atributos de la interfaz " + previousType));
         if(astChaining == null)
             return stType;
         else

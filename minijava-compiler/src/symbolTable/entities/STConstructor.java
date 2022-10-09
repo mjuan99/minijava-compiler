@@ -80,9 +80,6 @@ public class STConstructor {
         errorFound = true;
     }
 
-    public void checkSentences() {
-    }
-
     public void insertASTBlock(ASTBlock astBlock) {
         this.astBlock = astBlock;
     }

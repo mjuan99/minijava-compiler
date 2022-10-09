@@ -17,9 +17,7 @@ public class SymbolTable {
     private STClass currentSTClass;
     private STInterface currentSTInterface;
     private STMethod currentSTMethod;
-    private STConstructor currentSTConstructor;
     private final LinkedList<CompilerError> compilerErrorList;
-    private STMethodHeader currentSTMethodHeader;
     private Token tkEOF;
     private STMethod stMainMethod;
     private ASTBlock currentASTBlock;
@@ -123,14 +121,6 @@ public class SymbolTable {
         return currentSTMethod;
     }
 
-    public void setCurrentSTConstructor(STConstructor currentSTConstructor){
-        this.currentSTConstructor = currentSTConstructor;
-    }
-
-    public STConstructor getCurrentSTConstructor(){
-        return currentSTConstructor;
-    }
-
     public void insertSTClass(STClass stClass) {
         STClass stOldClass = stClasses.get(stClass.getHash());
         STInterface stOldInterface = stInterfaces.get(stClass.getHash());
@@ -218,10 +208,6 @@ public class SymbolTable {
 
     public HashMap<String, Token> getTKParentsInterfaces(Token tkInterface) {
         return stInterfaces.get(tkInterface.getLexeme()).getTKInterfacesItExtends();
-    }
-
-    public void setCurrentSTMethodHeader(STMethodHeader stMethodHeader) {
-        currentSTMethodHeader = stMethodHeader;
     }
 
     public STClass getSTClass(String className) {

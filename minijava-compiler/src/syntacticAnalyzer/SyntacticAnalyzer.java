@@ -387,7 +387,6 @@ public class SyntacticAnalyzer {
 
     private void RestoConstructor(Token idClass) throws IOException, SyntacticException {
         STConstructor stConstructor = new STConstructor(idClass);
-        ST.symbolTable.setCurrentSTConstructor(stConstructor);
         stConstructor.insertArguments(ArgsFormales());
         stConstructor.insertASTBlock(Bloque());
         ST.symbolTable.getCurrentSTClass().insertConstructor(stConstructor);
@@ -402,7 +401,6 @@ public class SyntacticAnalyzer {
         else
             returnType = TipoMetodo();
         STMethodHeader stMethodHeader = new STMethodHeader(currentToken, tkStatic, returnType);
-        ST.symbolTable.setCurrentSTMethodHeader(stMethodHeader);
         match("idMetVar");
         stMethodHeader.insertArguments(ArgsFormales());
         ST.symbolTable.getCurrentSTInterface().insertMethodHeader(stMethodHeader);
