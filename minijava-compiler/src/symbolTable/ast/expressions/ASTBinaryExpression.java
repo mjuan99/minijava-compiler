@@ -48,25 +48,25 @@ public class ASTBinaryExpression implements ASTExpression{
                 Objects.equals(tkBinaryOperator.getLexeme(), "*") || Objects.equals(tkBinaryOperator.getLexeme(), "/") ||
                 Objects.equals(tkBinaryOperator.getLexeme(), "%")){
             if(!leftSideType.conformsWith(new STTypeInt()))
-                throw new SemanticException(new SemanticError(leftSide.getToken(), "Expresion de tipo " + leftSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + leftSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
             if(!rightSideType.conformsWith(new STTypeInt()))
-                throw new SemanticException(new SemanticError(rightSide.getToken(), "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
             expressionType = new STTypeInt();
         }else if(Objects.equals(tkBinaryOperator.getLexeme(), "&&") || Objects.equals(tkBinaryOperator.getLexeme(), "||")){
             if(!leftSideType.conformsWith(new STTypeBoolean()))
-                throw new SemanticException(new SemanticError(leftSide.getToken(), "Expresion de tipo " + leftSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba boolean"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + leftSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba boolean"));
             if(!rightSideType.conformsWith(new STTypeBoolean()))
-                throw new SemanticException(new SemanticError(rightSide.getToken(), "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba boolean"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba boolean"));
             expressionType = new STTypeBoolean();
         }else if(Objects.equals(tkBinaryOperator.getLexeme(), "==") || Objects.equals(tkBinaryOperator.getLexeme(), "!=")){
             if(!leftSideType.conformsWith(rightSideType) && !rightSideType.conformsWith(leftSideType))
-                throw new SemanticException(new SemanticError(rightSide.getToken(), "Comparación de tipos no conformantes (" + leftSideType + " y " + rightSideType + ")"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Comparación de tipos no conformantes (" + leftSideType + " y " + rightSideType + ")"));
             expressionType = new STTypeBoolean();
         }else{
             if(!leftSideType.conformsWith(new STTypeInt()))
-                throw new SemanticException(new SemanticError(leftSide.getToken(), "Expresion de tipo " + leftSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + leftSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
             if(!rightSideType.conformsWith(new STTypeInt()))
-                throw new SemanticException(new SemanticError(rightSide.getToken(), "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
+                throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
             expressionType = new STTypeBoolean();
         }
         if(astChaining != null)

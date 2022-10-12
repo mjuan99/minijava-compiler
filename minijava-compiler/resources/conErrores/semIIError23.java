@@ -1,4 +1,4 @@
-//[Error:5|9]
+//[Error:!=|9]
 
 class A{
     public A a;

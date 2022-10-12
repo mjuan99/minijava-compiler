@@ -1,4 +1,4 @@
-//[Error:null|7]
+//[Error:&&|7]
 
 class A{
     public boolean a;

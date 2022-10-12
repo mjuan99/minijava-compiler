@@ -1,4 +1,4 @@
-//[Error:'7'|8]
+//[Error:<=|8]
 
 class A{
     public int a;
