@@ -41,10 +41,10 @@ public class ASTUnaryExpression implements ASTExpression{
         if(tkUnaryOperator != null) {
             if (Objects.equals(tkUnaryOperator.getLexeme(), "+") || Objects.equals(tkUnaryOperator.getLexeme(), "-"))
                 if (!stType.conformsWith(new STTypeInt()))
-                    throw new SemanticException(new SemanticError(astOperand.getToken(), "no se puede aplicar el operador " + tkUnaryOperator.getLexeme() + " al tipo " + stType));
+                    throw new SemanticException(new SemanticError(tkUnaryOperator, "no se puede aplicar el operador " + tkUnaryOperator.getLexeme() + " al tipo " + stType));
             if(Objects.equals(tkUnaryOperator.getLexeme(), "!"))
                 if(!stType.conformsWith(new STTypeBoolean()))
-                    throw new SemanticException(new SemanticError(astOperand.getToken(), "no se puede aplicar el operador " + tkUnaryOperator.getLexeme() + " al tipo " + stType));
+                    throw new SemanticException(new SemanticError(tkUnaryOperator, "no se puede aplicar el operador " + tkUnaryOperator.getLexeme() + " al tipo " + stType));
         }
         if(astChaining != null)
             return astChaining.check(stType);
