@@ -11,7 +11,13 @@ public class STTypeInt implements STPrimitiveType{
 
     @Override
     public boolean conformsWith(STType stType) {
-        return stType instanceof STTypeInt;
+        if(stType instanceof STTypeInt)
+            return true;
+        else
+            if(stType instanceof STTypeReference)
+                return stType.toString().equals("String");
+            else
+                return false;
     }
 
     public boolean equals(STType stType){

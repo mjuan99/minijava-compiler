@@ -3,7 +3,7 @@
 class A{
     public int a;
     void m1(){
-        a += 'c';
+        a += true;
     }
 
     static void main(){}
