@@ -838,6 +838,7 @@ public class SyntacticAnalyzer {
     private ASTSentence While() throws IOException {
         ASTExpression condition = null;
         ASTSentence astSentence = null;
+        Token tkWhile = currentToken;
         try{
             match("while");
             match("(");
@@ -853,7 +854,7 @@ public class SyntacticAnalyzer {
             if(checkCurrentToken("{"))
                 Sentencia();
         }
-        return new ASTWhile(condition, astSentence);
+        return new ASTWhile(tkWhile, condition, astSentence);
     }
 
     private ASTExpression Expresion() throws IOException, SyntacticException {

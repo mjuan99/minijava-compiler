@@ -1,4 +1,4 @@
-//[Error:*|8]
+//[Error:while|8]
 
 class A{
     static void main(){
