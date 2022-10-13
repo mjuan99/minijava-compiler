@@ -1,4 +1,4 @@
-//[Error:"asd"|9]
+//[Error:if|9]
 
 class A{
     static void main(){

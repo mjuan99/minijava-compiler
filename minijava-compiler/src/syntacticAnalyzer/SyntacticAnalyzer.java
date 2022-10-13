@@ -800,6 +800,7 @@ public class SyntacticAnalyzer {
         ASTExpression condition = null;
         ASTSentence thenSentence = null;
         ASTSentence elseSentence;
+        Token tkIf = currentToken;
         try{
             match("if");
             match("(");
@@ -818,7 +819,7 @@ public class SyntacticAnalyzer {
                 updateCurrentToken();
         }
         elseSentence = ElseOpt();
-        return new ASTIf(condition, thenSentence, elseSentence);
+        return new ASTIf(tkIf, condition, thenSentence, elseSentence);
     }
 
     private ASTSentence ElseOpt() throws IOException {
