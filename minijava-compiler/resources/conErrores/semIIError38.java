@@ -1,4 +1,4 @@
-//[Error:;|5]
+//[Error:return|5]
 
 class A{
     int m1(){

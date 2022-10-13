@@ -1,4 +1,4 @@
-//[Error:c1|29]
+//[Error:return|29]
 
 class A{
     public I3b i3b;

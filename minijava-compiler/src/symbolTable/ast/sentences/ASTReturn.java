@@ -9,17 +9,12 @@ import symbolTable.types.STType;
 import symbolTable.types.STTypeVoid;
 
 public class ASTReturn implements ASTSentence{
+    private final Token tkReturn;
     private final ASTExpression returnExpression;
-    private final Token tkEmptyReturn;
 
-    public ASTReturn(Token tkEmptyReturn) {
-        returnExpression = null;
-        this.tkEmptyReturn = tkEmptyReturn;
-    }
-
-    public ASTReturn(ASTExpression returnExpression){
+    public ASTReturn(Token tkReturn, ASTExpression returnExpression){
+        this.tkReturn = tkReturn;
         this.returnExpression = returnExpression;
-        tkEmptyReturn = null;
     }
 
     @Override
@@ -34,12 +29,11 @@ public class ASTReturn implements ASTSentence{
     public void checkSentences() throws SemanticException {
         if(returnExpression == null) {
             if (!ST.symbolTable.getCurrentSTMethod().getSTReturnType().equals(new STTypeVoid()))
-                //TODO ver de donde saco el token
-                throw new SemanticException(new SemanticError(tkEmptyReturn, "retorno vacio en un metodo no void"));
+                throw new SemanticException(new SemanticError(tkReturn, "retorno vacio en un metodo no void"));
         }else{
             STType returnType = returnExpression.check();
             if(!returnType.conformsWith(ST.symbolTable.getCurrentSTMethod().getSTReturnType()))
-                throw new SemanticException(new SemanticError(returnExpression.getToken(), "el tipo retornado " + returnType + " no conforma con el tipo de retorno del método (" + ST.symbolTable.getCurrentSTMethod().getSTReturnType().toString() + ")"));
+                throw new SemanticException(new SemanticError(tkReturn, "el tipo retornado " + returnType + " no conforma con el tipo de retorno del método (" + ST.symbolTable.getCurrentSTMethod().getSTReturnType().toString() + ")"));
         }
     }
 }
