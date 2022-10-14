@@ -5,6 +5,7 @@ import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
+import symbolTable.entities.STVariable;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeNull;
 
@@ -33,10 +34,6 @@ public class ASTLocalVariable implements ASTSentence{
         variableType = value.check();
         if(variableType.equals(new STTypeNull()))
             throw new SemanticException(new SemanticError(value.getToken(), "declaracion de variable con valor null"));
-        ST.symbolTable.getCurrentASTBlock().insertVariable(tkVariable.getLexeme(), this);
-    }
-
-    public STType getVariableType() {
-        return variableType;
+        ST.symbolTable.getCurrentASTBlock().insertVariable(tkVariable.getLexeme(), new STVariable(tkVariable, variableType));
     }
 }

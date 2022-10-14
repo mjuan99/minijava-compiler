@@ -2,6 +2,7 @@ package symbolTable.ast.sentences;
 
 import errors.SemanticException;
 import symbolTable.ST;
+import symbolTable.entities.STVariable;
 import symbolTable.types.STType;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.LinkedList;
 public class ASTBlock implements ASTSentence{
     private LinkedList<ASTSentence> astSentences;
     private final ASTBlock parentASTBlock;
-    private final HashMap<String, ASTLocalVariable> variables;
+    private final HashMap<String, STVariable> variables;
 
     public void setAstSentences(LinkedList<ASTSentence> astSentences) {
         this.astSentences = astSentences;
@@ -22,12 +23,12 @@ public class ASTBlock implements ASTSentence{
         variables = new HashMap<>();
     }
 
-    public void insertVariable(String name, ASTLocalVariable variable){
+    public void insertVariable(String name, STVariable variable){
         variables.put(name, variable);
     }
 
     public STType getVariableType(String name){
-        ASTLocalVariable variable = variables.get(name);
+        STVariable variable = variables.get(name);
         if(variable == null)
             if(parentASTBlock == null)
                 return null;
