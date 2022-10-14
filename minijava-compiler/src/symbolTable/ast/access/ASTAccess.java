@@ -1,4 +1,4 @@
-package symbolTable.ast.expressions.access;
+package symbolTable.ast.access;
 
 import symbolTable.ast.expressions.ASTOperand;
 

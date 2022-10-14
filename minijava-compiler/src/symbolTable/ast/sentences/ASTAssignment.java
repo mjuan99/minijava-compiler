@@ -4,7 +4,7 @@ import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ast.expressions.ASTExpression;
-import symbolTable.ast.expressions.access.ASTAccess;
+import symbolTable.ast.access.ASTAccess;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeInt;
 

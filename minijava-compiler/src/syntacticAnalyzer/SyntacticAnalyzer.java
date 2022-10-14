@@ -5,7 +5,7 @@ import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.expressions.*;
-import symbolTable.ast.expressions.access.*;
+import symbolTable.ast.access.*;
 import symbolTable.ast.sentences.*;
 import symbolTable.entities.*;
 import symbolTable.SymbolTable;

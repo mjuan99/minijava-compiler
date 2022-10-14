@@ -1,30 +1,28 @@
-package symbolTable.ast.expressions.access;
+package symbolTable.ast.access;
 
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
-import symbolTable.entities.STAbstractMethod;
-import symbolTable.entities.STClass;
-import symbolTable.entities.STInterface;
+import symbolTable.entities.STMethod;
 import symbolTable.types.STType;
 
 import java.util.LinkedList;
 
-public class ASTMethodChaining implements ASTChaining{
+public class ASTAccessMethod implements ASTAccess{
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
-    private final ASTChaining astChaining;
+    private ASTChaining astChaining;
 
-    public ASTMethodChaining(Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
+    public ASTAccessMethod(Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkMethod = tkMethod;
         this.arguments = arguments;
         this.astChaining = astChaining;
     }
 
-    public void print(){
-        System.out.print("." + tkMethod.getLexeme() + "(");
+    public void print() {
+        System.out.print(tkMethod.getLexeme() + "(");
         for(ASTExpression argument : arguments){
             argument.print();
             System.out.print(", ");
@@ -35,19 +33,20 @@ public class ASTMethodChaining implements ASTChaining{
     }
 
     @Override
-    public STType check(STType previousType) throws SemanticException {
-        if(!previousType.isTypeReference())
-            throw new SemanticException(new SemanticError(tkMethod, "no se puede aplicar encadenado a un tipo primitivo o void"));
-        STClass stClass = ST.symbolTable.getSTClass(previousType.toString());
-        STAbstractMethod stMethod;
-        if(stClass != null)
-            stMethod = stClass.getMethod(tkMethod.getLexeme());
-        else {
-            STInterface stInterface = ST.symbolTable.getSTInterface(previousType.toString());
-            stMethod = stInterface.getMethod(tkMethod.getLexeme());
-        }
+    public Token getToken() {
+        if(astChaining == null)
+            return tkMethod;
+        else
+            return astChaining.getToken();
+    }
+
+    @Override
+    public STType check() throws SemanticException {
+        STMethod stMethod = ST.symbolTable.getCurrentSTClass().getMethod(tkMethod.getLexeme());
         if(stMethod == null)
-            throw new SemanticException(new SemanticError(tkMethod, "el tipo " + previousType + " no tiene un metodo llamado " + tkMethod.getLexeme()));
+            throw new SemanticException(new SemanticError(tkMethod, "el metodo " + tkMethod.getLexeme() + " no fue declarado en la clase " + ST.symbolTable.getCurrentSTClass().getTKName().getLexeme()));
+        if(ST.symbolTable.getCurrentSTMethod().isStatic() && !stMethod.isStatic())
+            throw new SemanticException(new SemanticError(tkMethod, "acceso a metodo dinamico en metodo estatico"));
         if(arguments.size() != stMethod.getArguments().size())
             throw new SemanticException(new SemanticError(tkMethod, "llamada al metodo " + tkMethod.getLexeme() + " con " + arguments.size() + " argumentos cuando se esperaban " + stMethod.getArguments().size() + " argumentos"));
         for(int i = 0; i < arguments.size(); i++){
@@ -58,17 +57,12 @@ public class ASTMethodChaining implements ASTChaining{
         }
         if(astChaining == null)
             return stMethod.getSTReturnType();
-        else{
+        else
             return astChaining.check(stMethod.getSTReturnType());
-        }
     }
 
-    @Override
-    public Token getToken() {
-        if(astChaining == null)
-            return tkMethod;
-        else
-            return astChaining.getToken();
+    public void setASTChainng(ASTChaining astChaining) {
+        this.astChaining = astChaining;
     }
 
     @Override

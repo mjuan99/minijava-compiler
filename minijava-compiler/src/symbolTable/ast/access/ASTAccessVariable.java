@@ -1,4 +1,4 @@
-package symbolTable.ast.expressions.access;
+package symbolTable.ast.access;
 
 import errors.SemanticError;
 import errors.SemanticException;

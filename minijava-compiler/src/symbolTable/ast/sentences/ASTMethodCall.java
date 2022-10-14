@@ -2,7 +2,7 @@ package symbolTable.ast.sentences;
 
 import errors.SemanticError;
 import errors.SemanticException;
-import symbolTable.ast.expressions.access.ASTAccess;
+import symbolTable.ast.access.ASTAccess;
 
 public class ASTMethodCall implements ASTSentence{
     private final ASTAccess astAccess;

@@ -3,7 +3,7 @@ package symbolTable.ast.expressions;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
-import symbolTable.ast.expressions.access.ASTChaining;
+import symbolTable.ast.access.ASTChaining;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeBoolean;
 import symbolTable.types.STTypeInt;
