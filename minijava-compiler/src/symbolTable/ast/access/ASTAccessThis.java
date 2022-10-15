@@ -7,29 +7,21 @@ import symbolTable.ST;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeReference;
 
-public class ASTAccessThis implements ASTAccess{
+public class ASTAccessThis extends ASTAccess{
     private final Token tkThis;
-    private ASTChaining astChaining;
 
-    public ASTAccessThis(Token tkThis, ASTChaining astChaining) {
-        this.astChaining = astChaining;
+    public ASTAccessThis(Token tkThis) {
         this.tkThis = tkThis;
     }
 
     @Override
-    public boolean isValidCall() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidCall();
+    public boolean isValidCallWithoutChaining() {
+        return false;
     }
 
     @Override
-    public boolean isValidVariable() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidVariable();
+    public boolean isValidVariableWithoutChaining() {
+        return false;
     }
 
     public void print() {
@@ -42,13 +34,6 @@ public class ASTAccessThis implements ASTAccess{
     public STType check() throws SemanticException {
         if(ST.symbolTable.getCurrentSTMethod().isStatic())
             throw new SemanticException(new SemanticError(tkThis, "acceso a this en un metodo estatico"));
-        if(astChaining == null)
-            return new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName());
-        else
-            return astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
-    }
-
-    public void setASTChaining(ASTChaining astChaining) {
-        this.astChaining = astChaining;
+        return checkChaining(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
     }
 }

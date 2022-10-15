@@ -12,17 +12,16 @@ import symbolTable.types.STType;
 
 import java.util.LinkedList;
 
-public class ASTAccessStaticMethod implements ASTAccess{
+public class ASTAccessStaticMethod extends ASTAccess{
     private final Token tkClassName;
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
-    private ASTChaining astChaining;
 
     public ASTAccessStaticMethod(Token tkClassName, Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkClassName = tkClassName;
         this.tkMethod = tkMethod;
         this.arguments = arguments;
-        this.astChaining = astChaining;
+        setASTChaining(astChaining);
     }
 
     public void print() {
@@ -57,29 +56,16 @@ public class ASTAccessStaticMethod implements ASTAccess{
             if(!foundType.conformsWith(expectedType))
                 throw new SemanticException(new SemanticError(tkMethod, "el tipo del " + (i + 1) + "° argumento actual (" + foundType + ") del método " + stMethod.getTKName().getLexeme() + " no conforma con el tipo del argumento formal (" + expectedType + ")"));
         }
-        if(astChaining == null)
-            return stMethod.getSTReturnType();
-        else
-            return astChaining.check(stMethod.getSTReturnType());
-    }
-
-    public void setASTChaining(ASTChaining astChaining) {
-        this.astChaining = astChaining;
+        return checkChaining(stMethod.getSTReturnType());
     }
 
     @Override
-    public boolean isValidCall() {
-        if(astChaining == null)
-            return true;
-        else
-            return astChaining.isValidCall();
+    public boolean isValidCallWithoutChaining() {
+        return true;
     }
 
     @Override
-    public boolean isValidVariable() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidVariable();
+    public boolean isValidVariableWithoutChaining() {
+        return false;
     }
 }

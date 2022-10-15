@@ -6,13 +6,11 @@ import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.types.STType;
 
-public class ASTAccessVariable implements ASTAccess{
+public class ASTAccessVariable extends ASTAccess{
     private final Token tkVariable;
-    private ASTChaining astChaining;
 
-    public ASTAccessVariable(Token tkVariable, ASTChaining astChaining) {
+    public ASTAccessVariable(Token tkVariable) {
         this.tkVariable = tkVariable;
-        this.astChaining = astChaining;
     }
 
     public void print() {
@@ -35,29 +33,16 @@ public class ASTAccessVariable implements ASTAccess{
         }
         if(variableType == null)
             throw new SemanticException(new SemanticError(tkVariable, "la variable " + tkVariable.getLexeme() + " no fue delcarada"));
-        if(astChaining == null)
-            return variableType;
-        else
-            return astChaining.check(variableType);
-    }
-
-    public void setASTChaining(ASTChaining astChaining) {
-        this.astChaining = astChaining;
+        return checkChaining(variableType);
     }
 
     @Override
-    public boolean isValidCall() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidCall();
+    public boolean isValidCallWithoutChaining() {
+        return false;
     }
 
     @Override
-    public boolean isValidVariable() {
-        if(astChaining == null)
-            return true;
-        else
-            return astChaining.isValidVariable();
+    public boolean isValidVariableWithoutChaining() {
+        return true;
     }
 }

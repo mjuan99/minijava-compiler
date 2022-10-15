@@ -1032,9 +1032,9 @@ public class SyntacticAnalyzer {
         match("idMetVar");
         LinkedList<ASTExpression> arguments = ArgActualesMetodoOpt();
         if(arguments == null)
-            return new ASTAccessVariable(tkMetVar, null);
+            return new ASTAccessVariable(tkMetVar);
         else
-            return new ASTAccessMethod(tkMetVar, arguments, null);
+            return new ASTAccessMethod(tkMetVar, arguments);
     }
 
     private LinkedList<ASTExpression> ArgActualesMetodoOpt() throws IOException, SyntacticException {
@@ -1051,7 +1051,7 @@ public class SyntacticAnalyzer {
     private ASTAccess AccesoThis() throws IOException, SyntacticException {
         Token tkThis = currentToken;
         match("this");
-        return new ASTAccessThis(tkThis, null);
+        return new ASTAccessThis(tkThis);
     }
 
     private ASTAccess AccesoConstructor() throws IOException, SyntacticException {
@@ -1059,7 +1059,7 @@ public class SyntacticAnalyzer {
         Token tkClassName = currentToken;
         ClaseGenericaConstructor();
         LinkedList<ASTExpression> arguments = ArgsActuales();
-        return new ASTAccessConstructor(tkClassName, null, !arguments.isEmpty());
+        return new ASTAccessConstructor(tkClassName, !arguments.isEmpty());
     }
 
     private void ClaseGenericaConstructor() throws IOException, SyntacticException {

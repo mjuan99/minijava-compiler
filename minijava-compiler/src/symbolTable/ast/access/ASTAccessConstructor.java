@@ -9,35 +9,23 @@ import symbolTable.entities.STInterface;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeReference;
 
-public class ASTAccessConstructor implements ASTAccess{
+public class ASTAccessConstructor extends ASTAccess{
     private final Token tkClassName;
-    private ASTChaining astChaining;
     private final boolean hasArguments;
 
-    public ASTAccessConstructor(Token tkClassName, ASTChaining astChaining, boolean hasArguments) {
+    public ASTAccessConstructor(Token tkClassName, boolean hasArguments) {
         this.tkClassName = tkClassName;
-        this.astChaining = astChaining;
         this.hasArguments = hasArguments;
     }
 
-    public void setASTChaining(ASTChaining astChaining) {
-        this.astChaining = astChaining;
+    @Override
+    protected boolean isValidCallWithoutChaining() {
+        return true;
     }
 
     @Override
-    public boolean isValidCall() {
-        if(astChaining == null)
-            return true;
-        else
-            return astChaining.isValidCall();
-    }
-
-    @Override
-    public boolean isValidVariable() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidVariable();
+    public boolean isValidVariableWithoutChaining() {
+        return false;
     }
 
     public void print() {
@@ -58,10 +46,6 @@ public class ASTAccessConstructor implements ASTAccess{
         }
         if(hasArguments)
             throw new SemanticException(new SemanticError(tkClassName, "constructor de clase no deberia tener argumentos"));
-        if(astChaining == null)
-            return new STTypeReference(tkClassName);
-        else{
-            return astChaining.check(new STTypeReference(tkClassName));
-        }
+        return checkChaining(new STTypeReference(tkClassName));
     }
 }

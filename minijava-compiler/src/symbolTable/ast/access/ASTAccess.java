@@ -1,11 +1,38 @@
 package symbolTable.ast.access;
 
+import errors.SemanticException;
 import symbolTable.ast.expressions.ASTOperand;
+import symbolTable.types.STType;
 
-public interface ASTAccess extends ASTOperand {
-    void setASTChaining(ASTChaining astChaining);
+public abstract class ASTAccess implements ASTOperand {
+    protected ASTChaining astChaining;
 
-    boolean isValidCall();
+    public void setASTChaining(ASTChaining astChaining){
+        this.astChaining = astChaining;
+    }
 
-    boolean isValidVariable();
+    public STType checkChaining(STType accessType) throws SemanticException {
+        if(astChaining == null)
+            return accessType;
+        else
+            return astChaining.check(accessType);
+    }
+
+    public boolean isValidCall(){
+        if(astChaining == null)
+            return isValidCallWithoutChaining();
+        else
+            return astChaining.isValidCall();
+    }
+
+    protected abstract boolean isValidCallWithoutChaining();
+
+    public boolean isValidVariable(){
+        if(astChaining == null)
+            return isValidVariableWithoutChaining();
+        else
+            return astChaining.isValidVariable();
+    }
+
+    protected abstract boolean isValidVariableWithoutChaining();
 }

@@ -4,34 +4,23 @@ import errors.SemanticException;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 
-public class ASTAccessParenthesizedExpression implements ASTAccess{
+public class ASTAccessParenthesizedExpression extends ASTAccess{
 
     private final ASTExpression astExpression;
-    private ASTChaining astChaining;
 
     public ASTAccessParenthesizedExpression(ASTExpression astExpression) {
         this.astExpression = astExpression;
     }
 
+
     @Override
-    public void setASTChaining(ASTChaining astChaining) {
-        this.astChaining = astChaining;
+    public boolean isValidCallWithoutChaining() {
+        return false;
     }
 
     @Override
-    public boolean isValidCall() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidCall();
-    }
-
-    @Override
-    public boolean isValidVariable() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidVariable();
+    public boolean isValidVariableWithoutChaining() {
+        return false;
     }
 
     @Override
@@ -44,9 +33,6 @@ public class ASTAccessParenthesizedExpression implements ASTAccess{
     @Override
     public STType check() throws SemanticException {
         STType expressionType = astExpression.check();
-        if(astChaining == null)
-            return expressionType;
-        else
-            return astChaining.check(expressionType);
+        return checkChaining(expressionType);
     }
 }
