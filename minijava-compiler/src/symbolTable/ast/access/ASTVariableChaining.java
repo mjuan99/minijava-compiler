@@ -41,14 +41,6 @@ public class ASTVariableChaining implements ASTChaining{
     }
 
     @Override
-    public Token getToken() {
-        if(astChaining == null)
-            return tkVariable;
-        else
-            return astChaining.getToken();
-    }
-
-    @Override
     public boolean isValidCall() {
         if(astChaining == null)
             return false;

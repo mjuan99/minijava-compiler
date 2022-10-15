@@ -64,14 +64,6 @@ public class ASTMethodChaining implements ASTChaining{
     }
 
     @Override
-    public Token getToken() {
-        if(astChaining == null)
-            return tkMethod;
-        else
-            return astChaining.getToken();
-    }
-
-    @Override
     public boolean isValidCall() {
         if(astChaining == null)
             return true;

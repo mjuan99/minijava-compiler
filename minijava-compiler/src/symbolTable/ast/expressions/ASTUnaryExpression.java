@@ -26,7 +26,6 @@ public class ASTUnaryExpression implements ASTExpression{
 
     @Override
     public STType check() throws SemanticException {
-        //TODO implementar
         STType stType = astOperand.check();
         if(tkUnaryOperator != null) {
             if (Objects.equals(tkUnaryOperator.getLexeme(), "+") || Objects.equals(tkUnaryOperator.getLexeme(), "-"))

@@ -29,11 +29,6 @@ public class ASTBinaryExpression implements ASTExpression{
         System.out.print(")");
     }
 
-//    @Override
-//    public Token getToken() {
-//        return tkBinaryOperator;
-//    }
-
     @Override
     public STType check() throws SemanticException {
         STType leftSideType = leftSide.check();
