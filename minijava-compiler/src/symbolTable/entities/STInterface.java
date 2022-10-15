@@ -11,6 +11,7 @@ import java.util.LinkedList;
 public class STInterface {
     private final Token tkName;
     private final HashMap<String, STMethodHeader> stMethodsHeaders;
+    private final HashMap<String, STMethodHeader> stMethodsHeadersSimplified;
     private final HashMap<String, Token> tkInterfacesItExtends;
     private boolean consolidated;
     private boolean cyclicInheritance;
@@ -19,6 +20,7 @@ public class STInterface {
     public STInterface(Token tkName) {
         this.tkName = tkName;
         stMethodsHeaders = new HashMap<>();
+        stMethodsHeadersSimplified = new HashMap<>();
         tkInterfacesItExtends = new HashMap<>();
         consolidated = false;
         cyclicInheritance = false;
@@ -96,8 +98,10 @@ public class STInterface {
         stInterface.getSTMethodsHeaders().forEach((key, stParentMethodHeader) -> {
             if(!stParentMethodHeader.errorFound()) {
                 STMethodHeader stMyMethodHeader = stMethodsHeaders.get(stParentMethodHeader.getHash());
-                if(stMyMethodHeader == null)
+                if(stMyMethodHeader == null) {
                     stMethodsHeaders.put(stParentMethodHeader.getHash(), stParentMethodHeader);
+                    stMethodsHeadersSimplified.put(stParentMethodHeader.getTKName().getLexeme(), stParentMethodHeader);
+                }
                 else if(!stMyMethodHeader.getSTReturnType().equals(stParentMethodHeader.getSTReturnType()))
                     ST.symbolTable.addError(new SemanticError(stMyMethodHeader.getTKName(), "el tipo de retorno de " + stMyMethodHeader.getHash() + " no coincide con el tipo " + stParentMethodHeader.getSTReturnType() + " del metodo redefinido"));
             }
@@ -123,8 +127,10 @@ public class STInterface {
 
     public void insertMethodHeader(STMethodHeader stMethodHeader) {
         STMethodHeader stOldMethodHeader = stMethodsHeaders.get(stMethodHeader.getHash());
-        if(stOldMethodHeader == null)
+        if(stOldMethodHeader == null) {
             stMethodsHeaders.put(stMethodHeader.getHash(), stMethodHeader);
+            stMethodsHeadersSimplified.put(stMethodHeader.getTKName().getLexeme(), stMethodHeader);
+        }
         else{
             stOldMethodHeader.setErrorFound();
             ST.symbolTable.addError(new SemanticError(stMethodHeader.getTKName(), "el método " + stMethodHeader.getHash() + " ya fue definido"));
@@ -145,9 +151,10 @@ public class STInterface {
     }
 
     public STAbstractMethod getMethod(String methodName) {
-        for(STMethodHeader stMethodHeader : stMethodsHeaders.values())
-            if(stMethodHeader.getHash().startsWith(methodName + "("))
-                return stMethodHeader;
-        return null;
+//        for(STMethodHeader stMethodHeader : stMethodsHeaders.values())
+//            if(stMethodHeader.getHash().startsWith(methodName + "("))
+//                return stMethodHeader;
+//        return null;
+        return stMethodsHeadersSimplified.get(methodName);
     }
 }

@@ -16,6 +16,7 @@ public class STClass {
     private final Token tkName;
     private final HashMap<String, STAttribute> stAttributes;
     private final HashMap<String, STMethod> stMethods;
+    private final HashMap<String, STMethod> stMethodsSimplified;
     private final HashMap<String, STConstructor> stConstructors;
     private Token tkClassItExtends;
     private final HashMap<String, Token> tkInterfacesItImplements;
@@ -28,6 +29,7 @@ public class STClass {
         this.tkName = tkName;
         stAttributes = new HashMap<>();
         stMethods = new HashMap<>();
+        stMethodsSimplified = new HashMap<>();
         tkInterfacesItImplements = new HashMap<>();
         stConstructors = new HashMap<>();
         ancestorsClasses = new HashSet<>();
@@ -143,8 +145,10 @@ public class STClass {
         stClass.stMethods.forEach((key, stParentMethod) -> {
             if(!stParentMethod.errorFound()) {
                 STMethod stMyMethod = stMethods.get(stParentMethod.getHash());
-                if (stMyMethod == null)
+                if (stMyMethod == null) {
                     stMethods.put(stParentMethod.getHash(), stParentMethod);
+                    stMethodsSimplified.put(stParentMethod.getTKName().getLexeme(), stParentMethod);
+                }
                 else if (!stMyMethod.getSTReturnType().equals(stParentMethod.getSTReturnType()))
                     ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el tipo de retorno de " + stMyMethod.getHash() + " no coincide con el tipo " + stParentMethod.getSTReturnType() + " del metodo redefinido"));
                 else if (stMyMethod.isStatic() && !stParentMethod.isStatic())
@@ -193,6 +197,7 @@ public class STClass {
         STMethod stOldMethod = stMethods.get(stMethod.getHash());
         if(stOldMethod == null) {
             stMethods.put(stMethod.getHash(), stMethod);
+            stMethodsSimplified.put(stMethod.getTKName().getLexeme(), stMethod);
             stMethod.setSTClass(this);
             if(stMethod.isStatic() && Objects.equals(stMethod.getHash(), "main()") && stMethod.getArguments().isEmpty() && stMethod.getSTReturnType().equals(new STTypeVoid()))
                 ST.symbolTable.setSTMainMethod(stMethod);
@@ -257,10 +262,11 @@ public class STClass {
     }
 
     public STMethod getMethod(String methodName) {
-        for(STMethod stMethod : stMethods.values())
-            if(stMethod.getHash().startsWith(methodName + "("))
-                return stMethod;
-        return null;
+//        for(STMethod stMethod : stMethods.values())
+//            if(stMethod.getHash().startsWith(methodName + "("))
+//                return stMethod;
+//        return null;
+        return stMethodsSimplified.get(methodName);
     }
 
     public LinkedList<String> getInterfacesItImplements() {
