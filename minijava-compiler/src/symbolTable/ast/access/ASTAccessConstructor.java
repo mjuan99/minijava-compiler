@@ -47,14 +47,6 @@ public class ASTAccessConstructor implements ASTAccess{
     }
 
     @Override
-    public Token getToken() {
-        if(astChaining == null)
-            return tkClassName;
-        else
-            return astChaining.getToken();
-    }
-
-    @Override
     public STType check() throws SemanticException {
         STClass stClass = ST.symbolTable.getSTClass(tkClassName.getLexeme());
         if(stClass == null) {

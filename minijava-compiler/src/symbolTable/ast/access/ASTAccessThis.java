@@ -39,15 +39,6 @@ public class ASTAccessThis implements ASTAccess{
     }
 
     @Override
-    public Token getToken() {
-        if(astChaining == null)
-            //TODO ver de donde saco el token
-            return new Token("pr_this", "this", 0);
-        else
-            return astChaining.getToken();
-    }
-
-    @Override
     public STType check() throws SemanticException {
         if(ST.symbolTable.getCurrentSTMethod().isStatic())
             throw new SemanticException(new SemanticError(tkThis, "acceso a this en un metodo estatico"));

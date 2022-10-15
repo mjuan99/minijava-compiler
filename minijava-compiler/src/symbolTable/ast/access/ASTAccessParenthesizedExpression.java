@@ -1,7 +1,6 @@
 package symbolTable.ast.access;
 
 import errors.SemanticException;
-import lexicalAnalyzer.Token;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 
@@ -37,12 +36,9 @@ public class ASTAccessParenthesizedExpression implements ASTAccess{
 
     @Override
     public void print() {
-
-    }
-
-    @Override
-    public Token getToken() {
-        return null;
+        astExpression.print();
+        if(astChaining != null)
+            astChaining.print();
     }
 
     @Override

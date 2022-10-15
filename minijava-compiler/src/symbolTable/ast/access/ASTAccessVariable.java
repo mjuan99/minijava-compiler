@@ -22,14 +22,6 @@ public class ASTAccessVariable implements ASTAccess{
     }
 
     @Override
-    public Token getToken() {
-        if(astChaining == null)
-            return tkVariable;
-        else
-            return astChaining.getToken();
-    }
-
-    @Override
     public STType check() throws SemanticException {
         STType variableType;
         variableType = ST.symbolTable.getCurrentASTBlock().getVariableType(tkVariable.getLexeme());

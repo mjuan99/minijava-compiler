@@ -33,14 +33,6 @@ public class ASTAccessMethod implements ASTAccess{
     }
 
     @Override
-    public Token getToken() {
-        if(astChaining == null)
-            return tkMethod;
-        else
-            return astChaining.getToken();
-    }
-
-    @Override
     public STType check() throws SemanticException {
         STMethod stMethod = ST.symbolTable.getCurrentSTClass().getMethod(tkMethod.getLexeme());
         if(stMethod == null)
