@@ -61,7 +61,7 @@ public class ASTAccessMethod implements ASTAccess{
             return astChaining.check(stMethod.getSTReturnType());
     }
 
-    public void setASTChainng(ASTChaining astChaining) {
+    public void setASTChaining(ASTChaining astChaining) {
         this.astChaining = astChaining;
     }
 

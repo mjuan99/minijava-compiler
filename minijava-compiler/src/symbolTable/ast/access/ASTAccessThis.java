@@ -57,7 +57,7 @@ public class ASTAccessThis implements ASTAccess{
             return astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
     }
 
-    public void setASTChainng(ASTChaining astChaining) {
+    public void setASTChaining(ASTChaining astChaining) {
         this.astChaining = astChaining;
     }
 }

@@ -1,14 +1,29 @@
-//[Error:m3|7]
+///[Error:m2|10]
+// Tipos incompatibles en el pasaje de parametros: B no conforma con String - ln: 10
+class A {
+    public int a1;
+    public int v1;
 
-class A{
-    public I a1;
-    int m1(){
-        a1.m2();
-        a1.m3();
+
+    void m1(int p1)
+    {
+        m2(p1+(v1-10), new B(), "hola!");
     }
-    static void main(){}
+
+    void m2(int p1, String x, B p2)
+    {}
+
+
+
 }
 
-interface I{
-    int m2();
+class B{
 }
+
+
+class Init{
+    static void main()
+    { }
+}
+
+

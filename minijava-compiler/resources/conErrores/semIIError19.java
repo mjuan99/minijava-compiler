@@ -1,4 +1,4 @@
-//[Error:a1|12]
+//[Error:;|12]
 
 class A{
     A a(){}

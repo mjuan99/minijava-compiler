@@ -49,7 +49,7 @@ public class ASTAccessVariable implements ASTAccess{
             return astChaining.check(variableType);
     }
 
-    public void setASTChainng(ASTChaining astChaining) {
+    public void setASTChaining(ASTChaining astChaining) {
         this.astChaining = astChaining;
     }
 

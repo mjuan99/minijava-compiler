@@ -3,7 +3,6 @@ package symbolTable.ast.expressions;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
-import symbolTable.ast.access.ASTChaining;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeBoolean;
 import symbolTable.types.STTypeInt;
@@ -14,13 +13,11 @@ public class ASTBinaryExpression implements ASTExpression{
     private final ASTExpression leftSide;
     private final Token tkBinaryOperator;
     private final ASTUnaryExpression rightSide;
-    private ASTChaining astChaining;
 
-    public ASTBinaryExpression(ASTExpression leftSide, Token tkBinaryOperator, ASTUnaryExpression astUnaryExpRightSide, ASTChaining astChaining) {
+    public ASTBinaryExpression(ASTExpression leftSide, Token tkBinaryOperator, ASTUnaryExpression astUnaryExpRightSide) {
         this.leftSide = leftSide;
         this.tkBinaryOperator = tkBinaryOperator;
         this.rightSide = astUnaryExpRightSide;
-        this.astChaining = astChaining;
     }
 
     @Override
@@ -30,14 +27,12 @@ public class ASTBinaryExpression implements ASTExpression{
         System.out.print(" " + tkBinaryOperator.getLexeme() + " ");
         rightSide.print();
         System.out.print(")");
-        if(astChaining != null)
-            astChaining.print();
     }
 
-    @Override
-    public Token getToken() {
-        return tkBinaryOperator;
-    }
+//    @Override
+//    public Token getToken() {
+//        return tkBinaryOperator;
+//    }
 
     @Override
     public STType check() throws SemanticException {
@@ -69,29 +64,6 @@ public class ASTBinaryExpression implements ASTExpression{
                 throw new SemanticException(new SemanticError(tkBinaryOperator, "Expresion de tipo " + rightSideType + " cuando el operador " + tkBinaryOperator.getLexeme() + " esperaba int"));
             expressionType = new STTypeBoolean();
         }
-        if(astChaining != null)
-            return astChaining.check(expressionType);
-        else
-            return expressionType;
-    }
-
-    public void setASTChainng(ASTChaining astChaining) {
-        this.astChaining = astChaining;
-    }
-
-    @Override
-    public boolean isValidCall() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidCall();
-    }
-
-    @Override
-    public boolean isValidVariable() {
-        if(astChaining == null)
-            return false;
-        else
-            return astChaining.isValidVariable();
+        return expressionType;
     }
 }

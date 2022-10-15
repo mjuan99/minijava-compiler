@@ -11,11 +11,12 @@ import symbolTable.types.STTypeNull;
 
 public class ASTLocalVariable implements ASTSentence{
     private final Token tkVariable;
+    private final Token tkAssignment;
     private final ASTExpression value;
-    private STType variableType;
 
-    public ASTLocalVariable(Token tkVariable, ASTExpression value) {
+    public ASTLocalVariable(Token tkVariable, Token tkAssignment, ASTExpression value) {
         this.tkVariable = tkVariable;
+        this.tkAssignment = tkAssignment;
         this.value = value;
     }
 
@@ -31,9 +32,9 @@ public class ASTLocalVariable implements ASTSentence{
             throw new SemanticException(new SemanticError(tkVariable, "el nombre de la variable " + tkVariable.getLexeme() + " coincide con el nombre de un argumento"));
         else if(ST.symbolTable.getCurrentASTBlock().getVariableType(tkVariable.getLexeme()) != null)
             throw new SemanticException(new SemanticError(tkVariable, "la variable " + tkVariable.getLexeme() + " ya fue declarada"));
-        variableType = value.check();
+        STType variableType = value.check();
         if(variableType.equals(new STTypeNull()))
-            throw new SemanticException(new SemanticError(value.getToken(), "declaracion de variable con valor null"));
+            throw new SemanticException(new SemanticError(tkAssignment, "declaracion de variable con valor null"));
         ST.symbolTable.getCurrentASTBlock().insertVariable(tkVariable.getLexeme(), new STVariable(tkVariable, variableType));
     }
 }

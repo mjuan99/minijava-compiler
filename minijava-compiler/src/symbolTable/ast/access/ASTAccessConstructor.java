@@ -20,7 +20,7 @@ public class ASTAccessConstructor implements ASTAccess{
         this.hasArguments = hasArguments;
     }
 
-    public void setASTChainng(ASTChaining astChaining) {
+    public void setASTChaining(ASTChaining astChaining) {
         this.astChaining = astChaining;
     }
 

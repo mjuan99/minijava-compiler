@@ -644,7 +644,7 @@ public class SyntacticAnalyzer {
             Token tkAssignment = currentToken;
             ASTExpression assignmentExpression = AsignacionOpt();
             if(assignmentExpression == null)
-                return new ASTMethodCall(astAccess);
+                return new ASTMethodCall(astAccess, currentToken);
             else
                 return new ASTAssignment(astAccess, tkAssignment, assignmentExpression);
         }else if(checkCurrentToken("boolean", "char", "int")){
@@ -708,7 +708,7 @@ public class SyntacticAnalyzer {
             Token tkAssignment = currentToken;
             ASTExpression assignmentExpression = AsignacionOpt();
             if(assignmentExpression == null)
-                return new ASTMethodCall(astAccess);
+                return new ASTMethodCall(astAccess, currentToken);
             else
                 return new ASTAssignment(astAccess, tkAssignment, assignmentExpression);
         }else {
@@ -761,13 +761,14 @@ public class SyntacticAnalyzer {
         Token tkVariable = currentToken;
         ASTExpression value = null;
         match("idMetVar");
+        Token tkAssignment = currentToken;
         match("=");
         try {
             value = Expresion();
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(";");
         }
-        return new ASTLocalVariable(tkVariable, value);
+        return new ASTLocalVariable(tkVariable, tkAssignment, value);
     }
 
     private ASTSentence Return() throws IOException, SyntacticException {
@@ -863,7 +864,7 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("||", "&&", "==", "!=", "<", ">", "<=", ">=", "+", "-", "*", "/", "%")){
             Token tkBinaryOperator = OperadorBinario();
             ASTUnaryExpression astUnaryExpRightSide = ExpresionUnaria();
-            return RestoExpresion(new ASTBinaryExpression(astExpressionLeftSide, tkBinaryOperator, astUnaryExpRightSide, null));
+            return RestoExpresion(new ASTBinaryExpression(astExpressionLeftSide, tkBinaryOperator, astUnaryExpRightSide));
         }
         else if(invalidEpsilon(",", ";", ")")) {
             addError(new SyntacticError(currentToken, "operador binario, ',', ) o ;"));
@@ -911,11 +912,11 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("+", "-", "!")){
             Token tkUnaryOperator = OperadorUnario();
             ASTOperand astOperand = Operando();
-            return new ASTUnaryExpression(tkUnaryOperator, astOperand, null);
+            return new ASTUnaryExpression(tkUnaryOperator, astOperand);
         }else if(checkCurrentToken("null", "true", "false", "intLiteral", "charLiteral",
                 "stringLiteral", "this", "idMetVar", "new", "idClase", "(")) {
             ASTOperand astOperand = Operando();
-            return new ASTUnaryExpression(null, astOperand, null);
+            return new ASTUnaryExpression(null, astOperand);
         }
         else {
             addError(new SyntacticError(currentToken, "operando"));
@@ -950,19 +951,31 @@ public class SyntacticAnalyzer {
     }
 
     private ASTOperand Literal() throws IOException, SyntacticException {
-        ASTOperand astOperand = new ASTLiteral(currentToken);
-        if(checkCurrentToken("null"))
+        ASTOperand astOperand;
+        if(checkCurrentToken("null")) {
+            astOperand = new ASTNullLiteral(currentToken);
             match("null");
-        else if(checkCurrentToken("true"))
+        }
+        else if(checkCurrentToken("true")) {
+            astOperand = new ASTBooleanLiteral(currentToken);
             match("true");
-        else if (checkCurrentToken("false"))
+        }
+        else if (checkCurrentToken("false")) {
+            astOperand = new ASTBooleanLiteral(currentToken);
             match("false");
-        else if(checkCurrentToken("intLiteral"))
+        }
+        else if(checkCurrentToken("intLiteral")) {
+            astOperand = new ASTIntLiteral(currentToken);
             match("intLiteral");
-        else if(checkCurrentToken("charLiteral"))
+        }
+        else if(checkCurrentToken("charLiteral")) {
+            astOperand = new ASTCharLiteral(currentToken);
             match("charLiteral");
-        else if(checkCurrentToken("stringLiteral"))
+        }
+        else if(checkCurrentToken("stringLiteral")) {
+            astOperand = new ASTStringLiteral(currentToken);
             match("stringLiteral");
+        }
         else {
             addError(new SyntacticError(currentToken, "literal"));
             throw new SyntacticException(compilerErrorList);
@@ -984,7 +997,7 @@ public class SyntacticAnalyzer {
     private ASTAccess AccesoNoMetEstatico() throws IOException, SyntacticException {
         ASTAccess astAccess = PrimarioNoMetEstatico();
         ASTChaining astChaining = EncadenadoOpt();
-        astAccess.setASTChainng(astChaining);
+        astAccess.setASTChaining(astChaining);
         return astAccess;
     }
 
@@ -1075,10 +1088,10 @@ public class SyntacticAnalyzer {
     }
 
     private ASTAccess ExpresionParentizada() throws IOException, SyntacticException {
-        ASTExpression astExpression = null;
+        ASTAccess astExpression = null;
         match("(");
         try {
-            astExpression = Expresion();
+            astExpression = new ASTAccessParenthesizedExpression(Expresion());
         }catch (SyntacticException e){
             discardTokensUntilValidTokenIsFound(")");
         }
