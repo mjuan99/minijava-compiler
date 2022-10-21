@@ -1,4 +1,4 @@
-//prueba de encadenados
+//prueba de encadenados y llamados a metodos
 
 class A{
     public A aa;
