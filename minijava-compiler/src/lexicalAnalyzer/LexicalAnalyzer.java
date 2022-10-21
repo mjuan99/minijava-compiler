@@ -730,5 +730,6 @@ public class LexicalAnalyzer {
         keywordsMap.put("null", "null");
         keywordsMap.put("true", "true");
         keywordsMap.put("false", "false");
+        keywordsMap.put("super", "super");
     }
 }

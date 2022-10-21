@@ -577,7 +577,7 @@ public class SyntacticAnalyzer {
     }
 
     private LinkedList<ASTSentence> ListaSentencias() throws IOException {
-        if(checkCurrentToken(";", "this", "idMetVar", "new", "idClase", "(", "var",
+        if(checkCurrentToken(";", "this", "super", "idMetVar", "new", "idClase", "(", "var",
                 "return", "if", "while", "{", "boolean", "char", "int")){
             ASTSentence astSentence = Sentencia();
             LinkedList<ASTSentence> astSentences = ListaSentencias();
@@ -585,7 +585,7 @@ public class SyntacticAnalyzer {
             return astSentences;
         }else if(invalidEpsilon("}")) {
             addError(new SyntacticError(currentToken, "sentencia o }"));
-            discardTokensUntilValidTokenIsFound("}", ";", "this", "idMetVar", "new",
+            discardTokensUntilValidTokenIsFound("}", ";", "this", "super", "idMetVar", "new",
                     "idClase", "(", "var", "return", "if", "while", "{", "boolean", "char", "int");
             if(!checkCurrentToken("}")){
                 ListaSentencias();
@@ -601,7 +601,7 @@ public class SyntacticAnalyzer {
             updateCurrentToken();
             astSentence = new ASTEmptySentence();
         }
-        else if(checkCurrentToken("this", "idMetVar", "new", "idClase", "(",
+        else if(checkCurrentToken("this", "super", "idMetVar", "new", "idClase", "(",
                 "boolean", "char", "int")){
             try {
                 astSentence = AsignacionOLlamadaOVarClasica();
@@ -644,7 +644,7 @@ public class SyntacticAnalyzer {
     }
 
     private ASTSentence AsignacionOLlamadaOVarClasica() throws IOException, SyntacticException {
-        if(checkCurrentToken("this", "idMetVar", "new", "(")){
+        if(checkCurrentToken("this", "super", "idMetVar", "new", "(")){
             ASTAccess astAccess = AccesoNoMetEstatico();
             Token tkAssignment = currentToken;
             ASTExpression assignmentExpression = AsignacionOpt();
@@ -790,7 +790,7 @@ public class SyntacticAnalyzer {
 
     private ASTExpression ExpresionOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("+", "-", "!", "null", "true", "false", "intLiteral",
-                "charLiteral", "stringLiteral", "this", "idMetVar", "new", "idClase", "("))
+                "charLiteral", "stringLiteral", "this", "super", "idMetVar", "new", "idClase", "("))
             return Expresion();
         else if(invalidEpsilon(";")) {
             addError(new SyntacticError(currentToken, "expresion o ;"));
@@ -829,10 +829,10 @@ public class SyntacticAnalyzer {
         if(checkCurrentToken("else")){
             updateCurrentToken();
             return Sentencia();
-        }else if(invalidEpsilon(";", "this", "idMetVar", "new", "(", "boolean", "char",
+        }else if(invalidEpsilon(";", "this", "super", "idMetVar", "new", "(", "boolean", "char",
                 "int", "idClase", "var", "return", "if", "while", "{", "}", "else")) {
             addError(new SyntacticError(currentToken, "else, sentencia o }"));
-            discardTokensUntilValidTokenIsFound(";", "this", "idMetVar", "new", "(", "boolean",
+            discardTokensUntilValidTokenIsFound(";", "this", "super", "idMetVar", "new", "(", "boolean",
                     "char", "int", "idClase", "var", "return", "if", "while", "{", "}", "else");
         }
         return null;
@@ -919,7 +919,7 @@ public class SyntacticAnalyzer {
             ASTOperand astOperand = Operando();
             return new ASTUnaryExpression(tkUnaryOperator, astOperand);
         }else if(checkCurrentToken("null", "true", "false", "intLiteral", "charLiteral",
-                "stringLiteral", "this", "idMetVar", "new", "idClase", "(")) {
+                "stringLiteral", "this", "super", "idMetVar", "new", "idClase", "(")) {
             ASTOperand astOperand = Operando();
             return new ASTUnaryExpression(null, astOperand);
         }
@@ -947,7 +947,7 @@ public class SyntacticAnalyzer {
     private ASTOperand Operando() throws IOException, SyntacticException {
         if(checkCurrentToken("null", "true", "false", "intLiteral", "charLiteral", "stringLiteral"))
             return Literal();
-        else if(checkCurrentToken("this", "idMetVar", "new", "idClase", "("))
+        else if(checkCurrentToken("this", "super", "idMetVar", "new", "idClase", "("))
             return Acceso();
         else {
             addError(new SyntacticError(currentToken, "literal o acceso"));
@@ -991,7 +991,7 @@ public class SyntacticAnalyzer {
     private ASTAccess Acceso() throws IOException, SyntacticException {
         if(checkCurrentToken("idClase"))
             return AccesoMetodoEstatico();
-        else if(checkCurrentToken("this", "idMetVar", "new", "("))
+        else if(checkCurrentToken("this", "super", "idMetVar", "new", "("))
             return AccesoNoMetEstatico();
         else {
             addError(new SyntacticError(currentToken, "acceso"));
@@ -1020,6 +1020,8 @@ public class SyntacticAnalyzer {
     private ASTAccess PrimarioNoMetEstatico() throws IOException, SyntacticException {
         if(checkCurrentToken("this"))
             return AccesoThis();
+        else if(checkCurrentToken("super"))
+            return AccesoSuper();
         else if(checkCurrentToken("idMetVar"))
             return AccesoVarOMetodo();
         else if(checkCurrentToken("new"))
@@ -1057,6 +1059,12 @@ public class SyntacticAnalyzer {
         Token tkThis = currentToken;
         match("this");
         return new ASTAccessThis(tkThis);
+    }
+
+    private ASTAccess AccesoSuper() throws IOException, SyntacticException {
+        Token tkSuper = currentToken;
+        match("super");
+        return new ASTAccessSuper(tkSuper);
     }
 
     private ASTAccess AccesoConstructor() throws IOException, SyntacticException {
@@ -1113,7 +1121,7 @@ public class SyntacticAnalyzer {
 
     private LinkedList<ASTExpression> ListaExpsOpt() throws IOException, SyntacticException {
         if(checkCurrentToken("+", "-", "!", "null", "true", "false", "intLiteral",
-                "charLiteral", "stringLiteral", "this", "idMetVar", "new", "idClase", "("))
+                "charLiteral", "stringLiteral", "this", "super", "idMetVar", "new", "idClase", "("))
             return ListaExps();
         else if(invalidEpsilon(")")) {
             addError(new SyntacticError(currentToken, "expresion o )"));
