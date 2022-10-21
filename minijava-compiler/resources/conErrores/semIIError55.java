@@ -1,18 +1,18 @@
-//[Error:a3|9]
+//[Error:intPrivB|9]
 
 class A{
-    private int a1;
-    private B a2;
+    private int intPrivA;
+    private B bPrivA;
 
     void m1(){
-        this.a1 = a2.m2().a1;
-        this.a1 = a2.a3;
+        this.intPrivA = bPrivA.mA().intPrivA;
+        this.intPrivA = bPrivA.intPrivB;
     }
 
     static void main(){}
 }
 
 class B{
-    private int a3;
-    A m2(){}
+    private int intPrivB;
+    A mA(){}
 }

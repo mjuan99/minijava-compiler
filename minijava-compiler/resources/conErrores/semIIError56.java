@@ -1,16 +1,16 @@
-//[Error:a1|14]
+//[Error:intPrivA|14]
 
 class A{
-    private int a1;
-    public int a2;
+    private int intPrivA;
+    public int intPubA;
 
     static void main(){}
 }
 
 class B extends A{
-    private int a3;
-    public int a4;
+    private int intPrivB;
+    public int intPubB;
     void m1(){
-        this.a2 = this.a3 + this.a4 * this.a1;
+        this.intPubA = this.intPrivB + this.intPubB * this.intPrivA;
     }
 }
