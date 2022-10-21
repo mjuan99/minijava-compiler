@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public class Main {
     public final static int ERR_ARGUMENTO_FALTANTE = 1;
+    public final static boolean DEBUG = true;
 
     public static void main(String[] args){
         if(args.length == 0) {
@@ -26,14 +27,16 @@ public class Main {
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
             new SemanticAnalyzer(syntacticAnalyzer);
-            ST.symbolTable.print();
+            if(DEBUG)
+                ST.symbolTable.print();
             System.out.println("[SinErrores]");
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){
             System.out.println("Error de IO");
         } catch (SyntacticException | SemanticException e) {
-            ST.symbolTable.print();
+            if(DEBUG)
+                ST.symbolTable.print();
             System.out.println(e.getMessage());
         }
     }

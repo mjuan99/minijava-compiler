@@ -1,6 +1,8 @@
 package symbolTable.ast.sentences;
 
+import errors.SemanticError;
 import errors.SemanticException;
+import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.entities.STVariable;
 import symbolTable.types.STType;
@@ -67,6 +69,10 @@ public class ASTBlock extends ASTSentence{
     public void checkSentences() throws SemanticException {
         ST.symbolTable.setCurrentASTBlock(this);
         for(ASTSentence astSentence : astSentences) {
+            if(alwaysReturns) {
+                Token tkMethod = ST.symbolTable.getCurrentSTMethod().getTKName();
+                throw new SemanticException(new SemanticError(tkMethod, "codigo muerto en el metodo " + tkMethod.getLexeme()));
+            }
             astSentence.checkSentences();
             if(astSentence.alwaysReturns)
                 alwaysReturns = true;

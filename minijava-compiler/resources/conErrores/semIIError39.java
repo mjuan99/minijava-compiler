@@ -1,4 +1,4 @@
-//[Error:return|29]
+//[Error:=|38]
 
 class A{
     public I3b i3b;
@@ -6,27 +6,37 @@ class A{
     public C2 c2;
     public C3 c3;
     I4a m1(){
-        return i3b;
-        return c3;
+        var x = m1();
+        x = i3b;
+        x = c3;
+        return x;
     }
     I3b m2(){
-        return i3b;
-        return c3;
+        var x = m2();
+        x = i3b;
+        x = c3;
+        return x;
     }
     I1b m3(){
-        return c1;
-        return c2;
-        return c3;
+        var x = m3();
+        x = c1;
+        x = c2;
+        x = c3;
+        return x;
     }
     C1 m4(){
-        return c1;
-        return c2;
-        return c3;
+        var x = m4();
+        x = c1;
+        x = c2;
+        x = c3;
+        return x;
     }
     I2a m5(){
-        return c2;
-        return c3;
-        return c1;
+        var x = m5();
+        x = c2;
+        x = c3;
+        x = c1;
+        return x;
     }
     static void main(){}
 }
