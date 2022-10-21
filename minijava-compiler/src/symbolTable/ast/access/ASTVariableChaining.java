@@ -4,6 +4,7 @@ import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.entities.STAttribute;
 import symbolTable.entities.STClass;
 import symbolTable.types.STType;
 
@@ -13,20 +14,22 @@ public class ASTVariableChaining implements ASTChaining{
 
     @Override
     public STType check(STType previousType) throws SemanticException {
-        STType stType;
+        STAttribute stAttribute;
         if(!previousType.isTypeReference())
             throw new SemanticException(new SemanticError(tkVariable, "no se puede aplicar encadenado a un tipo primitivo o void"));
         STClass previousTypeClass = ST.symbolTable.getSTClass(previousType.toString());
         if(previousTypeClass != null) {
-            stType = previousTypeClass.getAttributeType(tkVariable.getLexeme());
-            if (stType == null)
+            stAttribute = previousTypeClass.getAttribute(tkVariable.getLexeme());
+            if(previousTypeClass != ST.symbolTable.getCurrentSTClass() && !stAttribute.isPublic())
+                throw new SemanticException(new SemanticError(tkVariable, "intento de acceso a atributo privado " + tkVariable.getLexeme() + " de la clase " + previousType));
+            if (stAttribute == null)
                 throw new SemanticException(new SemanticError(tkVariable, "el tipo " + previousType + " no tiene un atributo llamado " + tkVariable.getLexeme()));
         }else
             throw new SemanticException(new SemanticError(tkVariable, "intento de acceso a atributos de la interfaz " + previousType));
         if(astChaining == null)
-            return stType;
+            return stAttribute.getSTType();
         else
-            return astChaining.check(stType);
+            return astChaining.check(stAttribute.getSTType());
     }
 
     public ASTVariableChaining(Token tkVariable, ASTChaining astChaining) {

@@ -4,7 +4,6 @@ import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
-import symbolTable.types.STType;
 import symbolTable.types.STTypeVoid;
 
 import java.util.HashMap;
@@ -253,19 +252,11 @@ public class STClass {
                 stMethod.checkSentences();
     }
 
-    public STType getAttributeType(String attributeName) {
-        STAttribute stAttribute = stAttributes.get(attributeName);
-        if(stAttribute != null)
-            return stAttribute.getSTType();
-        else
-            return null;
+    public STAttribute getAttribute(String attributeName) {
+        return stAttributes.get(attributeName);
     }
 
     public STMethod getMethod(String methodName) {
-//        for(STMethod stMethod : stMethods.values())
-//            if(stMethod.getHash().startsWith(methodName + "("))
-//                return stMethod;
-//        return null;
         return stMethodsSimplified.get(methodName);
     }
 

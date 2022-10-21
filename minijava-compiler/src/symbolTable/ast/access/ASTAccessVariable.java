@@ -4,6 +4,7 @@ import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
+import symbolTable.entities.STAttribute;
 import symbolTable.types.STType;
 
 public class ASTAccessVariable extends ASTAccess{
@@ -26,7 +27,8 @@ public class ASTAccessVariable extends ASTAccess{
         if(variableType == null){
             variableType = ST.symbolTable.getCurrentSTMethod().getArgumentType(tkVariable.getLexeme());
             if(variableType == null) {
-                variableType = ST.symbolTable.getCurrentSTClass().getAttributeType(tkVariable.getLexeme());
+                STAttribute stAttribute = ST.symbolTable.getCurrentSTClass().getAttribute(tkVariable.getLexeme());
+                variableType = (stAttribute != null ? stAttribute.getSTType() : null);
                 if (variableType != null && ST.symbolTable.getCurrentSTMethod().isStatic())
                     throw new SemanticException(new SemanticError(tkVariable, "acceso a atributo de instancia en metodo estatico"));
             }
