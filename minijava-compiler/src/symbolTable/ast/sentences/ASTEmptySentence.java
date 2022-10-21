@@ -1,6 +1,6 @@
 package symbolTable.ast.sentences;
 
-public class ASTEmptySentence implements ASTSentence{
+public class ASTEmptySentence extends ASTSentence{
     public void print(){
         System.out.println(";");
     }

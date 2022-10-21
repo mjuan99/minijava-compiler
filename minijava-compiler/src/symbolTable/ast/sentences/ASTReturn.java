@@ -8,13 +8,14 @@ import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeVoid;
 
-public class ASTReturn implements ASTSentence{
+public class ASTReturn extends ASTSentence{
     private final Token tkReturn;
     private final ASTExpression returnExpression;
 
     public ASTReturn(Token tkReturn, ASTExpression returnExpression){
         this.tkReturn = tkReturn;
         this.returnExpression = returnExpression;
+        alwaysReturns = true;
     }
 
     @Override

@@ -5,7 +5,7 @@ import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ast.access.ASTAccess;
 
-public class ASTMethodCall implements ASTSentence{
+public class ASTMethodCall extends ASTSentence{
     private final ASTAccess astAccess;
     private final Token tkSemicolon;
 

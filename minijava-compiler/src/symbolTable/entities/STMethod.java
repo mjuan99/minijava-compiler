@@ -6,6 +6,7 @@ import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.ast.sentences.ASTBlock;
 import symbolTable.types.STType;
+import symbolTable.types.STTypeVoid;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public class STMethod implements STAbstractMethod{
     private boolean errorFound;
     private ASTBlock astBlock;
     private STClass stClass;
+    private Token tkLastBracket;
+    private boolean defaultBlock;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -29,6 +32,11 @@ public class STMethod implements STAbstractMethod{
         stArgumentsList = new LinkedList<>();
         errorFound = false;
         astBlock = new ASTBlock(null);
+        defaultBlock = true;
+    }
+
+    public void setTKLastBracket(Token tkLastBracket) {
+        this.tkLastBracket = tkLastBracket;
     }
 
     public boolean errorFound(){
@@ -103,12 +111,17 @@ public class STMethod implements STAbstractMethod{
     }
 
     public void checkSentences() throws SemanticException {
-        ST.symbolTable.setCurrentSTMethod(this);
-        astBlock.checkSentences();
+        if(!defaultBlock) {
+            ST.symbolTable.setCurrentSTMethod(this);
+            astBlock.checkSentences();
+            if (!stReturnType.equals(new STTypeVoid()) && !astBlock.alwaysReturns)
+                throw new SemanticException(new SemanticError(tkLastBracket, "el metodo " + tkName.getLexeme() + " no siempre retorna"));
+        }
     }
 
     public void insertASTBlock(ASTBlock astBlock) {
         this.astBlock = astBlock;
+        defaultBlock = false;
     }
 
     public STType getArgumentType(String argumentName) {

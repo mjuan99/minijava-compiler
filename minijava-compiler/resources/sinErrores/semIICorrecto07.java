@@ -2,7 +2,7 @@
 
 class A{
     public A aa;
-    B mb(){}
+    B mb(){return new B();}
     void m1(A pa){
         new A().aa.mb().ab.ma().mb();
         mb().ab.ma().aa.mb();
@@ -13,11 +13,11 @@ class A{
         var va = new A();
         va.aa.mb().ab.ma().mb();
     }
-    static B mb2(){}
+    static B mb2(){return new B();}
     static void main(){}
 }
 
 class B{
     public B ab;
-    A ma(){}
+    A ma(){return new A();}
 }

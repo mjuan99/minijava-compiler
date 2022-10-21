@@ -10,6 +10,7 @@ class A{
         var e = new A().m1();
         var f = m1();
         var g = (1 >= 3);
+        return new A();
     }
 
     static void main(){}

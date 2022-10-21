@@ -8,7 +8,7 @@ import symbolTable.types.STType;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class ASTBlock implements ASTSentence{
+public class ASTBlock extends ASTSentence{
     private LinkedList<ASTSentence> astSentences;
     private final ASTBlock parentASTBlock;
     private final HashMap<String, STVariable> variables;
@@ -66,8 +66,11 @@ public class ASTBlock implements ASTSentence{
 
     public void checkSentences() throws SemanticException {
         ST.symbolTable.setCurrentASTBlock(this);
-        for(ASTSentence astSentence : astSentences)
+        for(ASTSentence astSentence : astSentences) {
             astSentence.checkSentences();
+            if(astSentence.alwaysReturns)
+                alwaysReturns = true;
+        }
         ST.symbolTable.setCurrentASTBlock(parentASTBlock);
     }
 

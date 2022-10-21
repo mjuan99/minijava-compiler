@@ -2,8 +2,9 @@ package symbolTable.ast.sentences;
 
 import errors.SemanticException;
 
-public interface ASTSentence {
-    void print();
+public abstract class ASTSentence {
+    public boolean alwaysReturns = false;
+    public abstract void print();
 
-    void checkSentences() throws SemanticException;
+    public abstract void checkSentences() throws SemanticException;
 }

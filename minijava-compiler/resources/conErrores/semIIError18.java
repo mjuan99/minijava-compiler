@@ -2,7 +2,7 @@
 
 class A{
     public A a;
-    B b(){}
+    B b(){return new B();}
     A m1(){
         return C.a();
         return C.a().a;
@@ -13,10 +13,10 @@ class A{
 }
 
 class B{
-    A a(){}
+    A a(){return new A();}
     public int c;
 }
 
 class C{
-    static A a(){}
+    static A a(){return new A();}
 }

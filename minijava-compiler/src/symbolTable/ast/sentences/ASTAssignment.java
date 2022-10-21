@@ -10,7 +10,7 @@ import symbolTable.types.STTypeInt;
 
 import java.util.Objects;
 
-public class ASTAssignment implements ASTSentence{
+public class ASTAssignment extends ASTSentence{
     private final ASTAccess astAccess;
     private final Token tkAssignment;
     private final ASTExpression value;

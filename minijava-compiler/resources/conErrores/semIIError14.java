@@ -2,7 +2,7 @@
 
 class A{
     public A a;
-    B b(){}
+    B b(){return new B();}
     int m1(int a){
         return this.a.b().c;
         return a.b().c;

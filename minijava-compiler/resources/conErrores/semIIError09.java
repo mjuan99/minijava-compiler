@@ -1,8 +1,8 @@
 //[Error:c|7]
 
 class A{
-    A a(){}
-    B b(){}
+    A a(){return new A();}
+    B b(){return new B();}
     int m1(){
         return a().b().a().c().b();
     }
@@ -11,6 +11,6 @@ class A{
 }
 
 class B{
-    A a(){}
-    int c(){}
+    A a(){return new A();}
+    int c(){return 1;}
 }

@@ -7,7 +7,7 @@ import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeBoolean;
 
-public class ASTWhile implements ASTSentence{
+public class ASTWhile extends ASTSentence{
     private final Token tkWhile;
     private final ASTExpression condition;
     private final ASTSentence astSentence;

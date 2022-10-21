@@ -2,7 +2,7 @@
 
 class A{
     public A a;
-    B b(){}
+    B b(){return new B();}
     int m1(){
         return a.a.b().c.d;
     }
@@ -11,6 +11,6 @@ class A{
 }
 
 class B{
-    A a(){}
+    A a(){return new A();}
     public int c;
 }

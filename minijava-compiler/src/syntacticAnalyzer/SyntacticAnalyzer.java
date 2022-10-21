@@ -22,6 +22,7 @@ public class SyntacticAnalyzer {
     private Token currentToken;
     private final static boolean useAdvancedImplementation = true;
     private final LinkedList<CompilerError> compilerErrorList;
+    private Token tkLastBracket;
 
     public SyntacticAnalyzer(LexicalAnalyzer lexicalAnalyzer) throws IOException, SyntacticException {
         this.lexicalAnalyzer = lexicalAnalyzer;
@@ -325,6 +326,7 @@ public class SyntacticAnalyzer {
         match("idMetVar");
         stMethod.insertArguments(ArgsFormales());
         stMethod.insertASTBlock(Bloque());
+        stMethod.setTKLastBracket(tkLastBracket);
         ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
@@ -335,6 +337,7 @@ public class SyntacticAnalyzer {
         match("idMetVar");
         stMethod.insertArguments(ArgsFormales());
         stMethod.insertASTBlock(Bloque());
+        stMethod.setTKLastBracket(tkLastBracket);
         ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
     }
 
@@ -358,6 +361,7 @@ public class SyntacticAnalyzer {
             ST.symbolTable.setCurrentSTMethod(stMethod);
             stMethod.insertArguments(ArgsFormales());
             stMethod.insertASTBlock(Bloque());
+            stMethod.setTKLastBracket(tkLastBracket);
             ST.symbolTable.getCurrentSTClass().insertMethod(stMethod);
         }else {
             addError(new SyntacticError(currentToken, "',', ; o argumentos formales"));
@@ -560,6 +564,7 @@ public class SyntacticAnalyzer {
         ST.symbolTable.setCurrentASTBlock(astBlock);
         LinkedList<ASTSentence> astSentences = ListaSentencias();
         try{
+            tkLastBracket = currentToken;
             match("}");
             astBlock.setAstSentences(astSentences);
             ST.symbolTable.setCurrentASTBlock(astBlock.getParentASTBlock());

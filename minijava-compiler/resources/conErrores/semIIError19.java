@@ -1,7 +1,7 @@
 //[Error:;|12]
 
 class A{
-    A a(){}
+    A a(){return new A();}
     public B b;
     public A a1;
     A m1(){
@@ -16,5 +16,5 @@ class A{
 }
 
 class B{
-    static A a(){}
+    static A a(){return new A();}
 }

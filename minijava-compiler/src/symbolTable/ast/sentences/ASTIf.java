@@ -7,7 +7,7 @@ import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeBoolean;
 
-public class ASTIf implements ASTSentence{
+public class ASTIf extends ASTSentence{
     private final Token tkIf;
     private final ASTExpression condition;
     private final ASTSentence thenSentence;
@@ -37,7 +37,9 @@ public class ASTIf implements ASTSentence{
         if(!conditionType.conformsWith(new STTypeBoolean()))
             throw new SemanticException(new SemanticError(tkIf, "la condición del if deberia ser tipo boolean pero es tipo " + conditionType));
         thenSentence.checkSentences();
-        if(elseSentence != null)
+        if(elseSentence != null) {
             elseSentence.checkSentences();
+            alwaysReturns = thenSentence.alwaysReturns && elseSentence.alwaysReturns;
+        }
     }
 }

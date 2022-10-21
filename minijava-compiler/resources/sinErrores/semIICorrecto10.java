@@ -12,6 +12,7 @@ class A{
         this.m1().a2 = m1().m1().a3;
         m1().a3 = m1().m1().a3;
         new A().a1 = 3;
+        return new A();
     }
 
     static void main(){}

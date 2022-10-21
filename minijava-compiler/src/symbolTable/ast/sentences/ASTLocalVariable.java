@@ -9,7 +9,7 @@ import symbolTable.entities.STVariable;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeNull;
 
-public class ASTLocalVariable implements ASTSentence{
+public class ASTLocalVariable extends ASTSentence{
     private final Token tkVariable;
     private final Token tkAssignment;
     private final ASTExpression value;
