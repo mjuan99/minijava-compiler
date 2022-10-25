@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Main {
     public final static int ERR_ARGUMENTO_FALTANTE = 1;
-    public final static boolean DEBUG = true;
+    public final static boolean DEBUG = false;
 
     public static void main(String[] args){
         if(args.length == 0) {

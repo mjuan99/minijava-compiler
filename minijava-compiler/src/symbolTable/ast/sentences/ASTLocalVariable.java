@@ -8,6 +8,7 @@ import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.entities.STVariable;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeNull;
+import symbolTable.types.STTypeVoid;
 
 public class ASTLocalVariable extends ASTSentence{
     private final Token tkVariable;
@@ -35,6 +36,8 @@ public class ASTLocalVariable extends ASTSentence{
         STType variableType = value.check();
         if(variableType.equals(new STTypeNull()))
             throw new SemanticException(new SemanticError(tkAssignment, "declaracion de variable con valor null"));
+        if(variableType.equals(new STTypeVoid()))
+            throw new SemanticException(new SemanticError(tkAssignment, "declaracion de variable con valor void"));
         ST.symbolTable.getCurrentASTBlock().insertVariable(tkVariable.getLexeme(), new STVariable(tkVariable, variableType));
     }
 }
