@@ -1,7 +1,6 @@
 .idea/
 out/
 *.iml
-!virtual-machine/CeIVM-cei2011.jar
 
 # Compiled class file
 *.class
@@ -26,3 +25,5 @@ out/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+!virtual-machine/CeIVM-cei2011.jar
