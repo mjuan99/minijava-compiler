@@ -1,5 +1,6 @@
 package symbolTable;
 
+import codeGenerator.CodeGenerator;
 import errors.CompilerError;
 import errors.SemanticError;
 import errors.SemanticException;
@@ -216,5 +217,9 @@ public class SymbolTable {
 
     public STInterface getSTInterface(String interfaceName) {
         return stInterfaces.get(interfaceName);
+    }
+
+    public void generateCode() {
+        CodeGenerator.code += CodeGenerator.tagMain + ": PUSH 5\nIPRINT\nRET 0";
     }
 }

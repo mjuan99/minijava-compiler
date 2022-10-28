@@ -47,7 +47,7 @@ public class Main {
             if(DEBUG)
                 ST.symbolTable.print();
             System.out.println("[SinErrores]");
-            return new CodeGenerator().generateCode(6);
+            return new CodeGenerator().generateCode();
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){

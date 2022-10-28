@@ -1,4 +1,10 @@
 .code
-push 6
-iprint
-halt
+PUSH t0
+CALL
+PUSH t1
+CALL
+HALT
+t0: RET 0
+t1: PUSH 5
+IPRINT
+RET 0
