@@ -1,0 +1,4 @@
+.code
+push 6
+iprint
+halt
