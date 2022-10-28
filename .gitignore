@@ -1,6 +1,7 @@
 .idea/
 out/
 *.iml
+!virtual-machine/CeIVM-cei2011.jar
 
 # Compiled class file
 *.class
