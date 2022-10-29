@@ -29,9 +29,9 @@ public class ASTLocalVariable extends ASTSentence{
 
     @Override
     public void checkSentences() throws SemanticException {
-        if(ST.symbolTable.getCurrentSTMethod().getArgumentType(tkVariable.getLexeme()) != null)
+        if(ST.symbolTable.getCurrentSTMethod().getArgument(tkVariable.getLexeme()) != null)
             throw new SemanticException(new SemanticError(tkVariable, "el nombre de la variable " + tkVariable.getLexeme() + " coincide con el nombre de un argumento"));
-        else if(ST.symbolTable.getCurrentASTBlock().getVariableType(tkVariable.getLexeme()) != null)
+        else if(ST.symbolTable.getCurrentASTBlock().getVariable(tkVariable.getLexeme()) != null)
             throw new SemanticException(new SemanticError(tkVariable, "la variable " + tkVariable.getLexeme() + " ya fue declarada"));
         STType variableType = value.check();
         if(variableType.equals(new STTypeNull()))

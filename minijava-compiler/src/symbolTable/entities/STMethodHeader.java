@@ -50,7 +50,7 @@ public class STMethodHeader implements STAbstractMethod{
                 ST.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
-        stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
+        stArgumentsList.sort(Comparator.comparingInt(STArgument::getOffset));
     }
 
     private String getArgumentsSignature(){

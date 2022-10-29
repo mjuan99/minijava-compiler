@@ -1,18 +1,19 @@
 package symbolTable.entities;
 
 import lexicalAnalyzer.Token;
+import symbolTable.ST;
 import symbolTable.types.STType;
 
 public class STArgument {
     private final Token name;
     private final STType stType;
-    private final int position;
+    private final int offset;
     private boolean errorFound;
 
-    public STArgument(Token name, STType stType, int position) {
+    public STArgument(Token name, STType stType, int offset) {
         this.name = name;
         this.stType = stType;
-        this.position = position;
+        this.offset = offset;
         errorFound = false;
     }
 
@@ -28,8 +29,8 @@ public class STArgument {
         return name;
     }
 
-    public int getPosition() {
-        return position;
+    public int getOffset() {
+        return offset + (ST.symbolTable.getCurrentSTMethod().isStatic() ? 3 : 4);
     }
 
     public String getHash() {

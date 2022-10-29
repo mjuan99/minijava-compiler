@@ -15,4 +15,9 @@ public class STVariable {
     public STType getVariableType() {
         return stType;
     }
+
+    public int getOffset() {
+        //TODO implementar
+        return 0;
+    }
 }

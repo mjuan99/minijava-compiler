@@ -68,7 +68,7 @@ public class STMethod implements STAbstractMethod{
                 ST.symbolTable.addError(new SemanticError(stArgument.getTKName(), "el argumento " + stArgument.getTKName().getLexeme() + " ya fue definido"));
             }
         stArgumentsList = stArguments;
-        stArgumentsList.sort(Comparator.comparingInt(STArgument::getPosition));
+        stArgumentsList.sort(Comparator.comparingInt(STArgument::getOffset));
     }
 
     private String getArgumentsSignature(){
@@ -132,12 +132,8 @@ public class STMethod implements STAbstractMethod{
         this.astBlock = astBlock;
     }
 
-    public STType getArgumentType(String argumentName) {
-        STArgument stArgument = stArguments.get(argumentName);
-        if(stArgument != null)
-            return stArgument.getType();
-        else
-            return null;
+    public STArgument getArgument(String argumentName) {
+        return stArguments.get(argumentName);
     }
 
     public LinkedList<STArgument> getArguments() {

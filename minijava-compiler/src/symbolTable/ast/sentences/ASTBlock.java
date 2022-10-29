@@ -6,7 +6,6 @@ import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.entities.STVariable;
-import symbolTable.types.STType;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,15 +35,15 @@ public class ASTBlock extends ASTSentence{
         variables.put(name, variable);
     }
 
-    public STType getVariableType(String name){
+    public STVariable getVariable(String name){
         STVariable variable = variables.get(name);
         if(variable == null)
             if(parentASTBlock == null)
                 return null;
             else
-                return parentASTBlock.getVariableType(name);
+                return parentASTBlock.getVariable(name);
         else
-            return variable.getVariableType();
+            return variable;
     }
 
     public void print() {

@@ -60,4 +60,9 @@ public class STAttribute {
     public STType getSTType() {
         return stType;
     }
+
+    public int getOffset() {
+        //TODO implementar
+        return 0;
+    }
 }

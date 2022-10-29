@@ -8,18 +8,21 @@ heapInit$0:   RET 0
 print$2:      LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
-              PUSH 111         ;argumento 0 del metodo System.printIln
+              LOAD 3           ;carga valor del argumento en la pila ;argumento 0 del metodo System.printIln
               PUSH printIln$3
               CALL             ;llamada a metodo System.printIln
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 0            ;retorno del metodo
+              RET 1            ;retorno del metodo
 main$1:       LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
+              PUSH 111         ;argumento 0 del metodo A.print
               PUSH print$2
               CALL             ;llamada a metodo A.print
+              PUSH 222         ;argumento 0 del metodo A.print
               PUSH print$2
               CALL             ;llamada a metodo A.print
+              PUSH 333         ;argumento 0 del metodo A.print
               PUSH print$2
               CALL             ;llamada a metodo A.print
               STOREFP          ;actualizar registro de activación (desapilar)
