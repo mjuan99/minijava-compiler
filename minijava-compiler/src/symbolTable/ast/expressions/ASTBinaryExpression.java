@@ -1,5 +1,6 @@
 package symbolTable.ast.expressions;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -64,6 +65,48 @@ public class ASTBinaryExpression implements ASTExpression{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        leftSide.generateCode();
+        rightSide.generateCode();
+        switch(tkBinaryOperator.getLexeme()){
+            case "+":
+                CodeGenerator.generateCode("ADD");
+                break;
+            case "-":
+                CodeGenerator.generateCode("SUB");
+                break;
+            case "*":
+                CodeGenerator.generateCode("MUL");
+                break;
+            case "/":
+                CodeGenerator.generateCode("DIV");
+                break;
+            case "%":
+                CodeGenerator.generateCode("MOD");
+                break;
+            case "&&":
+                CodeGenerator.generateCode("AND");
+                break;
+            case "||":
+                CodeGenerator.generateCode("OR");
+                break;
+            case "==":
+                CodeGenerator.generateCode("EQ");
+                break;
+            case "!=":
+                CodeGenerator.generateCode("NE");
+                break;
+            case "<=":
+                CodeGenerator.generateCode("LE");
+                break;
+            case "<":
+                CodeGenerator.generateCode("LT");
+                break;
+            case ">=":
+                CodeGenerator.generateCode("GE");
+                break;
+            case ">":
+                CodeGenerator.generateCode("GT");
+                break;
+        }
     }
 }
