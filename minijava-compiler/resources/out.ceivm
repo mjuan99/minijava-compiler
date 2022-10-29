@@ -191,7 +191,7 @@ main$1:       LOADFP           ;enlace dinamico
               PUSH printBln$6
               CALL             ;llamada a metodo System.printBln
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 0
+              RET 0            ;retorno del metodo
 debugPrint$7: LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
@@ -199,25 +199,25 @@ debugPrint$7: LOADFP           ;enlace dinamico
               IPRINT
               PRNLN
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 printC$3:     LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               LOAD 4
               CPRINT
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 printS$8:     LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 println$9:    LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               PRNLN
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 0
+              RET 0            ;retorno del metodo
 printCln$10:  LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
@@ -225,25 +225,25 @@ printCln$10:  LOADFP           ;enlace dinamico
               CPRINT
               PRNLN
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 printSln$11:  LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 read$12:      LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               READ
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 0
+              RET 0            ;retorno del metodo
 printB$5:     LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               LOAD 4
               BPRINT
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 printIln$4:   LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
@@ -251,14 +251,14 @@ printIln$4:   LOADFP           ;enlace dinamico
               IPRINT
               PRNLN
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 printI$2:     LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
               LOAD 4
               IPRINT
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo
 printBln$6:   LOADFP           ;enlace dinamico
               LOADSP
               STOREFP          ;actualizar registro de activacion (apilar)
@@ -266,4 +266,4 @@ printBln$6:   LOADFP           ;enlace dinamico
               BPRINT
               PRNLN
               STOREFP          ;actualizar registro de activación (desapilar)
-              RET 1
+              RET 1            ;retorno del metodo

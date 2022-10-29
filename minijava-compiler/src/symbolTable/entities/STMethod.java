@@ -161,7 +161,7 @@ public class STMethod implements STAbstractMethod{
             CodeGenerator.generateCode("STOREFP ;actualizar registro de activacion (apilar)");
             astBlock.generateCode();
             CodeGenerator.generateCode("STOREFP ;actualizar registro de activación (desapilar)");
-            CodeGenerator.generateCode("RET " + (stArguments.size() + (isStatic ? 0 : 1))); //TODO preguntar
+            CodeGenerator.generateCode("RET " + (stArguments.size() + (isStatic ? 0 : 1)) + " ;retorno del metodo"); //TODO preguntar
         }
     }
 
