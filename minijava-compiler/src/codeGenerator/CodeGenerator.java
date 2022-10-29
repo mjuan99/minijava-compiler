@@ -14,10 +14,10 @@ public class CodeGenerator {
         tagMain = TagManager.getTag("main");
         generateCode(".code");
         generateCode("PUSH " + tagHeapInit);
-        generateCode("CALL");
+        generateCode("CALL ;llamada a heapInit");
         generateCode("PUSH " + tagMain);
-        generateCode("CALL");
-        generateCode("HALT");
+        generateCode("CALL ;llamada a main");
+        generateCode("HALT ;finalizacion del programa");
 
         generateCode(tagHeapInit + ": RET 0");
         ST.symbolTable.generateCode();
@@ -93,7 +93,7 @@ public class CodeGenerator {
             String formattedLine;
             if(line.contains(";")){
                 int comment = line.indexOf(';');
-                formattedLine = line.substring(0, comment) + getSpaces(maxComment - comment + 2) + line.substring(comment);
+                formattedLine = line.substring(0, comment) + getSpaces(maxComment - comment + 4) + line.substring(comment);
             }
             else
                 formattedLine = line;
