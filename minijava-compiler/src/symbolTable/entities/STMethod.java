@@ -27,6 +27,7 @@ public class STMethod implements STAbstractMethod{
     private Token tkLastBracket;
     private boolean defaultBlock;
     private String methodTag;
+    private int offset;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -168,5 +169,13 @@ public class STMethod implements STAbstractMethod{
             else
                 methodTag = TagManager.getTag(tkName.getLexeme());
         return methodTag;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public int getOffset(){
+        return offset;
     }
 }

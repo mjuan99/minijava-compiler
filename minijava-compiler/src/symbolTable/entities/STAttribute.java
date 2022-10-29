@@ -11,6 +11,7 @@ public class STAttribute {
     private final STType stType;
     private final String visibility;
     private boolean errorFound;
+    private int offset;
 
     public STAttribute(Token tkName, String visibility, STType stType) {
         this.tkName = tkName;
@@ -64,5 +65,9 @@ public class STAttribute {
     public int getOffset() {
         //TODO implementar
         return 0;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset + 1;
     }
 }

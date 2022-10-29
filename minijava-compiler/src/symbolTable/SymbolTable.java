@@ -232,7 +232,10 @@ public class SymbolTable {
     }
 
     public void generateCode() {
-        //CodeGenerator.code += CodeGenerator.tagMain + ": PUSH 5\nIPRINT\nRET 0";
+        for(STClass stClass : stClasses.values())
+            stClass.generateOffsets();
+        for(STInterface stInterface : stInterfaces.values())
+            stInterface.generateOffsets();
         for(STClass stClass : stClasses.values())
             stClass.generateCode();
     }

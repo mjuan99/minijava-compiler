@@ -151,10 +151,10 @@ public class STInterface {
     }
 
     public STAbstractMethod getMethod(String methodName) {
-//        for(STMethodHeader stMethodHeader : stMethodsHeaders.values())
-//            if(stMethodHeader.getHash().startsWith(methodName + "("))
-//                return stMethodHeader;
-//        return null;
         return stMethodsHeadersSimplified.get(methodName);
+    }
+
+    public void generateOffsets() {
+        //TODO implementar
     }
 }

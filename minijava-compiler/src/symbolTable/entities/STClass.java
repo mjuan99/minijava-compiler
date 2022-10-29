@@ -272,4 +272,19 @@ public class STClass {
         for(STMethod stMethod : stMethodsSimplified.values())
             stMethod.generateCode();
     }
+
+    public void generateOffsets() {
+        int i = 0;
+        for(STAttribute stAttribute : stAttributes.values())
+            stAttribute.setOffset(i++);
+        i = 0;
+        int minMethodOffset = getMinMethodOffset();
+        for(STMethod stMethod : stMethodsSimplified.values())
+            stMethod.setOffset(minMethodOffset + i++);
+    }
+
+    private int getMinMethodOffset(){
+        //TODO implementar
+        return 1;
+    }
 }
