@@ -156,11 +156,11 @@ public class STMethod implements STAbstractMethod{
         if(ST.symbolTable.getCurrentSTClass() == stClass) {
             ST.symbolTable.setCurrentSTMethod(this);
             CodeGenerator.setNextInstructionTag(getMethodTag());
-            CodeGenerator.generateCode("LOADFP          ; enlace dinamico");
+            CodeGenerator.generateCode("LOADFP ;enlace dinamico");
             CodeGenerator.generateCode("LOADSP");
-            CodeGenerator.generateCode("STOREFP          ; actualizar registro de activacion (apilar)");
+            CodeGenerator.generateCode("STOREFP ;actualizar registro de activacion (apilar)");
             astBlock.generateCode();
-            CodeGenerator.generateCode("STOREFP          ; actualizar registro de activación (desapilar)");
+            CodeGenerator.generateCode("STOREFP ;actualizar registro de activación (desapilar)");
             CodeGenerator.generateCode("RET " + (stArguments.size() + (isStatic ? 0 : 1))); //TODO preguntar
         }
     }
@@ -170,7 +170,7 @@ public class STMethod implements STAbstractMethod{
             if(isStatic && Objects.equals(tkName.getLexeme(), "main") && stArguments.isEmpty() && stReturnType.equals(new STTypeVoid()))
                 methodTag = CodeGenerator.tagMain;
             else
-                methodTag = TagManager.getTag();
+                methodTag = TagManager.getTag(tkName.getLexeme());
         return methodTag;
     }
 }

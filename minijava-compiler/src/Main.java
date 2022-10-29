@@ -4,7 +4,6 @@ import errors.SyntacticException;
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.sourceFileManager.SourceFileManager;
 import semanticAnalyzer.SemanticAnalyzer;
-import symbolTable.ST;
 import syntacticAnalyzer.SyntacticAnalyzer;
 
 import java.io.FileNotFoundException;
@@ -15,6 +14,7 @@ import java.nio.file.Path;
 public class Main {
     public final static int ERR_ARGUMENTO_FALTANTE = 1;
     public final static boolean DEBUG = true;
+    public final static boolean FORMAT_CODE = true;
 
     public static void main(String[] args){
         if(args.length == 0) {
@@ -45,17 +45,13 @@ public class Main {
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
             new SemanticAnalyzer(syntacticAnalyzer);
-            if(DEBUG)
-                ST.symbolTable.print();
             System.out.println("[SinErrores]");
-            return new CodeGenerator().generateCode();
+            return new CodeGenerator().generateCode(FORMAT_CODE);
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){
             System.out.println("Error de IO");
         } catch (SyntacticException | SemanticException e) {
-            if(DEBUG)
-                ST.symbolTable.print();
             System.out.println(e.getMessage());
         }
         return "";

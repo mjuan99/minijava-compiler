@@ -1,9 +1,9 @@
 package codeGenerator;
 
 public class TagManager {
-    private static long tag = 0;
+    private static long tagNumber = 0;
 
-    public static String getTag(){
-        return "t" + tag++;
+    public static String getTag(String tagPrefix){
+        return tagPrefix + "$" + tagNumber++;
     }
 }

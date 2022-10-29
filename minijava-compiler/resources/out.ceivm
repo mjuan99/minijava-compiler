@@ -1,269 +1,269 @@
-.code
-PUSH t0
-CALL
-PUSH t1
-CALL
-HALT
-t0: RET 0
-t1: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-PUSH 8
-SWAP          ; argumento 0 del metodo System.printI
-PUSH t2
-CALL          ; llamada a metodo System.printI
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 5
-PUSH 3
-ADD
-SWAP          ; argumento 0 del metodo System.printIln
-PUSH t4
-CALL          ; llamada a metodo System.printIln
-PUSH 3
-SWAP          ; argumento 0 del metodo System.printI
-PUSH t2
-CALL          ; llamada a metodo System.printI
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 10
-PUSH 7
-SUB
-SWAP          ; argumento 0 del metodo System.printIln
-PUSH t4
-CALL          ; llamada a metodo System.printIln
-PUSH 6
-SWAP          ; argumento 0 del metodo System.printI
-PUSH t2
-CALL          ; llamada a metodo System.printI
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 2
-PUSH 3
-MUL
-SWAP          ; argumento 0 del metodo System.printIln
-PUSH t4
-CALL          ; llamada a metodo System.printIln
-PUSH 5
-SWAP          ; argumento 0 del metodo System.printI
-PUSH t2
-CALL          ; llamada a metodo System.printI
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 10
-PUSH 2
-DIV
-SWAP          ; argumento 0 del metodo System.printIln
-PUSH t4
-CALL          ; llamada a metodo System.printIln
-PUSH 1
-SWAP          ; argumento 0 del metodo System.printI
-PUSH t2
-CALL          ; llamada a metodo System.printI
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 11
-PUSH 2
-MOD
-SWAP          ; argumento 0 del metodo System.printIln
-PUSH t4
-CALL          ; llamada a metodo System.printIln
-PUSH 0
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 1
-PUSH 0
-AND
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 1
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 1
-PUSH 0
-OR
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 0
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 10
-PUSH 11
-EQ
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 1
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 'c'
-PUSH 'a'
-NE
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 1
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 3
-PUSH 5
-LT
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 1
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 4
-PUSH 4
-LE
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 0
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 6
-PUSH 8
-GT
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-PUSH 1
-SWAP          ; argumento 0 del metodo System.printB
-PUSH t5
-CALL          ; llamada a metodo System.printB
-PUSH '='
-SWAP          ; argumento 0 del metodo System.printC
-PUSH t3
-CALL          ; llamada a metodo System.printC
-PUSH 8
-PUSH 2
-GE
-SWAP          ; argumento 0 del metodo System.printBln
-PUSH t6
-CALL          ; llamada a metodo System.printBln
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 0
-t7: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-IPRINT
-PRNLN
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t3: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-CPRINT
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t8: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t9: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-PRNLN
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 0
-t10: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-CPRINT
-PRNLN
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t11: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t12: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-READ
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 0
-t5: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-BPRINT
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t4: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-IPRINT
-PRNLN
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t2: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-IPRINT
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
-t6: LOADFP          ; enlace dinamico
-LOADSP
-STOREFP          ; actualizar registro de activacion (apilar)
-LOAD 4
-BPRINT
-PRNLN
-STOREFP          ; actualizar registro de activación (desapilar)
-RET 1
+              .code
+              PUSH heapInit$0
+              CALL
+              PUSH main$1
+              CALL
+              HALT
+heapInit$0:   RET 0
+main$1:       LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              PUSH 8
+              SWAP             ;argumento 0 del metodo System.printI
+              PUSH printI$2
+              CALL             ;llamada a metodo System.printI
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 5
+              PUSH 3
+              ADD
+              SWAP             ;argumento 0 del metodo System.printIln
+              PUSH printIln$4
+              CALL             ;llamada a metodo System.printIln
+              PUSH 3
+              SWAP             ;argumento 0 del metodo System.printI
+              PUSH printI$2
+              CALL             ;llamada a metodo System.printI
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 10
+              PUSH 7
+              SUB
+              SWAP             ;argumento 0 del metodo System.printIln
+              PUSH printIln$4
+              CALL             ;llamada a metodo System.printIln
+              PUSH 6
+              SWAP             ;argumento 0 del metodo System.printI
+              PUSH printI$2
+              CALL             ;llamada a metodo System.printI
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 2
+              PUSH 3
+              MUL
+              SWAP             ;argumento 0 del metodo System.printIln
+              PUSH printIln$4
+              CALL             ;llamada a metodo System.printIln
+              PUSH 5
+              SWAP             ;argumento 0 del metodo System.printI
+              PUSH printI$2
+              CALL             ;llamada a metodo System.printI
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 10
+              PUSH 2
+              DIV
+              SWAP             ;argumento 0 del metodo System.printIln
+              PUSH printIln$4
+              CALL             ;llamada a metodo System.printIln
+              PUSH 1
+              SWAP             ;argumento 0 del metodo System.printI
+              PUSH printI$2
+              CALL             ;llamada a metodo System.printI
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 11
+              PUSH 2
+              MOD
+              SWAP             ;argumento 0 del metodo System.printIln
+              PUSH printIln$4
+              CALL             ;llamada a metodo System.printIln
+              PUSH 0
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 1
+              PUSH 0
+              AND
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 1
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 1
+              PUSH 0
+              OR
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 0
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 10
+              PUSH 11
+              EQ
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 1
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 'c'
+              PUSH 'a'
+              NE
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 1
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 3
+              PUSH 5
+              LT
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 1
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 4
+              PUSH 4
+              LE
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 0
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 6
+              PUSH 8
+              GT
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              PUSH 1
+              SWAP             ;argumento 0 del metodo System.printB
+              PUSH printB$5
+              CALL             ;llamada a metodo System.printB
+              PUSH '='
+              SWAP             ;argumento 0 del metodo System.printC
+              PUSH printC$3
+              CALL             ;llamada a metodo System.printC
+              PUSH 8
+              PUSH 2
+              GE
+              SWAP             ;argumento 0 del metodo System.printBln
+              PUSH printBln$6
+              CALL             ;llamada a metodo System.printBln
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 0
+debugPrint$7: LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              IPRINT
+              PRNLN
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+printC$3:     LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              CPRINT
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+printS$8:     LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+println$9:    LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              PRNLN
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 0
+printCln$10:  LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              CPRINT
+              PRNLN
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+printSln$11:  LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+read$12:      LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              READ
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 0
+printB$5:     LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              BPRINT
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+printIln$4:   LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              IPRINT
+              PRNLN
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+printI$2:     LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              IPRINT
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
+printBln$6:   LOADFP           ;enlace dinamico
+              LOADSP
+              STOREFP          ;actualizar registro de activacion (apilar)
+              LOAD 4
+              BPRINT
+              PRNLN
+              STOREFP          ;actualizar registro de activación (desapilar)
+              RET 1
