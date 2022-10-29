@@ -4,19 +4,36 @@ import java.io.InputStreamReader;
 
 public class ExecuteVM {
     public static void main(String[] args){
-        ProcessBuilder builder = new ProcessBuilder(
-                "cmd.exe", "/c", "java -jar virtual-machine/CeIVM-cei2011.jar " + args[0]);
-        builder.redirectErrorStream(true);
         try {
-            Process p = builder.start();
-            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = r.readLine();
+            Process vmProcess = getVMProcess(args[0]);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(vmProcess.getInputStream()));
+            String line = reader.readLine();
             while (line != null) {
                 System.out.println(line);
-                line = r.readLine();
+                line = reader.readLine();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Process getVMProcess(String filePath) throws IOException {
+        ProcessBuilder processBuilder;
+        if(System.getProperty("os.name").equals("Linux"))
+            processBuilder = getProcessBuilderForLinux(filePath);
+        else
+            processBuilder = getProcessBuilderForWindows(filePath);
+        processBuilder.redirectErrorStream(true);
+        return processBuilder.start();
+    }
+
+    private static ProcessBuilder getProcessBuilderForLinux(String filePath) {
+        return new ProcessBuilder(
+                "java", "-jar", "virtual-machine/CeIVM-cei2011.jar", filePath);
+    }
+
+    private static ProcessBuilder getProcessBuilderForWindows(String filePath) {
+        return new ProcessBuilder(
+                "cmd.exe", "/c", "java -jar virtual-machine/CeIVM-cei2011.jar " + filePath);
     }
 }

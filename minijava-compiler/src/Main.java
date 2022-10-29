@@ -28,7 +28,8 @@ public class Main {
         else
             path = Path.of(args[1]);
         try {
-            Files.createDirectories(path.getParent());
+            if(path.getParent() != null)
+                Files.createDirectories(path.getParent());
             Files.writeString(path, code);
         } catch (IOException e) {
             e.printStackTrace();
