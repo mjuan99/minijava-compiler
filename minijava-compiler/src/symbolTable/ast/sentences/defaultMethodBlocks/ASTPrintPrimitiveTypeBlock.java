@@ -9,7 +9,7 @@ public abstract class ASTPrintPrimitiveTypeBlock extends ASTBlock {
 
     public void generateCode(){
         if(printInstruction != null) {
-            CodeGenerator.generateCode("LOAD 4");
+            CodeGenerator.generateCode("LOAD 3");
             CodeGenerator.generateCode(printInstruction);
         }
         if(printNewLine)

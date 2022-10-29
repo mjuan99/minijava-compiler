@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class CodeGenerator {
     public static String code = "";
     public static String tagMain;
+    private static boolean newLine = true;
 
     public String generateCode(boolean formatCode){
         String tagHeapInit = TagManager.getTag("heapInit");
@@ -27,11 +28,24 @@ public class CodeGenerator {
     }
 
     public static void generateCode(String instruction){
-        code += instruction + "\n";
+        if(newLine)
+            code += instruction;
+        else
+            code += "\n" + instruction;
+        newLine = false;
     }
 
     public static void setNextInstructionTag(String tag){
-        code += tag + ": ";
+        if(newLine)
+            code += tag + ": ";
+        else
+            code += "\n" + tag + ": ";
+        newLine = true;
+    }
+
+    public static void setComment(String comment){
+        code += " ;" + comment;
+        newLine = false;
     }
 
     private static String format(String code){

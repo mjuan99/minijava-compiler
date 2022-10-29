@@ -64,14 +64,12 @@ public class ASTAccessStaticMethod extends ASTAccess{
 
     @Override
     public void generateCode() {
-        if(!stMethod.getSTReturnType().equals(new STTypeVoid())) {
-            CodeGenerator.generateCode("RMEM 1");
-            CodeGenerator.generateCode("SAWP ;lugar de retorno (2)");
-        }
+        if(!stMethod.getSTReturnType().equals(new STTypeVoid()))
+            CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
         for(int i = 0; i <arguments.size(); i++){
             ASTExpression argument = arguments.get(i);
             argument.generateCode();
-            CodeGenerator.generateCode("SWAP ;argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
+            CodeGenerator.setComment("argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
         }
         CodeGenerator.generateCode("PUSH " + stMethod.getMethodTag());
         CodeGenerator.generateCode("CALL ;llamada a metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
