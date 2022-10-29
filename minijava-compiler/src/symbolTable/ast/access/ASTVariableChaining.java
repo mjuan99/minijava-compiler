@@ -32,6 +32,11 @@ public class ASTVariableChaining implements ASTChaining{
             return astChaining.check(stAttribute.getSTType());
     }
 
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
+
     public ASTVariableChaining(Token tkVariable, ASTChaining astChaining) {
         this.tkVariable = tkVariable;
         this.astChaining = astChaining;

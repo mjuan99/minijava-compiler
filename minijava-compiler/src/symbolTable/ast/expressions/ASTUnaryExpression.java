@@ -1,5 +1,6 @@
 package symbolTable.ast.expressions;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -36,5 +37,22 @@ public class ASTUnaryExpression implements ASTExpression{
                     throw new SemanticException(new SemanticError(tkUnaryOperator, "no se puede aplicar el operador " + tkUnaryOperator.getLexeme() + " al tipo " + stType));
         }
         return stType;
+    }
+
+    @Override
+    public void generateCode() {
+        astOperand.generateCode();
+        if(tkUnaryOperator != null)
+            switch (tkUnaryOperator.getLexeme()) {
+                case "-":
+                    CodeGenerator.generateCode("NEG");
+                    break;
+                case "!":
+                    CodeGenerator.generateCode("NOT");
+                    break;
+                case "+":
+                    //TODO preguntar. no hago nada?
+                    break;
+            }
     }
 }

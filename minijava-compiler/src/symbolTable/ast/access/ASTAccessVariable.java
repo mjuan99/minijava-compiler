@@ -39,6 +39,11 @@ public class ASTAccessVariable extends ASTAccess{
     }
 
     @Override
+    public void generateCode() {
+        //TODO implementar
+    }
+
+    @Override
     public boolean isValidCallWithoutChaining() {
         return false;
     }

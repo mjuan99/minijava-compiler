@@ -7,4 +7,9 @@ public class ASTEmptySentence extends ASTSentence{
 
     @Override
     public void checkSentences() {}
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

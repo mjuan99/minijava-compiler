@@ -7,4 +7,6 @@ public interface ASTExpression {
     void print();
 
     STType check() throws SemanticException;
+
+    void generateCode();
 }

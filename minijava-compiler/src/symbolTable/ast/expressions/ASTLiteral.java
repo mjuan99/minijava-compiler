@@ -3,7 +3,7 @@ package symbolTable.ast.expressions;
 import lexicalAnalyzer.Token;
 
 public abstract class ASTLiteral implements ASTOperand{
-    private final Token tkLiteral;
+    protected final Token tkLiteral;
 
     public ASTLiteral(Token tkLiteral) {
         this.tkLiteral = tkLiteral;

@@ -266,4 +266,10 @@ public class STClass {
             interfaces.add(tkInterface.getLexeme());
         return interfaces;
     }
+
+    public void generateCode() {
+        ST.symbolTable.setCurrentSTClass(this);
+        for(STMethod stMethod : stMethodsSimplified.values())
+            stMethod.generateCode();
+    }
 }

@@ -1,5 +1,6 @@
 package symbolTable.ast.access;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -9,12 +10,14 @@ import symbolTable.entities.STClass;
 import symbolTable.entities.STInterface;
 import symbolTable.entities.STMethod;
 import symbolTable.types.STType;
+import symbolTable.types.STTypeVoid;
 
 import java.util.LinkedList;
 
 public class ASTAccessStaticMethod extends ASTAccess{
     private final Token tkClassName;
     private final Token tkMethod;
+    private STMethod stMethod;
     private final LinkedList<ASTExpression> arguments;
 
     public ASTAccessStaticMethod(Token tkClassName, Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
@@ -45,7 +48,7 @@ public class ASTAccessStaticMethod extends ASTAccess{
             else
                 throw new SemanticException(new SemanticError(tkMethod, "intento de acceso a metodo estatico de interfaz " + tkClassName.getLexeme()));
         }
-        STMethod stMethod = stClass.getMethod(tkMethod.getLexeme());
+        stMethod = stClass.getMethod(tkMethod.getLexeme());
         if(stMethod == null || !stMethod.isStatic())
             throw new SemanticException(new SemanticError(tkMethod, "el metodo estatico " + tkMethod.getLexeme() + " no fue declarado en la clase " + stClass.getTKName().getLexeme()));
         if(arguments.size() != stMethod.getArguments().size())
@@ -57,6 +60,23 @@ public class ASTAccessStaticMethod extends ASTAccess{
                 throw new SemanticException(new SemanticError(tkMethod, "el tipo del " + (i + 1) + "° argumento actual (" + foundType + ") del método " + stMethod.getTKName().getLexeme() + " no conforma con el tipo del argumento formal (" + expectedType + ")"));
         }
         return checkChaining(stMethod.getSTReturnType());
+    }
+
+    @Override
+    public void generateCode() {
+        if(!stMethod.getSTReturnType().equals(new STTypeVoid())) {
+            CodeGenerator.generateCode("RMEM 1");
+            CodeGenerator.generateCode("SAWP          ; lugar de retorno (2)");
+        }
+        for(int i = 0; i <arguments.size(); i++){
+            ASTExpression argument = arguments.get(i);
+            argument.generateCode();
+            CodeGenerator.generateCode("SWAP          ; argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
+        }
+        CodeGenerator.generateCode("PUSH " + stMethod.getMethodTag());
+        CodeGenerator.generateCode("CALL          ; llamada a metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
+        if(astChaining != null)
+            astChaining.generateCode();
     }
 
     @Override

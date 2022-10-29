@@ -42,4 +42,9 @@ public class ASTIf extends ASTSentence{
             alwaysReturns = thenSentence.alwaysReturns && elseSentence.alwaysReturns;
         }
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

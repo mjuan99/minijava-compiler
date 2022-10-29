@@ -13,6 +13,11 @@ public class ASTAccessConstructor extends ASTAccess{
     private final Token tkClassName;
     private final boolean hasArguments;
 
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
+
     public ASTAccessConstructor(Token tkClassName, boolean hasArguments) {
         this.tkClassName = tkClassName;
         this.hasArguments = hasArguments;

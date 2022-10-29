@@ -13,4 +13,9 @@ public class ASTStringLiteral extends ASTLiteral{
     public STType check() {
             return new STTypeReference(new Token("idClase", "String", 0));
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

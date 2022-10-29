@@ -61,4 +61,9 @@ public class ASTBinaryExpression implements ASTExpression{
         }
         return expressionType;
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

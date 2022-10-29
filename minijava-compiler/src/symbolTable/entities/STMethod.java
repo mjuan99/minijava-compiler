@@ -1,5 +1,7 @@
 package symbolTable.entities;
 
+import codeGenerator.CodeGenerator;
+import codeGenerator.TagManager;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -11,6 +13,7 @@ import symbolTable.types.STTypeVoid;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class STMethod implements STAbstractMethod{
     private final Token tkName;
@@ -23,6 +26,7 @@ public class STMethod implements STAbstractMethod{
     private STClass stClass;
     private Token tkLastBracket;
     private boolean defaultBlock;
+    private String methodTag;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -124,6 +128,10 @@ public class STMethod implements STAbstractMethod{
         defaultBlock = false;
     }
 
+    public void insertDefaultASTBlock(ASTBlock astBlock) {
+        this.astBlock = astBlock;
+    }
+
     public STType getArgumentType(String argumentName) {
         STArgument stArgument = stArguments.get(argumentName);
         if(stArgument != null)
@@ -142,5 +150,27 @@ public class STMethod implements STAbstractMethod{
 
     public void setSTClass(STClass stClass) {
         this.stClass = stClass;
+    }
+
+    public void generateCode() {
+        if(ST.symbolTable.getCurrentSTClass() == stClass) {
+            ST.symbolTable.setCurrentSTMethod(this);
+            CodeGenerator.setNextInstructionTag(getMethodTag());
+            CodeGenerator.generateCode("LOADFP          ; enlace dinamico");
+            CodeGenerator.generateCode("LOADSP");
+            CodeGenerator.generateCode("STOREFP          ; actualizar registro de activacion (apilar)");
+            astBlock.generateCode();
+            CodeGenerator.generateCode("STOREFP          ; actualizar registro de activación (desapilar)");
+            CodeGenerator.generateCode("RET " + (stArguments.size() + (isStatic ? 0 : 1))); //TODO preguntar
+        }
+    }
+
+    public String getMethodTag(){
+        if(methodTag == null)
+            if(isStatic && Objects.equals(tkName.getLexeme(), "main") && stArguments.isEmpty() && stReturnType.equals(new STTypeVoid()))
+                methodTag = CodeGenerator.tagMain;
+            else
+                methodTag = TagManager.getTag();
+        return methodTag;
     }
 }

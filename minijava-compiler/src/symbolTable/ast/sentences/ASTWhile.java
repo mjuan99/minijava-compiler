@@ -32,4 +32,9 @@ public class ASTWhile extends ASTSentence{
             throw new SemanticException(new SemanticError(tkWhile, "la condición del while deberia ser tipo boolean pero es tipo " + conditionType));
         astSentence.checkSentences();
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

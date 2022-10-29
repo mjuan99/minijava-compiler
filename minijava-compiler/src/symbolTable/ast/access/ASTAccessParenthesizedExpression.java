@@ -35,4 +35,9 @@ public class ASTAccessParenthesizedExpression extends ASTAccess{
         STType expressionType = astExpression.check();
         return checkChaining(expressionType);
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

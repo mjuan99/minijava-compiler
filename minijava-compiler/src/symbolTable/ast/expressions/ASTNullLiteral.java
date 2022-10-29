@@ -14,4 +14,9 @@ public class ASTNullLiteral extends ASTLiteral{
     public STType check() {
         return new STTypeNull();
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

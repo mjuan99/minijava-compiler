@@ -36,4 +36,9 @@ public class ASTAccessThis extends ASTAccess{
             throw new SemanticException(new SemanticError(tkThis, "acceso a this en un metodo estatico"));
         return checkChaining(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKName()));
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

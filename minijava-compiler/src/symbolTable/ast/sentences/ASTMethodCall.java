@@ -25,4 +25,9 @@ public class ASTMethodCall extends ASTSentence{
         if(!astAccess.isValidCall())
             throw new SemanticException(new SemanticError(tkSemicolon, "sentencia incorrecta, el acceso no es una llamada valida"));
     }
+
+    @Override
+    public void generateCode() {
+        astAccess.generateCode();
+    }
 }

@@ -1,11 +1,11 @@
 package symbolTable;
 
-import codeGenerator.CodeGenerator;
 import errors.CompilerError;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
 import symbolTable.ast.sentences.ASTBlock;
+import symbolTable.ast.sentences.defaultMethodBlocks.*;
 import symbolTable.entities.*;
 import symbolTable.types.*;
 
@@ -48,6 +48,7 @@ public class SymbolTable {
         STClass stClassObject = new STClass(new Token("idClase", "Object", 0));
         STMethod stMethodDebugPrint = new STMethod(new Token("idMetVar", "debugPrint", 0), true, new STTypeVoid());
         stMethodDebugPrint.insertArgument(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
+        stMethodDebugPrint.insertDefaultASTBlock(new ASTDebugPrintBlock());
         stClassObject.insertMethod(stMethodDebugPrint);
         stClasses.put(stClassObject.getHash(), stClassObject);
 
@@ -79,6 +80,17 @@ public class SymbolTable {
         stMethodPrintCln.insertArgument(new STArgument(new Token("idMetVar", "c", 0), new STTypeChar(), 0));
         stMethodPrintIln.insertArgument(new STArgument(new Token("idMetVar", "i", 0), new STTypeInt(), 0));
         stMethodPrintSln.insertArgument(new STArgument(new Token("idMetVar", "s", 0), new STTypeReference(new Token("idClase", "String", 0)), 0));
+
+        stMethodRead.insertDefaultASTBlock(new ASTReadBlock());
+        stMethodPrintB.insertDefaultASTBlock(new ASTPrintBBlock());
+        stMethodPrintC.insertDefaultASTBlock(new ASTPrintCBlock());
+        stMethodPrintI.insertDefaultASTBlock(new ASTPrintIBlock());
+        stMethodPrintS.insertDefaultASTBlock(new ASTPrintSBlock());
+        stMethodPrintln.insertDefaultASTBlock(new ASTPrintlnBlock());
+        stMethodPrintBln.insertDefaultASTBlock(new ASTPrintBlnBlock());
+        stMethodPrintCln.insertDefaultASTBlock(new ASTPrintClnBlock());
+        stMethodPrintIln.insertDefaultASTBlock(new ASTPrintIlnBlock());
+        stMethodPrintSln.insertDefaultASTBlock(new ASTPrintSlnBlock());
 
         stClassSystem.insertMethod(stMethodRead);
         stClassSystem.insertMethod(stMethodPrintB);
@@ -220,6 +232,8 @@ public class SymbolTable {
     }
 
     public void generateCode() {
-        CodeGenerator.code += CodeGenerator.tagMain + ": PUSH 5\nIPRINT\nRET 0";
+        //CodeGenerator.code += CodeGenerator.tagMain + ": PUSH 5\nIPRINT\nRET 0";
+        for(STClass stClass : stClasses.values())
+            stClass.generateCode();
     }
 }

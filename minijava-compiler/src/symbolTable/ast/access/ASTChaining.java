@@ -11,4 +11,6 @@ public interface ASTChaining {
     boolean isValidVariable();
 
     STType check(STType previousType) throws SemanticException;
+
+    void generateCode();
 }

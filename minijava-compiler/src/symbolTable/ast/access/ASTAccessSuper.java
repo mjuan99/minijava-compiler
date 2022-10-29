@@ -39,5 +39,10 @@ public class ASTAccessSuper extends ASTAccess{
         return astChaining.check(new STTypeReference(ST.symbolTable.getCurrentSTClass().getTKClassItExtends()));
     }
 
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
+
 
 }

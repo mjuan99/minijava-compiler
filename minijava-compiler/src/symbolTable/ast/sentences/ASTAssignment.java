@@ -44,4 +44,9 @@ public class ASTAssignment extends ASTSentence{
                 throw new SemanticException(new SemanticError(tkAssignment, "la asignacion " + tkAssignment.getLexeme() + " esperaba una expresion tipo int pero se encontro una expresion tipo " + valueType));
         }
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

@@ -64,6 +64,11 @@ public class ASTMethodChaining implements ASTChaining{
     }
 
     @Override
+    public void generateCode() {
+        //TODO implementar
+    }
+
+    @Override
     public boolean isValidCall() {
         if(astChaining == null)
             return true;

@@ -37,4 +37,9 @@ public class ASTReturn extends ASTSentence{
                 throw new SemanticException(new SemanticError(tkReturn, "el tipo retornado " + returnType + " no conforma con el tipo de retorno del método (" + ST.symbolTable.getCurrentSTMethod().getSTReturnType().toString() + ")"));
         }
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }

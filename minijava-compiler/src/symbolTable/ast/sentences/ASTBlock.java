@@ -1,5 +1,6 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -21,6 +22,12 @@ public class ASTBlock extends ASTSentence{
 
     public ASTBlock(ASTBlock parentASTBlock) {
         this.parentASTBlock = parentASTBlock;
+        astSentences = new LinkedList<>();
+        variables = new HashMap<>();
+    }
+
+    public ASTBlock(){
+        parentASTBlock = null;
         astSentences = new LinkedList<>();
         variables = new HashMap<>();
     }
@@ -78,6 +85,14 @@ public class ASTBlock extends ASTSentence{
                 alwaysReturns = true;
         }
         ST.symbolTable.setCurrentASTBlock(parentASTBlock);
+    }
+
+    @Override
+    public void generateCode() {
+        if(astSentences.isEmpty())
+            CodeGenerator.generateCode("NOP"); //TODO preguntar
+        for(ASTSentence sentence : astSentences)
+            sentence.generateCode();
     }
 
     public ASTBlock getParentASTBlock() {

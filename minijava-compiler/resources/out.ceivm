@@ -5,6 +5,127 @@ PUSH t1
 CALL
 HALT
 t0: RET 0
-t1: PUSH 5
-IPRINT
+t1: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+PUSH 'H'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'o'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'l'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'a'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH ' '
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'M'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'u'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'n'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'd'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH 'o'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+PUSH '!'
+SWAP          ; argumento 0 del metodo System.printC
+PUSH t2
+CALL          ; llamada a metodo System.printC
+STOREFP          ; actualizar registro de activación (desapilar)
 RET 0
+t3: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+IPRINT
+PRNLN
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t2: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+CPRINT
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t4: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t5: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+PRNLN
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 0
+t6: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+CPRINT
+PRNLN
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t7: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t8: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+READ
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 0
+t9: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+BPRINT
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t10: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+IPRINT
+PRNLN
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t11: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+IPRINT
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1
+t12: LOADFP          ; enlace dinamico
+LOADSP
+STOREFP          ; actualizar registro de activacion (apilar)
+LOAD 4
+BPRINT
+PRNLN
+STOREFP          ; actualizar registro de activación (desapilar)
+RET 1

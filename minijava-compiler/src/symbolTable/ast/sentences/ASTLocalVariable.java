@@ -40,4 +40,9 @@ public class ASTLocalVariable extends ASTSentence{
             throw new SemanticException(new SemanticError(tkAssignment, "declaracion de variable con valor void"));
         ST.symbolTable.getCurrentASTBlock().insertVariable(tkVariable.getLexeme(), new STVariable(tkVariable, variableType));
     }
+
+    @Override
+    public void generateCode() {
+        //TODO implementar
+    }
 }
