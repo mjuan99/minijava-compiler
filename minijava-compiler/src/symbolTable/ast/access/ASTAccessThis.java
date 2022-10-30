@@ -1,5 +1,6 @@
 package symbolTable.ast.access;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -44,6 +45,8 @@ public class ASTAccessThis extends ASTAccess{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        CodeGenerator.generateCode("LOAD 3");
+        if(astChaining != null)
+            astChaining.generateCode();
     }
 }

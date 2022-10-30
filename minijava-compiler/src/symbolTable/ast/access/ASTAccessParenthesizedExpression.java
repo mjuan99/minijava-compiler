@@ -43,6 +43,8 @@ public class ASTAccessParenthesizedExpression extends ASTAccess{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        astExpression.generateCode();
+        if(astChaining != null)
+            astChaining.generateCode();
     }
 }

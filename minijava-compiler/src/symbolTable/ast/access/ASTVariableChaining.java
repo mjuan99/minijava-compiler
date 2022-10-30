@@ -1,5 +1,6 @@
 package symbolTable.ast.access;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -11,10 +12,11 @@ import symbolTable.types.STType;
 public class ASTVariableChaining implements ASTChaining{
     private final Token tkVariable;
     private final ASTChaining astChaining;
+    private STAttribute stAttribute;
+    private boolean isLeftSideOfAssignment = false;
 
     @Override
     public STType check(STType previousType) throws SemanticException {
-        STAttribute stAttribute;
         if(!previousType.isTypeReference())
             throw new SemanticException(new SemanticError(tkVariable, "no se puede aplicar encadenado a un tipo primitivo o void"));
         STClass previousTypeClass = ST.symbolTable.getSTClass(previousType.toString());
@@ -34,12 +36,26 @@ public class ASTVariableChaining implements ASTChaining{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        if(!isLeftSideOfAssignment || astChaining != null)
+            CodeGenerator.generateCode("LOADREF " + stAttribute.getOffset() + " ;carga valor del atributo en la pila");
+        else{
+            CodeGenerator.generateCode("SWAP");
+            CodeGenerator.generateCode("STOREREF " + stAttribute.getOffset() + " ;almacena el tope de la pila en el atributo");
+        }
+        if(astChaining != null)
+            astChaining.generateCode();
     }
 
     @Override
     public boolean isNotVoid() {
         return false;
+    }
+
+    @Override
+    public void setLeftSideOfAssignment() {
+        isLeftSideOfAssignment = true;
+        if(astChaining != null)
+            astChaining.setLeftSideOfAssignment();
     }
 
     public ASTVariableChaining(Token tkVariable, ASTChaining astChaining) {

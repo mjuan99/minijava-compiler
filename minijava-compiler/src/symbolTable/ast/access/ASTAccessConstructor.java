@@ -66,5 +66,8 @@ public class ASTAccessConstructor extends ASTAccess{
         CodeGenerator.generateCode("DUP");
         CodeGenerator.generateCode("PUSH " + stClass.getVTableTag());
         CodeGenerator.generateCode("STOREREF 0 ;set vtable");
+
+        if(astChaining != null)
+            astChaining.generateCode();
     }
 }

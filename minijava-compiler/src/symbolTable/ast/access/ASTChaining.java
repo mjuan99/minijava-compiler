@@ -15,4 +15,6 @@ public interface ASTChaining {
     void generateCode();
 
     boolean isNotVoid();
+
+    void setLeftSideOfAssignment();
 }

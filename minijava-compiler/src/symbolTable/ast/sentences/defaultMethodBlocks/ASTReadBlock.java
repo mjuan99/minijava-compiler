@@ -8,5 +8,6 @@ public class ASTReadBlock extends ASTBlock {
     @Override
     public void generateCode() {
         CodeGenerator.generateCode("READ");
+        CodeGenerator.generateCode("STORE 3");
     }
 }

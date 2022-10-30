@@ -25,63 +25,77 @@ init@A:            LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
                    LOAD 4               ;carga valor del argumento en la pila
-                   LOAD 3               ;carga this
+                   LOAD 3
                    SWAP
                    STOREREF 1           ;almacena el tope de la pila en el atributo
-                   LOAD 3               ;this
+                   LOAD 3
+                   RMEM 1               ;lugar de retorno
+                   SWAP
                    DUP
                    LOADREF 0
                    LOADREF 2
                    CALL                 ;llamada a metodo m1
-                   LOAD 3               ;this
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                 ;llamada a metodo m1
-                   LOAD 3               ;this
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                 ;llamada a metodo m1
+                   FMEM 1
+                   LOAD 3
+                   STORE 5
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
                    FMEM 0               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 2                ;retorno del metodo
 m1@A:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
-                   LOAD 3               ;carga this
+                   LOAD 3
                    LOADREF 1            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
                    PUSH printIln@System
                    CALL                 ;llamada a metodo System.printIln
+                   LOAD 3
+                   STORE 4
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
                    FMEM 0               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 1                ;retorno del metodo
 main:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
+                   PUSH 48              ;declaracion de variable
                    RMEM 1               ;lugar de retorno
                    PUSH 2               ;celdas a reservar
                    PUSH malloc
                    CALL                 ;llamada a malloc
                    DUP
                    PUSH VT_A
-                   STOREREF 0           ;set vtable ;declaracion de variable
-                   PUSH 5               ;declaracion de variable
+                   STOREREF 0           ;set vtable
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   RMEM 1               ;lugar de retorno
+                   PUSH read@System
+                   CALL                 ;llamada a metodo System.read
                    LOAD 0               ;carga valor de la variable en la pila
-                   LOAD -1              ;carga valor de la variable en la pila ;argumento 0 del metodo init
+                   SUB                  ;argumento 0 del metodo init
                    SWAP
                    DUP
                    LOADREF 0
                    LOADREF 1
                    CALL                 ;llamada a metodo init
-                   LOAD 0               ;carga valor de la variable en la pila
-                   PUSH 6               ;argumento 0 del metodo init
+                   RMEM 1               ;lugar de retorno
                    SWAP
                    DUP
                    LOADREF 0
-                   LOADREF 1
-                   CALL                 ;llamada a metodo init
-                   FMEM 2               ;liberar variables locales
+                   LOADREF 2
+                   CALL                 ;llamada a metodo m1
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                 ;llamada a metodo m1
+                   FMEM 1
+                   FMEM 1               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 0                ;retorno del metodo
                    .DATA                ;VTable de Object
@@ -136,6 +150,7 @@ read@System:       LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
                    READ
+                   STORE 3
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 0                ;retorno del metodo
 printB@System:     LOADFP               ;enlace dinamico

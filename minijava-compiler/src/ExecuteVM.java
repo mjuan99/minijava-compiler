@@ -24,6 +24,7 @@ public class ExecuteVM {
         else
             processBuilder = getProcessBuilderForWindows(filePath);
         processBuilder.redirectErrorStream(true);
+        processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
         return processBuilder.start();
     }
 

@@ -21,6 +21,8 @@ public abstract class ASTAccess implements ASTOperand {
 
     public void setLeftSideOfAssignment(){
         isLeftSideOfAssignment = true;
+        if(astChaining != null)
+            astChaining.setLeftSideOfAssignment();
     }
 
     public boolean isValidCall(){

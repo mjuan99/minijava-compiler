@@ -91,8 +91,6 @@ public class ASTMethodChaining implements ASTChaining{
         CodeGenerator.generateCode("CALL ;llamada a metodo " + stMethod.getTKName().getLexeme());
         if(astChaining != null)
             astChaining.generateCode();
-
-        //TODO implementar
     }
 
     @Override
@@ -101,6 +99,12 @@ public class ASTMethodChaining implements ASTChaining{
             return !stMethod.getSTReturnType().equals(new STTypeVoid());
         else
             return astChaining.isNotVoid();
+    }
+
+    @Override
+    public void setLeftSideOfAssignment() {
+        if(astChaining != null)
+            astChaining.setLeftSideOfAssignment();
     }
 
     @Override

@@ -76,7 +76,6 @@ public class ASTAccessMethod extends ASTAccess{
         CodeGenerator.generateCode("CALL ;llamada a metodo " + stMethod.getTKName().getLexeme());
         if(astChaining != null)
             astChaining.generateCode();
-        //TODO implementar
     }
 
     @Override

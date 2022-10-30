@@ -1,12 +1,15 @@
-//<digito-ingresado>
-//<digito-ingresado>
-//<digito-ingresado>
+//5
+//5
+//5
+//6
+//6
+//6
 
 class A{
     public int at1;
     static void main(){
-        var asciiDigitsOffset = 48;
-        new A().init(System.read() - asciiDigitsOffset).m1().m1();
+        new A().init(5).m1().m1();
+        new A().init(6).m1().m1();
     }
 
     A init(int i){
