@@ -1,5 +1,7 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
+import codeGenerator.TagManager;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -35,6 +37,13 @@ public class ASTWhile extends ASTSentence{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        String whileConditionTag = TagManager.getTag("whileCondition");
+        String endWhileTag = TagManager.getTag("endWhile");
+        CodeGenerator.setNextInstructionTag(whileConditionTag);
+        condition.generateCode();
+        CodeGenerator.generateCode("BF " + endWhileTag);
+        astSentence.generateCode();
+        CodeGenerator.generateCode("JUMP " + whileConditionTag);
+        CodeGenerator.generateCode(endWhileTag + ": NOP");
     }
 }

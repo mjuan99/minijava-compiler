@@ -15,18 +15,12 @@ public class ASTAccessVariable extends ASTAccess{
     private STArgument stArgument;
     private STAttribute stAttribute;
     private STVariable stVariable;
-    private boolean isLeftSideOfAssignment;
 
     public ASTAccessVariable(Token tkVariable) {
         this.tkVariable = tkVariable;
         stVariable = null;
         stArgument = null;
         stAttribute = null;
-        isLeftSideOfAssignment = false;
-    }
-
-    public void setLeftSideOfAssignment(){
-        isLeftSideOfAssignment = true;
     }
 
     public void print() {

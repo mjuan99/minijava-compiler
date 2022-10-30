@@ -1,5 +1,6 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -47,6 +48,19 @@ public class ASTAssignment extends ASTSentence{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        if(tkAssignment.getLexeme().equals("="))
+            value.generateCode();
+        else if(tkAssignment.getLexeme().equals("+=")){
+            astAccess.generateCode();
+            value.generateCode();
+            CodeGenerator.generateCode("ADD");
+        }
+        else{
+            astAccess.generateCode();
+            value.generateCode();
+            CodeGenerator.generateCode("SUB");
+        }
+        astAccess.setLeftSideOfAssignment();
+        astAccess.generateCode();
     }
 }

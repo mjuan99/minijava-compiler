@@ -6,6 +6,7 @@ import symbolTable.types.STType;
 
 public abstract class ASTAccess implements ASTOperand {
     protected ASTChaining astChaining;
+    protected boolean isLeftSideOfAssignment = false;
 
     public void setASTChaining(ASTChaining astChaining){
         this.astChaining = astChaining;
@@ -16,6 +17,10 @@ public abstract class ASTAccess implements ASTOperand {
             return accessType;
         else
             return astChaining.check(accessType);
+    }
+
+    public void setLeftSideOfAssignment(){
+        isLeftSideOfAssignment = true;
     }
 
     public boolean isValidCall(){

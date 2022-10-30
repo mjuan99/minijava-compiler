@@ -1,143 +1,152 @@
-              .code
-              PUSH heapInit$1
-              CALL               ;llamada a heapInit
-              PUSH main$1
-              CALL               ;llamada a main
-              HALT               ;finalizacion del programa
-heapInit$1:   RET 0
-print$1:      LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3             ;carga valor del argumento en la pila
-              PUSH 0
-              LT
-              BF else$1
-then$1:       PUSH '<'           ;argumento 0 del metodo System.printC
-              PUSH printC$1
-              CALL               ;llamada a metodo System.printC
-              PUSH '0'           ;argumento 0 del metodo System.printCln
-              PUSH printCln$1
-              CALL               ;llamada a metodo System.printCln
-              FMEM 0             ;liberar variables locales
-              JUMP endIf$1
-else$1:       LOAD 3             ;carga valor del argumento en la pila
-              PUSH 0
-              GT
-              BF else$2
-then$2:       PUSH '+'           ;argumento 0 del metodo System.printC
-              PUSH printC$1
-              CALL               ;llamada a metodo System.printC
-              PUSH '0'           ;argumento 0 del metodo System.printCln
-              PUSH printCln$1
-              CALL               ;llamada a metodo System.printCln
-              FMEM 0             ;liberar variables locales
-              JUMP endIf$2
-else$2:       LOAD 3             ;carga valor del argumento en la pila
-              PUSH 0
-              EQ
-              BF endIf$3
-then$3:       NOP                ;sentencia vacia
-endIf$3:      NOP                ;fin del if
-              PUSH '0'           ;argumento 0 del metodo System.printC
-              PUSH printC$1
-              CALL               ;llamada a metodo System.printC
-              PUSH '0'           ;argumento 0 del metodo System.printCln
-              PUSH printCln$1
-              CALL               ;llamada a metodo System.printCln
-              FMEM 0             ;liberar variables locales
-endIf$2:      NOP                ;fin del if
-endIf$1:      NOP                ;fin del if
-              FMEM 0             ;liberar variables locales
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-main$1:       LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              PUSH 100
-              NEG                ;argumento 0 del metodo A.print
-              PUSH print$1
-              CALL               ;llamada a metodo A.print
-              PUSH 0             ;argumento 0 del metodo A.print
-              PUSH print$1
-              CALL               ;llamada a metodo A.print
-              PUSH 1             ;argumento 0 del metodo A.print
-              PUSH print$1
-              CALL               ;llamada a metodo A.print
-              FMEM 0             ;liberar variables locales
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 0              ;retorno del metodo
-debugPrint$1: LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              IPRINT
-              PRNLN
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-printC$1:     LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              CPRINT
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-printS$1:     LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-println$1:    LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              PRNLN
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 0              ;retorno del metodo
-printCln$1:   LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              CPRINT
-              PRNLN
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-printSln$1:   LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-read$1:       LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              READ
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 0              ;retorno del metodo
-printB$1:     LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              BPRINT
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-printIln$1:   LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              IPRINT
-              PRNLN
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-printI$1:     LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              IPRINT
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
-printBln$1:   LOADFP             ;enlace dinamico
-              LOADSP
-              STOREFP            ;actualizar registro de activacion (apilar)
-              LOAD 3
-              BPRINT
-              PRNLN
-              STOREFP            ;actualizar registro de activación (desapilar)
-              RET 1              ;retorno del metodo
+                  .code
+                  PUSH heapInit$1
+                  CALL                     ;llamada a heapInit
+                  PUSH main$1
+                  CALL                     ;llamada a main
+                  HALT                     ;finalizacion del programa
+heapInit$1:       RET 0
+print$1:          LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3                   ;carga valor del argumento en la pila ;declaracion de variable
+whileCondition$1: LOAD 0                   ;carga valor de la variable en la pila
+                  PUSH 10
+                  LT
+                  BF endWhile$1
+                  LOAD 0                   ;carga valor de la variable en la pila ;argumento 0 del metodo System.printI
+                  PUSH printI$1
+                  CALL                     ;llamada a metodo System.printI
+                  LOAD 0                   ;carga valor de la variable en la pila
+                  PUSH 1
+                  ADD
+                  STORE 0                  ;almacena el tope de la pila en la variable
+                  FMEM 0                   ;liberar variables locales
+                  JUMP whileCondition$1
+endWhile$1:       NOP
+                  PUSH println$1
+                  CALL                     ;llamada a metodo System.println
+                  LOAD 3                   ;carga valor del argumento en la pila
+                  STORE 0                  ;almacena el tope de la pila en la variable
+whileCondition$2: LOAD 0                   ;carga valor de la variable en la pila
+                  PUSH 0
+                  GT
+                  BF endWhile$2
+                  LOAD 0                   ;carga valor de la variable en la pila ;argumento 0 del metodo System.printI
+                  PUSH printI$1
+                  CALL                     ;llamada a metodo System.printI
+                  LOAD 0                   ;carga valor de la variable en la pila
+                  PUSH 1
+                  SUB
+                  STORE 0                  ;almacena el tope de la pila en la variable
+                  FMEM 0                   ;liberar variables locales
+                  JUMP whileCondition$2
+endWhile$2:       NOP
+                  PUSH println$1
+                  CALL                     ;llamada a metodo System.println
+whileCondition$3: LOAD 0                   ;carga valor de la variable en la pila
+                  PUSH 5
+                  LE
+                  BF endWhile$3
+                  LOAD 0                   ;carga valor de la variable en la pila ;argumento 0 del metodo System.printI
+                  PUSH printI$1
+                  CALL                     ;llamada a metodo System.printI
+                  LOAD 0                   ;carga valor de la variable en la pila
+                  PUSH 1
+                  ADD
+                  STORE 0                  ;almacena el tope de la pila en la variable
+                  FMEM 0                   ;liberar variables locales
+                  JUMP whileCondition$3
+endWhile$3:       NOP
+                  PUSH println$1
+                  CALL                     ;llamada a metodo System.println
+                  FMEM 1                   ;liberar variables locales
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+main$1:           LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  PUSH 5                   ;argumento 0 del metodo A.print
+                  PUSH print$1
+                  CALL                     ;llamada a metodo A.print
+                  PUSH 1
+                  NEG                      ;argumento 0 del metodo A.print
+                  PUSH print$1
+                  CALL                     ;llamada a metodo A.print
+                  FMEM 0                   ;liberar variables locales
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 0                    ;retorno del metodo
+debugPrint$1:     LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  IPRINT
+                  PRNLN
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+printC$1:         LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  CPRINT
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+printS$1:         LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+println$1:        LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  PRNLN
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 0                    ;retorno del metodo
+printCln$1:       LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  CPRINT
+                  PRNLN
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+printSln$1:       LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+read$1:           LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  READ
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 0                    ;retorno del metodo
+printB$1:         LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  BPRINT
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+printIln$1:       LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  IPRINT
+                  PRNLN
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+printI$1:         LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  IPRINT
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
+printBln$1:       LOADFP                   ;enlace dinamico
+                  LOADSP
+                  STOREFP                  ;actualizar registro de activacion (apilar)
+                  LOAD 3
+                  BPRINT
+                  PRNLN
+                  STOREFP                  ;actualizar registro de activación (desapilar)
+                  RET 1                    ;retorno del metodo
