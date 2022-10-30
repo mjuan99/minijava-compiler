@@ -96,14 +96,20 @@ public class ASTBlock extends ASTSentence{
 
     @Override
     public void generateCode() {
+        ST.symbolTable.setCurrentASTBlock(this);
         if(astSentences.isEmpty())
             CodeGenerator.generateCode("NOP"); //TODO preguntar
         for(ASTSentence sentence : astSentences)
             sentence.generateCode();
         CodeGenerator.generateCode("FMEM " + (nextVariableOffset - minVariableOffset) + " ;liberar variables locales");
+        ST.symbolTable.setCurrentASTBlock(parentASTBlock);
     }
 
     public ASTBlock getParentASTBlock() {
         return parentASTBlock;
+    }
+
+    public int getCurrentVariableOffset() {
+        return nextVariableOffset;
     }
 }
