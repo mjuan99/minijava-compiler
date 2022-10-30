@@ -38,6 +38,7 @@ public class STMethod implements STAbstractMethod{
         errorFound = false;
         astBlock = new ASTBlock(null);
         defaultBlock = true;
+        offset = -1;
     }
 
     public void setTKLastBracket(Token tkLastBracket) {
@@ -167,7 +168,7 @@ public class STMethod implements STAbstractMethod{
             if(isStatic && Objects.equals(tkName.getLexeme(), "main") && stArguments.isEmpty() && stReturnType.equals(new STTypeVoid()))
                 methodTag = CodeGenerator.tagMain;
             else
-                methodTag = TagManager.getTag(tkName.getLexeme());
+                methodTag = TagManager.getTag(tkName.getLexeme() + "@" + stClass.getTKName().getLexeme());
         return methodTag;
     }
 

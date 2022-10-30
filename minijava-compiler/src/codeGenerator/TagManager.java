@@ -12,10 +12,11 @@ public class TagManager {
         if(tagNumber == null){
             tagNumber = 1;
             tags.put(tagPrefix, tagNumber);
+            return tagPrefix;
         }else{
             tagNumber++;
             tags.put(tagPrefix, tagNumber);
+            return tagPrefix + "$" + tagNumber;
         }
-        return tagPrefix + "$" + tagNumber;
     }
 }

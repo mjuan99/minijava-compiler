@@ -1,5 +1,7 @@
 package symbolTable.entities;
 
+import codeGenerator.CodeGenerator;
+import codeGenerator.TagManager;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -23,6 +25,8 @@ public class STClass {
     private boolean consolidated;
     private boolean cyclicInheritance;
     private boolean errorFound;
+    private boolean offsetsGenerated;
+    private String vTableTag;
 
     public STClass(Token tkName){
         this.tkName = tkName;
@@ -35,6 +39,8 @@ public class STClass {
         consolidated = false;
         cyclicInheritance = false;
         errorFound = false;
+        offsetsGenerated = false;
+        vTableTag = null;
     }
 
     public boolean errorFound(){
@@ -267,24 +273,54 @@ public class STClass {
         return interfaces;
     }
 
+    public String getVTableTag(){
+        if(vTableTag == null)
+            vTableTag = TagManager.getTag("VT_" + tkName.getLexeme());
+        return vTableTag;
+    }
+
     public void generateCode() {
         ST.symbolTable.setCurrentSTClass(this);
+        loadVTable();
         for(STMethod stMethod : stMethodsSimplified.values())
             stMethod.generateCode();
     }
 
+    private void loadVTable(){
+        StringBuilder methodsTags = new StringBuilder();
+        for(int i = 0; i < stMethodsSimplified.size(); i++)
+            for(STMethod stMethod : stMethodsSimplified.values()) {
+                if (stMethod.getOffset() == i) {
+                    methodsTags.append(stMethod.getMethodTag()).append(",");
+                }
+            }
+        CodeGenerator.generateCode(".DATA ;VTable de " + tkName.getLexeme());
+        CodeGenerator.setNextInstructionTag(getVTableTag());
+        CodeGenerator.generateCode("DW " + methodsTags.substring(0, methodsTags.length() - 1));
+        CodeGenerator.generateCode(".CODE ;codigo de metodos definidos en " + tkName.getLexeme());
+    }
+
     public void generateOffsets() {
-        int i = 0;
-        for(STAttribute stAttribute : stAttributes.values())
-            stAttribute.setOffset(i++);
-        i = 0;
-        int minMethodOffset = getMinMethodOffset();
-        for(STMethod stMethod : stMethodsSimplified.values())
-            stMethod.setOffset(minMethodOffset + i++);
+        if(!offsetsGenerated) {
+            if (tkClassItExtends != null)
+                ST.symbolTable.getSTClass(tkClassItExtends.getLexeme()).generateOffsets();
+            int i = 0;
+            for (STAttribute stAttribute : stAttributes.values())
+                stAttribute.setOffset(i++);
+            i = 0;
+            int minMethodOffset = getMinMethodOffset();
+            for (STMethod stMethod : stMethodsSimplified.values())
+                if (stMethod.getOffset() == -1)
+                    stMethod.setOffset(minMethodOffset + i++);
+            offsetsGenerated = true;
+        }
     }
 
     private int getMinMethodOffset(){
-        //TODO implementar
-        return 1;
+        int maxParentMethodOffset = -1;
+        if(tkClassItExtends != null)
+            for(STMethod stMethod : ST.symbolTable.getSTClass(tkClassItExtends.getLexeme()).stMethods.values())
+                maxParentMethodOffset = Math.max(maxParentMethodOffset, stMethod.getOffset());
+        return maxParentMethodOffset + 1;
     }
 }

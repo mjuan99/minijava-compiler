@@ -84,8 +84,8 @@ public class CodeGenerator {
             String line = scanner.nextLine();
             if(line.contains(";"))
                 maxComment = Math.max(line.indexOf(';'), maxComment);
-            else
-                maxComment = Math.max(line.length(), maxComment);
+            /*else
+                maxComment = Math.max(line.length(), maxComment);*/
         }
         scanner = new Scanner(code);
         while (scanner.hasNextLine()){
@@ -93,7 +93,7 @@ public class CodeGenerator {
             String formattedLine;
             if(line.contains(";")){
                 int comment = line.indexOf(';');
-                formattedLine = line.substring(0, comment) + getSpaces(maxComment - comment + 4) + line.substring(comment);
+                formattedLine = line.substring(0, comment) + getSpaces(maxComment - comment + 10) + line.substring(comment);
             }
             else
                 formattedLine = line;

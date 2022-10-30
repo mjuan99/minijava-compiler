@@ -1,24 +1,5 @@
-//1
-//2
-//4
-//8
-//16
-//32
-//64
-//128
-//256
-//512
-//1024
-
 class A{
     static void main(){
-        var a = 1;
-        while(a <= 1024) {
-            var b = a;
-            A.print(b);
-            a = A.duplicar(b);
-            A.duplicar(b);
-        }
     }
 
     static void print(int i){
@@ -30,4 +11,25 @@ class A{
     static int duplicar(int i){
         return i * 2;
     }
+
+    int m1(){return 1;}
+}
+
+class B extends A{
+    void m2(){
+        if(1 > 3)
+            if(3 > 2)
+                return;
+    }
+    char m3(){return 'c';}
+}
+
+class C extends A{
+    void m4(){}
+    void m5(){}
+}
+
+class D extends C{
+    void m6(){}
+    void m7(){}
 }
