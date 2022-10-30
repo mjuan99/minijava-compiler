@@ -87,6 +87,18 @@ public class STMethodHeader implements STAbstractMethod{
     }
 
     @Override
+    public int getOffset() {
+        //TODO implementar
+        return 0;
+    }
+
+    @Override
+    public String getMethodTag() {
+        //TODO implementar
+        return null;
+    }
+
+    @Override
     public LinkedList<STArgument> getArguments() {
         return stArgumentsList;
     }

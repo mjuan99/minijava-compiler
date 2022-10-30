@@ -63,11 +63,10 @@ public class STAttribute {
     }
 
     public int getOffset() {
-        //TODO implementar
-        return 0;
+        return offset + 1;
     }
 
     public void setOffset(int offset) {
-        this.offset = offset + 1;
+        this.offset = offset;
     }
 }

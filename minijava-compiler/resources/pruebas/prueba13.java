@@ -11,14 +11,19 @@ class A{
         var a = new A();
         var b = 5;
         a.init(b);
-        a.init(6);
+        a.m1();
+        var c = new A();
+        a.m1();
+        var d = 6;
+        c.init(d);
+        a.m1();
+        c.m1();
+        c.m1();
+        c.m1();
     }
 
     void init(int i){
         at1 = i;
-        m1();
-        m1();
-        m1();
     }
 
     void m1(){

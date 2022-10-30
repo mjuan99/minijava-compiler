@@ -26,16 +26,16 @@ public class CodeGenerator {
         generateCode(tagMalloc + ": LOADFP ;Inicialización unidad");
         generateCode("LOADSP");
         generateCode("STOREFP ;Finaliza inicialización del RA");
-        generateCode("LOADHL	;hl");
-        generateCode("DUP	;hl");
-        generateCode("PUSH 1	;1");
-        generateCode("ADD	;hl+1");
+        generateCode("LOADHL ;hl");
+        generateCode("DUP ;hl");
+        generateCode("PUSH 1 ;1");
+        generateCode("ADD ;hl+1");
         generateCode("STORE 4 ;Guarda el resultado (un puntero a la primer celda de la región de memoria)");
-        generateCode("LOAD 3	;Carga la cantidad de celdas a alojar (parámetro que debe ser positivo)");
+        generateCode("LOAD 3 ;Carga la cantidad de celdas a alojar (parámetro que debe ser positivo)");
         generateCode("ADD");
         generateCode("STOREHL ;Mueve el heap limit (hl). Expande el heap");
         generateCode("STOREFP");
-        generateCode("RET 1	;Retorna eliminando el parámetro");
+        generateCode("RET 1 ;Retorna eliminando el parámetro");
 
         ST.symbolTable.generateCode();
         if(formatCode)

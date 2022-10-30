@@ -10,4 +10,10 @@ public interface STAbstractMethod {
     STType getSTReturnType();
     LinkedList<STArgument> getArguments();
     Token getTKName();
+
+    boolean isStatic();
+
+    int getOffset();
+
+    String getMethodTag();
 }
