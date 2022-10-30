@@ -1,5 +1,7 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
+
 public class ASTEmptySentence extends ASTSentence{
     public void print(){
         System.out.println(";");
@@ -10,6 +12,6 @@ public class ASTEmptySentence extends ASTSentence{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        CodeGenerator.generateCode("NOP ;sentencia vacia");
     }
 }

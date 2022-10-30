@@ -1,5 +1,7 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
+import codeGenerator.TagManager;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -45,6 +47,18 @@ public class ASTIf extends ASTSentence{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        String thenTag = TagManager.getTag("then");
+        String endIfTag = TagManager.getTag("endIf");
+        String elseTag = elseSentence != null ? TagManager.getTag("else") : endIfTag;
+        condition.generateCode();
+        CodeGenerator.generateCode("BF " + elseTag);
+        CodeGenerator.setNextInstructionTag(thenTag);
+        thenSentence.generateCode();
+        if(elseSentence != null) {
+            CodeGenerator.generateCode("JUMP " + endIfTag);
+            CodeGenerator.setNextInstructionTag(elseTag);
+            elseSentence.generateCode();
+        }
+        CodeGenerator.generateCode(endIfTag + ": " + "NOP ;fin del if");
     }
 }
