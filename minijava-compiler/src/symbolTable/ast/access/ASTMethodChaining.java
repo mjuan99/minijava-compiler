@@ -9,6 +9,7 @@ import symbolTable.entities.STAbstractMethod;
 import symbolTable.entities.STClass;
 import symbolTable.entities.STInterface;
 import symbolTable.types.STType;
+import symbolTable.types.STTypeVoid;
 
 import java.util.LinkedList;
 
@@ -16,6 +17,7 @@ public class ASTMethodChaining implements ASTChaining{
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
     private final ASTChaining astChaining;
+    private STAbstractMethod stMethod;
 
     public ASTMethodChaining(Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkMethod = tkMethod;
@@ -39,7 +41,6 @@ public class ASTMethodChaining implements ASTChaining{
         if(!previousType.isTypeReference())
             throw new SemanticException(new SemanticError(tkMethod, "no se puede aplicar encadenado a un tipo primitivo o void"));
         STClass stClass = ST.symbolTable.getSTClass(previousType.toString());
-        STAbstractMethod stMethod;
         if(stClass != null)
             stMethod = stClass.getMethod(tkMethod.getLexeme());
         else {
@@ -66,6 +67,14 @@ public class ASTMethodChaining implements ASTChaining{
     @Override
     public void generateCode() {
         //TODO implementar
+    }
+
+    @Override
+    public boolean isNotVoid() {
+        if(astChaining == null)
+            return !stMethod.getSTReturnType().equals(new STTypeVoid());
+        else
+            return astChaining.isNotVoid();
     }
 
     @Override

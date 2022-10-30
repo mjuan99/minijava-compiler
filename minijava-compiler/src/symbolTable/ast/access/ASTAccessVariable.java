@@ -23,6 +23,11 @@ public class ASTAccessVariable extends ASTAccess{
         stAttribute = null;
     }
 
+    @Override
+    protected boolean isNotVoidWithoutChaining() {
+        return false;
+    }
+
     public void print() {
         System.out.print(tkVariable.getLexeme());
         if(astChaining != null)

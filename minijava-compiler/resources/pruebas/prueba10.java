@@ -17,6 +17,7 @@ class A{
             var b = a;
             A.print(b);
             a = A.duplicar(b);
+            A.duplicar(b);
         }
     }
 

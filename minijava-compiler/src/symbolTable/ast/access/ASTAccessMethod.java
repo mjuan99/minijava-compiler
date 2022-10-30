@@ -7,12 +7,14 @@ import symbolTable.ST;
 import symbolTable.ast.expressions.ASTExpression;
 import symbolTable.entities.STMethod;
 import symbolTable.types.STType;
+import symbolTable.types.STTypeVoid;
 
 import java.util.LinkedList;
 
 public class ASTAccessMethod extends ASTAccess{
     private final Token tkMethod;
     private final LinkedList<ASTExpression> arguments;
+    private STMethod stMethod;
 
     public ASTAccessMethod(Token tkMethod, LinkedList<ASTExpression> arguments) {
         this.tkMethod = tkMethod;
@@ -32,7 +34,7 @@ public class ASTAccessMethod extends ASTAccess{
 
     @Override
     public STType check() throws SemanticException {
-        STMethod stMethod = ST.symbolTable.getCurrentSTClass().getMethod(tkMethod.getLexeme());
+        stMethod = ST.symbolTable.getCurrentSTClass().getMethod(tkMethod.getLexeme());
         if(stMethod == null)
             throw new SemanticException(new SemanticError(tkMethod, "el metodo " + tkMethod.getLexeme() + " no fue declarado en la clase " + ST.symbolTable.getCurrentSTClass().getTKName().getLexeme()));
         if(ST.symbolTable.getCurrentSTMethod().isStatic() && !stMethod.isStatic())
@@ -61,5 +63,10 @@ public class ASTAccessMethod extends ASTAccess{
     @Override
     public boolean isValidVariableWithoutChaining() {
         return false;
+    }
+
+    @Override
+    protected boolean isNotVoidWithoutChaining() {
+        return !stMethod.getSTReturnType().equals(new STTypeVoid());
     }
 }

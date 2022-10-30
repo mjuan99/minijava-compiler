@@ -40,4 +40,13 @@ public abstract class ASTAccess implements ASTOperand {
     }
 
     protected abstract boolean isValidVariableWithoutChaining();
+
+    public boolean isNotVoid() {
+        if(astChaining == null)
+            return isNotVoidWithoutChaining();
+        else
+            return astChaining.isNotVoid();
+    }
+
+    protected abstract boolean isNotVoidWithoutChaining();
 }

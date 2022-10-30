@@ -37,6 +37,11 @@ public class ASTVariableChaining implements ASTChaining{
         //TODO implementar
     }
 
+    @Override
+    public boolean isNotVoid() {
+        return false;
+    }
+
     public ASTVariableChaining(Token tkVariable, ASTChaining astChaining) {
         this.tkVariable = tkVariable;
         this.astChaining = astChaining;

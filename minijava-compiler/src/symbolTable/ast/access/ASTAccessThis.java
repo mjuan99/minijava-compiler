@@ -24,6 +24,11 @@ public class ASTAccessThis extends ASTAccess{
         return false;
     }
 
+    @Override
+    protected boolean isNotVoidWithoutChaining() {
+        return false;
+    }
+
     public void print() {
         System.out.print("this");
         if(astChaining != null)

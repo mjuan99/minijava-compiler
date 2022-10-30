@@ -19,6 +19,11 @@ public class ASTAccessParenthesizedExpression extends ASTAccess{
     }
 
     @Override
+    protected boolean isNotVoidWithoutChaining() {
+        return false;
+    }
+
+    @Override
     public boolean isValidVariableWithoutChaining() {
         return false;
     }

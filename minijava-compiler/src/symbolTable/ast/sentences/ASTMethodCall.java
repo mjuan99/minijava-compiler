@@ -1,5 +1,6 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -29,5 +30,7 @@ public class ASTMethodCall extends ASTSentence{
     @Override
     public void generateCode() {
         astAccess.generateCode();
+        if(astAccess.isNotVoid())
+            CodeGenerator.generateCode("FMEM 1");
     }
 }

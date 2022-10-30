@@ -33,6 +33,11 @@ public class ASTAccessConstructor extends ASTAccess{
         return false;
     }
 
+    @Override
+    protected boolean isNotVoidWithoutChaining() {
+        return false;
+    }
+
     public void print() {
         System.out.print("new " + tkClassName.getLexeme() + "()");
         if(astChaining != null)

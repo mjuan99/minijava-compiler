@@ -13,4 +13,6 @@ public interface ASTChaining {
     STType check(STType previousType) throws SemanticException;
 
     void generateCode();
+
+    boolean isNotVoid();
 }

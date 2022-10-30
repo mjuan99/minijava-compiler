@@ -20,6 +20,11 @@ public class ASTAccessStaticMethod extends ASTAccess{
     private STMethod stMethod;
     private final LinkedList<ASTExpression> arguments;
 
+    @Override
+    protected boolean isNotVoidWithoutChaining() {
+        return !stMethod.getSTReturnType().equals(new STTypeVoid());
+    }
+
     public ASTAccessStaticMethod(Token tkClassName, Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkClassName = tkClassName;
         this.tkMethod = tkMethod;
