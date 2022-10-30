@@ -1,5 +1,6 @@
 package symbolTable.ast.sentences;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -43,6 +44,7 @@ public class ASTLocalVariable extends ASTSentence{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        value.generateCode();
+        CodeGenerator.setComment("declaracion de variable");
     }
 }

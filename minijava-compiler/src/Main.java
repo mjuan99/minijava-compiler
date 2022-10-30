@@ -22,21 +22,23 @@ public class Main {
             System.exit(ERR_ARGUMENTO_FALTANTE);
         }
         String code = generateCode(args[0]);
-        Path path;
-        if(args.length == 1)
-            path = Path.of("default.txt");
-        else
-            path = Path.of(args[1]);
-        try {
-            if(path.getParent() != null)
-                Files.createDirectories(path.getParent());
-            Files.writeString(path, code);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error de IO");
+        if(!code.equals("")) {
+            Path path;
+            if (args.length == 1)
+                path = Path.of("default.txt");
+            else
+                path = Path.of(args[1]);
+            try {
+                if (path.getParent() != null)
+                    Files.createDirectories(path.getParent());
+                Files.writeString(path, code);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error de IO");
+            }
+            if (DEBUG)
+                ExecuteVM.main(new String[]{path.toString()});
         }
-        if(DEBUG)
-            ExecuteVM.main(new String[]{path.toString()});
     }
 
     private static String generateCode(String sourceFilePath) {

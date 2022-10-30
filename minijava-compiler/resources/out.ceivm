@@ -8,23 +8,51 @@ heapInit$1:   RET 0
 print$1:      LOADFP             ;enlace dinamico
               LOADSP
               STOREFP            ;actualizar registro de activacion (apilar)
+              PUSH 5             ;declaracion de variable
+              PUSH 7             ;declaracion de variable
               LOAD 3             ;carga valor del argumento en la pila ;argumento 0 del metodo System.printIln
               PUSH printIln$1
               CALL               ;llamada a metodo System.printIln
+              FMEM 2             ;liberar variables locales
               STOREFP            ;actualizar registro de activación (desapilar)
               RET 1              ;retorno del metodo
 main$1:       LOADFP             ;enlace dinamico
               LOADSP
               STOREFP            ;actualizar registro de activacion (apilar)
-              PUSH 111           ;argumento 0 del metodo A.print
+              PUSH 111           ;declaracion de variable
+              PUSH 222           ;declaracion de variable
+              PUSH 333           ;declaracion de variable
+              LOAD 0             ;carga valor de la variable en la pila ;argumento 0 del metodo A.print
               PUSH print$1
               CALL               ;llamada a metodo A.print
-              PUSH 222           ;argumento 0 del metodo A.print
+              LOAD -1            ;carga valor de la variable en la pila ;argumento 0 del metodo A.print
               PUSH print$1
               CALL               ;llamada a metodo A.print
-              PUSH 333           ;argumento 0 del metodo A.print
+              LOAD -2            ;carga valor de la variable en la pila ;argumento 0 del metodo A.print
               PUSH print$1
               CALL               ;llamada a metodo A.print
+              LOAD 0             ;carga valor de la variable en la pila
+              LOAD -2            ;carga valor de la variable en la pila
+              ADD                ;argumento 0 del metodo A.print
+              PUSH print$1
+              CALL               ;llamada a metodo A.print
+              FMEM 1             ;liberar variables locales
+              LOAD 0             ;carga valor de la variable en la pila
+              LOAD -1            ;carga valor de la variable en la pila
+              ADD                ;argumento 0 del metodo A.print
+              PUSH print$1
+              CALL               ;llamada a metodo A.print
+              FMEM 1             ;liberar variables locales
+              PUSH 111           ;declaracion de variable
+              LOAD 0             ;carga valor de la variable en la pila
+              LOAD -1            ;carga valor de la variable en la pila
+              ADD                ;argumento 0 del metodo A.print
+              PUSH print$1
+              CALL               ;llamada a metodo A.print
+              LOAD 0             ;carga valor de la variable en la pila ;argumento 0 del metodo A.print
+              PUSH print$1
+              CALL               ;llamada a metodo A.print
+              FMEM 2             ;liberar variables locales
               STOREFP            ;actualizar registro de activación (desapilar)
               RET 0              ;retorno del metodo
 debugPrint$1: LOADFP             ;enlace dinamico

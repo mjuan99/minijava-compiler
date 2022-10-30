@@ -6,6 +6,7 @@ import symbolTable.types.STType;
 public class STVariable {
     private final Token name;
     private final STType stType;
+    private int offset;
 
     public STVariable(Token name, STType stType) {
         this.name = name;
@@ -17,7 +18,10 @@ public class STVariable {
     }
 
     public int getOffset() {
-        //TODO implementar
-        return 0;
+        return -offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 }

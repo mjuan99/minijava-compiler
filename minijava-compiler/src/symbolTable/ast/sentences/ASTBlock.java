@@ -14,6 +14,8 @@ public class ASTBlock extends ASTSentence{
     private LinkedList<ASTSentence> astSentences;
     private final ASTBlock parentASTBlock;
     private final HashMap<String, STVariable> variables;
+    private int minVariableOffset;
+    private int nextVariableOffset;
 
     public void setAstSentences(LinkedList<ASTSentence> astSentences) {
         this.astSentences = astSentences;
@@ -32,6 +34,7 @@ public class ASTBlock extends ASTSentence{
     }
 
     public void insertVariable(String name, STVariable variable){
+        variable.setOffset(nextVariableOffset++);
         variables.put(name, variable);
     }
 
@@ -73,6 +76,11 @@ public class ASTBlock extends ASTSentence{
     }
 
     public void checkSentences() throws SemanticException {
+        if(parentASTBlock == null)
+            minVariableOffset = 0;
+        else
+            minVariableOffset = parentASTBlock.nextVariableOffset;
+        nextVariableOffset = minVariableOffset;
         ST.symbolTable.setCurrentASTBlock(this);
         for(ASTSentence astSentence : astSentences) {
             if(alwaysReturns) {
@@ -92,6 +100,7 @@ public class ASTBlock extends ASTSentence{
             CodeGenerator.generateCode("NOP"); //TODO preguntar
         for(ASTSentence sentence : astSentences)
             sentence.generateCode();
+        CodeGenerator.generateCode("FMEM " + (nextVariableOffset - minVariableOffset) + " ;liberar variables locales");
     }
 
     public ASTBlock getParentASTBlock() {
