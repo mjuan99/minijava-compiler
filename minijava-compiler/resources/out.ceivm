@@ -29,14 +29,6 @@ init@A:            LOADFP               ;enlace dinamico
                    SWAP
                    STOREREF 1           ;almacena el tope de la pila en el atributo
                    LOAD 3
-                   RMEM 1               ;lugar de retorno
-                   SWAP
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                 ;llamada a metodo m1
-                   FMEM 1
-                   LOAD 3
                    STORE 5
                    FMEM 0
                    STOREFP              ;actualizar registro de activación (desapilar)
@@ -48,9 +40,9 @@ m1@A:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
                    LOAD 3
-                   LOADREF 1            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
-                   PUSH printIln@System
-                   CALL                 ;llamada a metodo System.printIln
+                   LOADREF 1            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printSln
+                   PUSH printSln@System
+                   CALL                 ;llamada a metodo System.printSln
                    LOAD 3
                    STORE 4
                    FMEM 0
@@ -62,7 +54,28 @@ m1@A:              LOADFP               ;enlace dinamico
 main:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
-                   PUSH 48              ;declaracion de variable
+                   RMEM 1               ;lugar de retorno
+                   PUSH 6
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH 'H'
+                   STOREREF 1
+                   DUP
+                   PUSH 'o'
+                   STOREREF 2
+                   DUP
+                   PUSH 'l'
+                   STOREREF 3
+                   DUP
+                   PUSH 'a'
+                   STOREREF 4
+                   DUP
+                   PUSH 0
+                   STOREREF 5           ;declaracion de variable
                    RMEM 1               ;lugar de retorno
                    PUSH 2               ;celdas a reservar
                    PUSH malloc
@@ -72,11 +85,7 @@ main:              LOADFP               ;enlace dinamico
                    STOREREF 0           ;set vtable
                    RMEM 1               ;lugar de retorno
                    SWAP
-                   RMEM 1               ;lugar de retorno
-                   PUSH read@System
-                   CALL                 ;llamada a metodo System.read
-                   LOAD 0               ;carga valor de la variable en la pila
-                   SUB                  ;argumento 0 del metodo init
+                   LOAD 0               ;carga valor de la variable en la pila ;argumento 0 del metodo init
                    SWAP
                    DUP
                    LOADREF 0
@@ -88,6 +97,106 @@ main:              LOADFP               ;enlace dinamico
                    LOADREF 0
                    LOADREF 2
                    CALL                 ;llamada a metodo m1
+                   FMEM 1
+                   RMEM 1               ;lugar de retorno
+                   PUSH 5
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH 'a'
+                   STOREREF 1
+                   DUP
+                   PUSH 's'
+                   STOREREF 2
+                   DUP
+                   PUSH 'd'
+                   STOREREF 3
+                   DUP
+                   PUSH 0
+                   STOREREF 4           ;declaracion de variable
+                   RMEM 1               ;lugar de retorno
+                   PUSH 5
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH 'd'
+                   STOREREF 1
+                   DUP
+                   PUSH 's'
+                   STOREREF 2
+                   DUP
+                   PUSH 'a'
+                   STOREREF 3
+                   DUP
+                   PUSH 0
+                   STOREREF 4           ;declaracion de variable
+                   FMEM 2               ;liberar variables locales
+                   FMEM 0               ;liberar variables locales
+                   RMEM 1               ;lugar de retorno
+                   PUSH 7
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH 'M'
+                   STOREREF 1
+                   DUP
+                   PUSH 'u'
+                   STOREREF 2
+                   DUP
+                   PUSH 'n'
+                   STOREREF 3
+                   DUP
+                   PUSH 'd'
+                   STOREREF 4
+                   DUP
+                   PUSH 'o'
+                   STOREREF 5
+                   DUP
+                   PUSH 0
+                   STOREREF 6           ;declaracion de variable
+                   RMEM 1               ;lugar de retorno
+                   PUSH 5
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH '!'
+                   STOREREF 1
+                   DUP
+                   PUSH '!'
+                   STOREREF 2
+                   DUP
+                   PUSH '!'
+                   STOREREF 3
+                   DUP
+                   PUSH 0
+                   STOREREF 4           ;declaracion de variable
+                   RMEM 1               ;lugar de retorno
+                   PUSH 2               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_A
+                   STOREREF 0           ;set vtable
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD -1              ;carga valor de la variable en la pila ;argumento 0 del metodo init
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 1
+                   CALL                 ;llamada a metodo init
                    RMEM 1               ;lugar de retorno
                    SWAP
                    DUP
@@ -95,6 +204,29 @@ main:              LOADFP               ;enlace dinamico
                    LOADREF 2
                    CALL                 ;llamada a metodo m1
                    FMEM 1
+                   RMEM 1               ;lugar de retorno
+                   PUSH 2               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_A
+                   STOREREF 0           ;set vtable
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD -2              ;carga valor de la variable en la pila ;argumento 0 del metodo init
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 1
+                   CALL                 ;llamada a metodo init
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                 ;llamada a metodo m1
+                   FMEM 1
+                   FMEM 2               ;liberar variables locales
                    FMEM 1               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 0                ;retorno del metodo
@@ -125,6 +257,10 @@ printC@System:     LOADFP               ;enlace dinamico
 printS@System:     LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3
+                   PUSH 1
+                   ADD
+                   SPRINT
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 1                ;retorno del metodo
 println@System:    LOADFP               ;enlace dinamico
@@ -144,6 +280,11 @@ printCln@System:   LOADFP               ;enlace dinamico
 printSln@System:   LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3
+                   PUSH 1
+                   ADD
+                   SPRINT
+                   PRNLN
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 1                ;retorno del metodo
 read@System:       LOADFP               ;enlace dinamico

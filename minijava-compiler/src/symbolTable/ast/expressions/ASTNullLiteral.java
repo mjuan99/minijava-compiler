@@ -1,5 +1,6 @@
 package symbolTable.ast.expressions;
 
+import codeGenerator.CodeGenerator;
 import lexicalAnalyzer.Token;
 import symbolTable.types.STType;
 import symbolTable.types.STTypeNull;
@@ -17,6 +18,6 @@ public class ASTNullLiteral extends ASTLiteral{
 
     @Override
     public void generateCode() {
-        //TODO implementar
+        CodeGenerator.generateCode("PUSH 0");
     }
 }
