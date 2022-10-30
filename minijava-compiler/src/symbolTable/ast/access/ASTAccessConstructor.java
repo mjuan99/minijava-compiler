@@ -1,5 +1,6 @@
 package symbolTable.ast.access;
 
+import codeGenerator.CodeGenerator;
 import errors.SemanticError;
 import errors.SemanticException;
 import lexicalAnalyzer.Token;
@@ -12,11 +13,7 @@ import symbolTable.types.STTypeReference;
 public class ASTAccessConstructor extends ASTAccess{
     private final Token tkClassName;
     private final boolean hasArguments;
-
-    @Override
-    public void generateCode() {
-        //TODO implementar
-    }
+    private STClass stClass;
 
     public ASTAccessConstructor(Token tkClassName, boolean hasArguments) {
         this.tkClassName = tkClassName;
@@ -46,7 +43,7 @@ public class ASTAccessConstructor extends ASTAccess{
 
     @Override
     public STType check() throws SemanticException {
-        STClass stClass = ST.symbolTable.getSTClass(tkClassName.getLexeme());
+        stClass = ST.symbolTable.getSTClass(tkClassName.getLexeme());
         if(stClass == null) {
             STInterface stInterface = ST.symbolTable.getSTInterface(tkClassName.getLexeme());
             if(stInterface == null)
@@ -57,5 +54,15 @@ public class ASTAccessConstructor extends ASTAccess{
         if(hasArguments)
             throw new SemanticException(new SemanticError(tkClassName, "constructor de clase no deberia tener argumentos"));
         return checkChaining(new STTypeReference(tkClassName));
+    }
+
+    @Override
+    public void generateCode() {
+        CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
+        CodeGenerator.generateCode("PUSH " + stClass.getAttributesSize() + 1 + " ;celdas a reservar");
+        CodeGenerator.generateCode("PUSH " + CodeGenerator.tagMalloc);
+        CodeGenerator.generateCode("CALL ;llamada a malloc");
+
+        //TODO setear vtable
     }
 }

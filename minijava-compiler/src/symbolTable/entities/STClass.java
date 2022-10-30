@@ -8,10 +8,7 @@ import lexicalAnalyzer.Token;
 import symbolTable.ST;
 import symbolTable.types.STTypeVoid;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 
 public class STClass {
     private final Token tkName;
@@ -322,5 +319,9 @@ public class STClass {
             for(STMethod stMethod : ST.symbolTable.getSTClass(tkClassItExtends.getLexeme()).stMethods.values())
                 maxParentMethodOffset = Math.max(maxParentMethodOffset, stMethod.getOffset());
         return maxParentMethodOffset + 1;
+    }
+
+    public int getAttributesSize() {
+        return stAttributes.size();
     }
 }
