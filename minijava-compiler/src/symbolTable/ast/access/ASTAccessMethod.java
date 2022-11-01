@@ -59,7 +59,7 @@ public class ASTAccessMethod extends ASTAccess{
             CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
             CodeGenerator.generateCode("SWAP");
         }
-        for(int i = 0; i <arguments.size(); i++){
+        for(int i = arguments.size() - 1; i >= 0; i--){
             ASTExpression argument = arguments.get(i);
             argument.generateCode();
             CodeGenerator.setComment("argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());

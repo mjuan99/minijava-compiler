@@ -74,7 +74,7 @@ public class ASTMethodChaining implements ASTChaining{
             if(!stMethod.isStatic())
                 CodeGenerator.generateCode("SWAP");
         }
-        for(int i = 0; i <arguments.size(); i++){
+        for(int i = arguments.size() - 1; i >= 0; i--){
             ASTExpression argument = arguments.get(i);
             argument.generateCode();
             CodeGenerator.setComment("argumento " + i + " del metodo " + stMethod.getTKName().getLexeme());

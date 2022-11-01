@@ -71,7 +71,7 @@ public class ASTAccessStaticMethod extends ASTAccess{
     public void generateCode() {
         if(!stMethod.getSTReturnType().equals(new STTypeVoid()))
             CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
-        for(int i = 0; i <arguments.size(); i++){
+        for(int i = arguments.size() - 1; i >= 0; i--){
             ASTExpression argument = arguments.get(i);
             argument.generateCode();
             CodeGenerator.setComment("argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
