@@ -15,7 +15,7 @@ class A{
             System.printCln('0');
         }
         else if(i > 0) {
-            System.printC('+');
+            System.printC('>');
             System.printCln('0');
         }
         else {
