@@ -19,217 +19,249 @@ malloc:            LOADFP               ;Inicialización unidad
                    STOREFP
                    RET 1                ;Retorna eliminando el parámetro
                    .DATA                ;VTable de A
-VT_A:              DW debugPrint@Object,init@A,m1@A,main
+VT_A:              DW debugPrint@Object,main
                    .CODE                ;codigo de metodos definidos en A
-init@A:            LOADFP               ;enlace dinamico
-                   LOADSP
-                   STOREFP              ;actualizar registro de activacion (apilar)
-                   LOAD 4               ;carga valor del argumento en la pila
-                   LOAD 3
-                   SWAP
-                   STOREREF 1           ;almacena el tope de la pila en el atributo
-                   LOAD 3
-                   STORE 5
-                   FMEM 0
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 2                ;retorno del metodo
-                   FMEM 0               ;liberar variables locales
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 2                ;retorno del metodo
-m1@A:              LOADFP               ;enlace dinamico
-                   LOADSP
-                   STOREFP              ;actualizar registro de activacion (apilar)
-                   LOAD 3
-                   LOADREF 1            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System
-                   CALL                 ;llamada a metodo System.printSln
-                   LOAD 3
-                   STORE 4
-                   FMEM 0
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 1                ;retorno del metodo
-                   FMEM 0               ;liberar variables locales
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 1                ;retorno del metodo
 main:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
                    RMEM 1               ;lugar de retorno
-                   PUSH 6
+                   PUSH 3               ;celdas a reservar
                    PUSH malloc
                    CALL                 ;llamada a malloc
                    DUP
-                   PUSH VT_String
-                   STOREREF 0           ;set vtable
-                   DUP
-                   PUSH 'H'
-                   STOREREF 1
-                   DUP
-                   PUSH 'o'
-                   STOREREF 2
-                   DUP
-                   PUSH 'l'
-                   STOREREF 3
-                   DUP
-                   PUSH 'a'
-                   STOREREF 4
-                   DUP
-                   PUSH 0
-                   STOREREF 5           ;declaracion de variable
-                   RMEM 1               ;lugar de retorno
-                   PUSH 2               ;celdas a reservar
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_A
-                   STOREREF 0           ;set vtable
+                   PUSH VT_List
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   PUSH 4               ;declaracion de variable
+whileCondition:    LOAD -1              ;carga valor de la variable en la pila
+                   PUSH 15
+                   LT
+                   BF endWhile
+                   LOAD 0               ;carga valor de la variable en la pila
                    RMEM 1               ;lugar de retorno
                    SWAP
-                   LOAD 0               ;carga valor de la variable en la pila ;argumento 0 del metodo init
-                   SWAP
-                   DUP
-                   LOADREF 0
-                   LOADREF 1
-                   CALL                 ;llamada a metodo init
-                   RMEM 1               ;lugar de retorno
+                   LOAD -1              ;carga valor de la variable en la pila ;argumento 0 del metodo addLast
                    SWAP
                    DUP
                    LOADREF 0
                    LOADREF 2
-                   CALL                 ;llamada a metodo m1
+                   CALL                 ;llamada a metodo addLast
                    FMEM 1
-                   RMEM 1               ;lugar de retorno
-                   PUSH 5
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_String
-                   STOREREF 0           ;set vtable
-                   DUP
-                   PUSH 'a'
-                   STOREREF 1
-                   DUP
-                   PUSH 's'
-                   STOREREF 2
-                   DUP
-                   PUSH 'd'
-                   STOREREF 3
-                   DUP
-                   PUSH 0
-                   STOREREF 4           ;declaracion de variable
-                   RMEM 1               ;lugar de retorno
-                   PUSH 5
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_String
-                   STOREREF 0           ;set vtable
-                   DUP
-                   PUSH 'd'
-                   STOREREF 1
-                   DUP
-                   PUSH 's'
-                   STOREREF 2
-                   DUP
-                   PUSH 'a'
-                   STOREREF 3
-                   DUP
-                   PUSH 0
-                   STOREREF 4           ;declaracion de variable
-                   FMEM 2               ;liberar variables locales
+                   LOAD -1              ;carga valor de la variable en la pila
+                   PUSH 3
+                   ADD
+                   STORE -1             ;almacena el tope de la pila en la variable
                    FMEM 0               ;liberar variables locales
-                   RMEM 1               ;lugar de retorno
-                   PUSH 7
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_String
-                   STOREREF 0           ;set vtable
-                   DUP
-                   PUSH 'M'
-                   STOREREF 1
-                   DUP
-                   PUSH 'u'
-                   STOREREF 2
-                   DUP
-                   PUSH 'n'
-                   STOREREF 3
-                   DUP
-                   PUSH 'd'
-                   STOREREF 4
-                   DUP
-                   PUSH 'o'
-                   STOREREF 5
-                   DUP
-                   PUSH 0
-                   STOREREF 6           ;declaracion de variable
-                   RMEM 1               ;lugar de retorno
-                   PUSH 5
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_String
-                   STOREREF 0           ;set vtable
-                   DUP
-                   PUSH '!'
-                   STOREREF 1
-                   DUP
-                   PUSH '!'
-                   STOREREF 2
-                   DUP
-                   PUSH '!'
-                   STOREREF 3
-                   DUP
-                   PUSH 0
-                   STOREREF 4           ;declaracion de variable
-                   RMEM 1               ;lugar de retorno
-                   PUSH 2               ;celdas a reservar
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_A
-                   STOREREF 0           ;set vtable
+                   JUMP whileCondition
+endWhile:          NOP
+                   LOAD 0               ;carga valor de la variable en la pila
                    RMEM 1               ;lugar de retorno
                    SWAP
-                   LOAD -1              ;carga valor de la variable en la pila ;argumento 0 del metodo init
+                   PUSH 7               ;argumento 0 del metodo getNode
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 9
+                   CALL                 ;llamada a metodo getNode ;declaracion de variable
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 5               ;argumento 1 del metodo addBefore
+                   SWAP
+                   LOAD -2              ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 3
+                   CALL                 ;llamada a metodo addBefore
+                   FMEM 1
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 6               ;argumento 1 del metodo addBefore
+                   SWAP
+                   LOAD -2              ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 3
+                   CALL                 ;llamada a metodo addBefore
+                   FMEM 1
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 10              ;argumento 0 del metodo getNode
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 9
+                   CALL                 ;llamada a metodo getNode
+                   STORE -2             ;almacena el tope de la pila en la variable
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 11              ;argumento 1 del metodo addAfter
+                   SWAP
+                   LOAD -2              ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 5
+                   CALL                 ;llamada a metodo addAfter
+                   STORE -2             ;almacena el tope de la pila en la variable
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 12              ;argumento 1 del metodo addAfter
+                   SWAP
+                   LOAD -2              ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 5
+                   CALL                 ;llamada a metodo addAfter
+                   FMEM 1
+                   PUSH 3
+                   STORE -1             ;almacena el tope de la pila en la variable
+whileCondition$2:  LOAD -1              ;carga valor de la variable en la pila
+                   PUSH 0
+                   GT
+                   BF endWhile$2
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD -1              ;carga valor de la variable en la pila ;argumento 0 del metodo addFirst
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 11
+                   CALL                 ;llamada a metodo addFirst
+                   FMEM 1
+                   LOAD -1              ;carga valor de la variable en la pila
+                   PUSH 1
+                   SUB
+                   STORE -1             ;almacena el tope de la pila en la variable
+                   FMEM 0               ;liberar variables locales
+                   JUMP whileCondition$2
+endWhile$2:        NOP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 8               ;argumento 1 del metodo addAfter
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 7
+                   CALL                 ;llamada a metodo getFirst ;argumento 0 del metodo getNext
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 8
+                   CALL                 ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 8
+                   CALL                 ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 8
+                   CALL                 ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 8
+                   CALL                 ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 8
+                   CALL                 ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 8
+                   CALL                 ;llamada a metodo getNext ;argumento 0 del metodo addAfter
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 5
+                   CALL                 ;llamada a metodo addAfter
+                   FMEM 1
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   PUSH 9               ;argumento 1 del metodo addBefore
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 10
+                   CALL                 ;llamada a metodo getLast ;argumento 0 del metodo getPrevious
                    SWAP
                    DUP
                    LOADREF 0
                    LOADREF 1
-                   CALL                 ;llamada a metodo init
-                   RMEM 1               ;lugar de retorno
-                   SWAP
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                 ;llamada a metodo m1
-                   FMEM 1
-                   RMEM 1               ;lugar de retorno
-                   PUSH 2               ;celdas a reservar
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_A
-                   STOREREF 0           ;set vtable
-                   RMEM 1               ;lugar de retorno
-                   SWAP
-                   LOAD -2              ;carga valor de la variable en la pila ;argumento 0 del metodo init
+                   CALL                 ;llamada a metodo getPrevious ;argumento 0 del metodo getPrevious
                    SWAP
                    DUP
                    LOADREF 0
                    LOADREF 1
-                   CALL                 ;llamada a metodo init
-                   RMEM 1               ;lugar de retorno
+                   CALL                 ;llamada a metodo getPrevious ;argumento 0 del metodo getPrevious
                    SWAP
                    DUP
                    LOADREF 0
-                   LOADREF 2
-                   CALL                 ;llamada a metodo m1
+                   LOADREF 1
+                   CALL                 ;llamada a metodo getPrevious ;argumento 0 del metodo addBefore
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 3
+                   CALL                 ;llamada a metodo addBefore
                    FMEM 1
-                   FMEM 2               ;liberar variables locales
-                   FMEM 1               ;liberar variables locales
+                   LOAD 0               ;carga valor de la variable en la pila
+                   DUP
+                   LOADREF 0
+                   LOADREF 4
+                   CALL                 ;llamada a metodo print
+                   FMEM 3               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 0                ;retorno del metodo
+                   .DATA                ;VTable de Node
+VT_Node:           DW debugPrint@Object
+                   .CODE                ;codigo de metodos definidos en Node
                    .DATA                ;VTable de Object
 VT_Object:         DW debugPrint@Object
                    .CODE                ;codigo de metodos definidos en Object
@@ -241,6 +273,437 @@ debugPrint@Object: LOADFP               ;enlace dinamico
                    PRNLN
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 1                ;retorno del metodo
+                   .DATA                ;VTable de List
+VT_List:           DW debugPrint@Object,getPrevious@List,addLast@List,addBefore@List,print@List,addAfter@List,getSize@List,getFirst@List,getNext@List,getNode@List,getLast@List,addFirst@List
+                   .CODE                ;codigo de metodos definidos en List
+getPrevious@List:  LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila ;declaracion de variable
+whileCondition$3:  LOAD 0               ;carga valor de la variable en la pila
+                   PUSH 0
+                   NE
+                   BF endWhile$3
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   LOAD 4               ;carga valor del argumento en la pila
+                   EQ
+                   BF else
+then:              LOAD 0               ;carga valor de la variable en la pila
+                   STORE 5
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   JUMP endIf
+else:              LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 0              ;almacena el tope de la pila en la variable
+endIf:             NOP                  ;fin del if
+                   JUMP whileCondition$3
+endWhile$3:        NOP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 5
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   FMEM 1               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+addLast@List:      LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   RMEM 1               ;lugar de retorno
+                   PUSH 3               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_Node
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   PUSH 0
+                   EQ
+                   BF else$2
+then$2:            LOAD 0               ;carga valor de la variable en la pila
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   JUMP endIf$2
+else$2:            LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila ;declaracion de variable
+whileCondition$4:  LOAD -1              ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   PUSH 0
+                   NE
+                   BF endWhile$4
+                   LOAD -1              ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE -1             ;almacena el tope de la pila en la variable
+                   JUMP whileCondition$4
+endWhile$4:        NOP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOAD -1              ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   FMEM 1               ;liberar variables locales
+endIf$2:           NOP                  ;fin del if
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   PUSH 1
+                   ADD
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 5
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   FMEM 1               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+addBefore@List:    LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   RMEM 1               ;lugar de retorno
+                   PUSH 3               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_Node
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   LOAD 5               ;carga valor del argumento en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila ;declaracion de variable
+whileCondition$5:  LOAD -1              ;carga valor de la variable en la pila
+                   PUSH 0
+                   NE
+                   BF endWhile$5
+                   LOAD -1              ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   LOAD 4               ;carga valor del argumento en la pila
+                   EQ
+                   BF else$3
+then$3:            LOAD 0               ;carga valor de la variable en la pila
+                   LOAD -1              ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   PUSH 1
+                   ADD
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 6
+                   FMEM 2
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 3                ;retorno del metodo
+                   FMEM 0               ;liberar variables locales
+                   JUMP endIf$3
+else$3:            LOAD -1              ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE -1             ;almacena el tope de la pila en la variable
+endIf$3:           NOP                  ;fin del if
+                   JUMP whileCondition$5
+endWhile$5:        NOP
+                   LOAD -1              ;carga valor de la variable en la pila
+                   STORE 6
+                   FMEM 2
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 3                ;retorno del metodo
+                   FMEM 2               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 3                ;retorno del metodo
+print@List:        LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila ;declaracion de variable
+                   RMEM 1               ;lugar de retorno
+                   PUSH 9
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH 's'
+                   STOREREF 1
+                   DUP
+                   PUSH 'i'
+                   STOREREF 2
+                   DUP
+                   PUSH 'z'
+                   STOREREF 3
+                   DUP
+                   PUSH 'e'
+                   STOREREF 4
+                   DUP
+                   PUSH ' '
+                   STOREREF 5
+                   DUP
+                   PUSH '='
+                   STOREREF 6
+                   DUP
+                   PUSH ' '
+                   STOREREF 7
+                   DUP
+                   PUSH 0
+                   STOREREF 8           ;argumento 0 del metodo System.printS
+                   PUSH printS@System
+                   CALL                 ;llamada a metodo System.printS
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
+                   PUSH printIln@System
+                   CALL                 ;llamada a metodo System.printIln
+                   PUSH 0               ;declaracion de variable
+whileCondition$6:  LOAD -1              ;carga valor de la variable en la pila
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   LT
+                   BF endWhile$6
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 2            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printI
+                   PUSH printI@System
+                   CALL                 ;llamada a metodo System.printI
+                   LOAD -1              ;carga valor de la variable en la pila
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   PUSH 1
+                   SUB
+                   LT
+                   BF endIf$4
+then$4:            RMEM 1               ;lugar de retorno
+                   PUSH 4
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_String
+                   STOREREF 0           ;set vtable
+                   DUP
+                   PUSH ','
+                   STOREREF 1
+                   DUP
+                   PUSH ' '
+                   STOREREF 2
+                   DUP
+                   PUSH 0
+                   STOREREF 3           ;argumento 0 del metodo System.printS
+                   PUSH printS@System
+                   CALL                 ;llamada a metodo System.printS
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 0              ;almacena el tope de la pila en la variable
+                   FMEM 0               ;liberar variables locales
+endIf$4:           NOP                  ;fin del if
+                   LOAD -1              ;carga valor de la variable en la pila
+                   PUSH 1
+                   ADD
+                   STORE -1             ;almacena el tope de la pila en la variable
+                   FMEM 0               ;liberar variables locales
+                   JUMP whileCondition$6
+endWhile$6:        NOP
+                   PUSH println@System
+                   CALL                 ;llamada a metodo System.println
+                   FMEM 2               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+addAfter@List:     LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   RMEM 1               ;lugar de retorno
+                   PUSH 3               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_Node
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   LOAD 5               ;carga valor del argumento en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOAD 4               ;carga valor del argumento en la pila
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   PUSH 1
+                   ADD
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 6
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 3                ;retorno del metodo
+                   FMEM 1               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 3                ;retorno del metodo
+getSize@List:      LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   STORE 4
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+getFirst@List:     LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 4
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+getNext@List:      LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 5
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+getNode@List:      LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila ;declaracion de variable
+whileCondition$7:  LOAD 0               ;carga valor de la variable en la pila
+                   PUSH 0
+                   NE
+                   BF endWhile$7
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   LOAD 4               ;carga valor del argumento en la pila
+                   EQ
+                   BF else$4
+then$5:            LOAD 0               ;carga valor de la variable en la pila
+                   STORE 5
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   JUMP endIf$5
+else$4:            LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 0              ;almacena el tope de la pila en la variable
+endIf$5:           NOP                  ;fin del if
+                   JUMP whileCondition$7
+endWhile$7:        NOP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 5
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   FMEM 1               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+getLast@List:      LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   PUSH 0
+                   EQ
+                   BF else$5
+then$6:            PUSH 0
+                   STORE 4
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+                   JUMP endIf$6
+else$5:            LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila ;declaracion de variable
+whileCondition$8:  LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   PUSH 0
+                   NE
+                   BF endWhile$8
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 0              ;almacena el tope de la pila en la variable
+                   JUMP whileCondition$8
+endWhile$8:        NOP
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 4
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+                   FMEM 1               ;liberar variables locales
+endIf$6:           NOP                  ;fin del if
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+addFirst@List:     LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   RMEM 1               ;lugar de retorno
+                   PUSH 3               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_Node
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 3               ;carga this
+                   LOADREF 2            ;carga valor del atributo en la pila
+                   PUSH 1
+                   ADD
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD 0               ;carga valor de la variable en la pila
+                   STORE 5
+                   FMEM 1
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+                   FMEM 1               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
                    .DATA                ;VTable de String
 VT_String:         DW debugPrint@Object
                    .CODE                ;codigo de metodos definidos en String
