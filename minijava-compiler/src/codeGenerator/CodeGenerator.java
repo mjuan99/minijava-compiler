@@ -75,15 +75,15 @@ public class CodeGenerator {
         Scanner scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
-            if(line.contains(":"))
-                maxTag = Math.max(line.indexOf(':'), maxTag);
+            if(getCharacterIndex(line, ':') != -1)
+                maxTag = Math.max(getCharacterIndex(line, ':'), maxTag);
         }
         scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
             String formattedLine;
-            if(line.contains(":")){
-                int tag = line.indexOf(':');
+            if(getCharacterIndex(line, ':') != -1){
+                int tag = getCharacterIndex(line, ':');
                 formattedLine = line.substring(0, tag+1) + getSpaces(maxTag - tag) + line.substring(tag+1);
             }
             else
@@ -99,17 +99,15 @@ public class CodeGenerator {
         Scanner scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
-            if(line.contains(";"))
-                maxComment = Math.max(line.indexOf(';'), maxComment);
-            /*else
-                maxComment = Math.max(line.length(), maxComment);*/
+            if(getCharacterIndex(line, ';') != -1)
+                maxComment = Math.max(getCharacterIndex(line, ';'), maxComment);
         }
         scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
             String formattedLine;
-            if(line.contains(";")){
-                int comment = line.indexOf(';');
+            if(getCharacterIndex(line, ';') != -1){
+                int comment = getCharacterIndex(line, ';');
                 formattedLine = line.substring(0, comment) + getSpaces(maxComment - comment + 10) + line.substring(comment);
             }
             else
@@ -117,6 +115,19 @@ public class CodeGenerator {
             formattedCode.append(formattedLine).append("\n");
         }
         return formattedCode.toString();
+    }
+
+    private static int getCharacterIndex(String line, char character){
+        if(line.contains(Character.toString(character))){
+            int characterIndex = line.indexOf(character);
+            if(line.contains("'") && line.indexOf('\'') < characterIndex)
+                return -1;
+            if(line.contains("\"") && line.indexOf('"') < characterIndex)
+                return -1;
+            return characterIndex;
+        }
+        else
+            return -1;
     }
 
     private static String getSpaces(int n){
