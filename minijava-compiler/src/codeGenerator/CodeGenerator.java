@@ -71,23 +71,24 @@ public class CodeGenerator {
 
     private static String formatTags(String code){
         StringBuilder formattedCode = new StringBuilder();
-        int maxTag = 0;
+        int maxTagIndex = 0;
         Scanner scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
-            if(getCharacterIndex(line, ':') != -1)
-                maxTag = Math.max(getCharacterIndex(line, ':'), maxTag);
+            int tagIndex = getCharacterIndex(line, ':');
+            if(tagIndex != -1)
+                maxTagIndex = Math.max(tagIndex, maxTagIndex);
         }
         scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
             String formattedLine;
-            if(getCharacterIndex(line, ':') != -1){
-                int tag = getCharacterIndex(line, ':');
-                formattedLine = line.substring(0, tag+1) + getSpaces(maxTag - tag) + line.substring(tag+1);
+            int tagIndex = getCharacterIndex(line, ':');
+            if(tagIndex != -1){
+                formattedLine = line.substring(0, tagIndex + 1) + getSpaces(maxTagIndex - tagIndex) + line.substring(tagIndex + 1);
             }
             else
-                formattedLine = getSpaces(maxTag + 2) + line;
+                formattedLine = getSpaces(maxTagIndex + 2) + line;
             formattedCode.append(formattedLine).append("\n");
         }
         return formattedCode.toString();
@@ -95,20 +96,21 @@ public class CodeGenerator {
 
     private static String formatComments(String code){
         StringBuilder formattedCode = new StringBuilder();
-        int maxComment = 0;
+        int maxCommentIndex = 0;
         Scanner scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
-            if(getCharacterIndex(line, ';') != -1)
-                maxComment = Math.max(getCharacterIndex(line, ';'), maxComment);
+            int commentIndex = getCharacterIndex(line, ';');
+            if(commentIndex != -1)
+                maxCommentIndex = Math.max(commentIndex, maxCommentIndex);
         }
         scanner = new Scanner(code);
         while (scanner.hasNextLine()){
             String line = scanner.nextLine();
             String formattedLine;
-            if(getCharacterIndex(line, ';') != -1){
-                int comment = getCharacterIndex(line, ';');
-                formattedLine = line.substring(0, comment) + getSpaces(maxComment - comment + 10) + line.substring(comment);
+            int commentIndex = getCharacterIndex(line, ';');
+            if(commentIndex != -1){
+                formattedLine = line.substring(0, commentIndex) + getSpaces(maxCommentIndex - commentIndex + 10) + line.substring(commentIndex);
             }
             else
                 formattedLine = line;
@@ -118,16 +120,22 @@ public class CodeGenerator {
     }
 
     private static int getCharacterIndex(String line, char character){
-        if(line.contains(Character.toString(character))){
-            int characterIndex = line.indexOf(character);
-            if(line.contains("'") && line.indexOf('\'') < characterIndex)
-                return -1;
-            if(line.contains("\"") && line.indexOf('"') < characterIndex)
-                return -1;
-            return characterIndex;
+        char lastSpecialCharacter = '\0';
+        for(int i = 0; i < line.length(); i++){
+            if(lastSpecialCharacter == '\0') {
+                if(line.charAt(i) == character)
+                    return i;
+                else if(line.charAt(i) == '\'')
+                    lastSpecialCharacter = '\'';
+                else if(line.charAt(i) == '"')
+                    lastSpecialCharacter = '"';
+            }
+            else if(lastSpecialCharacter == '\'' && line.charAt(i) == '\'')
+                lastSpecialCharacter = '\0';
+            else if(lastSpecialCharacter == '"' && line.charAt(i) == '"')
+                lastSpecialCharacter = '\0';
         }
-        else
-            return -1;
+        return -1;
     }
 
     private static String getSpaces(int n){
