@@ -1,13 +1,15 @@
 class A{
     public int x;
     static void main(){
-        var a = new B();
+        var a = new A();
+        var b = new B();
+        a = b;
         a.m1(9);
         System.printIln(a.x);
-        System.printIln(a.m0());
+        System.printIln(a.getXA());
     }
 
-    int m0(){
+    int getXA(){
         return x;
     }
 
@@ -21,6 +23,7 @@ class B extends A{
 
     void m1(int i){
         x = i;
-        super.x = i;
+        super.y = 7;
+        super.m1(i);
     }
 }

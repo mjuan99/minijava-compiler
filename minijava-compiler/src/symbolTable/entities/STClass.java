@@ -157,6 +157,8 @@ public class STClass {
                     ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " es estatico pero el metodo que redefine no lo es"));
                 else if (!stMyMethod.isStatic() && stParentMethod.isStatic())
                     ST.symbolTable.addError(new SemanticError(stMyMethod.getTKName(), "el metodo " + stMyMethod.getHash() + " no es estatico pero el metodo que redefine si lo es"));
+                if(stMyMethod != null)
+                    stParentMethod.addRedefinition(stMyMethod);
             }
         });
     }

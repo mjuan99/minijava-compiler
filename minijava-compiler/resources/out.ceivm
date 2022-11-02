@@ -19,9 +19,9 @@ malloc:            LOADFP               ;Inicialización unidad
                    STOREFP
                    RET 1                ;Retorna eliminando el parámetro
                    .DATA                ;VTable de A
-VT_A:              DW debugPrint@Object,m0@A,m1@A,main
+VT_A:              DW debugPrint@Object,getXA@A,m1@A,main
                    .CODE                ;codigo de metodos definidos en A
-m0@A:              LOADFP               ;enlace dinamico
+getXA@A:           LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
                    LOAD 3               ;carga this
@@ -47,21 +47,30 @@ main:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
                    RMEM 1               ;lugar de retorno
+                   PUSH 2               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_A
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   RMEM 1               ;lugar de retorno
                    PUSH 3               ;celdas a reservar
                    PUSH malloc
                    CALL                 ;llamada a malloc
                    DUP
                    PUSH VT_B
                    STOREREF 0           ;set vtable ;declaracion de variable
+                   LOAD -1              ;carga valor de la variable en la pila
+                   STORE 0              ;almacena el tope de la pila en la variable
                    LOAD 0               ;carga valor de la variable en la pila
                    PUSH 9               ;argumento 0 del metodo m1
                    SWAP
                    DUP
                    LOADREF 0
-                   LOADREF 4
+                   LOADREF 2
                    CALL                 ;llamada a metodo m1
                    LOAD 0               ;carga valor de la variable en la pila
-                   LOADREF 1            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
+                   LOADREF 2            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
                    PUSH printIln@System
                    CALL                 ;llamada a metodo System.printIln
                    LOAD 0               ;carga valor de la variable en la pila
@@ -70,14 +79,14 @@ main:              LOADFP               ;enlace dinamico
                    DUP
                    LOADREF 0
                    LOADREF 1
-                   CALL                 ;llamada a metodo m0 ;argumento 0 del metodo System.printIln
+                   CALL                 ;llamada a metodo getXA ;argumento 0 del metodo System.printIln
                    PUSH printIln@System
                    CALL                 ;llamada a metodo System.printIln
-                   FMEM 1               ;liberar variables locales
+                   FMEM 2               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 0                ;retorno del metodo
                    .DATA                ;VTable de B
-VT_B:              DW debugPrint@Object,m0@A,main
+VT_B:              DW debugPrint@Object,getXA@A,m1@B,main
                    .CODE                ;codigo de metodos definidos en B
 m1@B:              LOADFP               ;enlace dinamico
                    LOADSP
@@ -86,10 +95,13 @@ m1@B:              LOADFP               ;enlace dinamico
                    LOAD 3               ;carga this
                    SWAP
                    STOREREF 1           ;almacena el tope de la pila en el atributo
-                   LOAD 4               ;carga valor del argumento en la pila
                    LOAD 3
+                   LOAD 4               ;carga valor del argumento en la pila ;argumento 0 del metodo m1
                    SWAP
-                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                 ;llamada a metodo m1
                    FMEM 0               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 2                ;retorno del metodo

@@ -28,6 +28,7 @@ public class STMethod implements STAbstractMethod{
     private boolean defaultBlock;
     private String methodTag;
     private int offset;
+    private LinkedList<STMethod> redefinitions;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -39,6 +40,11 @@ public class STMethod implements STAbstractMethod{
         astBlock = new ASTBlock(null);
         defaultBlock = true;
         offset = -1;
+        redefinitions = new LinkedList<>();
+    }
+
+    public void addRedefinition(STMethod redefinition){
+        redefinitions.add(redefinition);
     }
 
     public void setTKLastBracket(Token tkLastBracket) {
@@ -174,6 +180,8 @@ public class STMethod implements STAbstractMethod{
 
     public void setOffset(int offset) {
         this.offset = offset;
+        for(STMethod redefinition : redefinitions)
+            redefinition.setOffset(offset);
     }
 
     public int getOffset(){
