@@ -27,3 +27,5 @@ out/
 hs_err_pid*
 
 !virtual-machine/CeIVM-cei2011.jar
+
+minijava-compiler/src/TesterGeneracionCodigo.java
