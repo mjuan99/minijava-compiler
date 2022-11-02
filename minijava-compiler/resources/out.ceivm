@@ -69,11 +69,7 @@ main:              LOADFP               ;enlace dinamico
                    LOADREF 0
                    LOADREF 2
                    CALL                 ;llamada a metodo m1
-                   LOAD 0               ;carga valor de la variable en la pila
-                   LOADREF 2            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
-                   PUSH printIln@System
-                   CALL                 ;llamada a metodo System.printIln
-                   LOAD 0               ;carga valor de la variable en la pila
+                   LOAD -1              ;carga valor de la variable en la pila
                    RMEM 1               ;lugar de retorno
                    SWAP
                    DUP
@@ -82,11 +78,33 @@ main:              LOADFP               ;enlace dinamico
                    CALL                 ;llamada a metodo getXA ;argumento 0 del metodo System.printIln
                    PUSH printIln@System
                    CALL                 ;llamada a metodo System.printIln
+                   PUSH 3
+                   LOAD 0               ;carga valor de la variable en la pila
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   LOAD -1              ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 1
+                   CALL                 ;llamada a metodo getXA ;argumento 0 del metodo System.printIln
+                   PUSH printIln@System
+                   CALL                 ;llamada a metodo System.printIln
+                   LOAD -1              ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 4
+                   CALL                 ;llamada a metodo getXB ;argumento 0 del metodo System.printIln
+                   PUSH printIln@System
+                   CALL                 ;llamada a metodo System.printIln
                    FMEM 2               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 0                ;retorno del metodo
                    .DATA                ;VTable de B
-VT_B:              DW debugPrint@Object,getXA@A,m1@B,main
+VT_B:              DW debugPrint@Object,getXA@A,m1@B,main,getXB@B
                    .CODE                ;codigo de metodos definidos en B
 m1@B:              LOADFP               ;enlace dinamico
                    LOADSP
@@ -95,16 +113,27 @@ m1@B:              LOADFP               ;enlace dinamico
                    LOAD 3               ;carga this
                    SWAP
                    STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 4               ;carga valor del argumento en la pila
+                   PUSH 1
+                   SUB
                    LOAD 3
-                   LOAD 4               ;carga valor del argumento en la pila ;argumento 0 del metodo m1
                    SWAP
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                 ;llamada a metodo m1
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
                    FMEM 0               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 2                ;retorno del metodo
+getXB@B:           LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 3               ;carga this
+                   LOADREF 1            ;carga valor del atributo en la pila
+                   STORE 4
+                   FMEM 0
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 1                ;retorno del metodo
                    .DATA                ;VTable de Object
 VT_Object:         DW debugPrint@Object
                    .CODE                ;codigo de metodos definidos en Object
