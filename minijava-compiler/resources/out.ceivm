@@ -19,99 +19,12 @@ malloc:            LOADFP               ;Inicialización unidad
                    STOREFP
                    RET 1                ;Retorna eliminando el parámetro
                    .DATA                ;VTable de A
-VT_A:              DW debugPrint@Object,reverseAux@A,main,reverse@A
+VT_A:              DW debugPrint@Object,m0@A,m1@A,main
                    .CODE                ;codigo de metodos definidos en A
-reverseAux@A:      LOADFP               ;enlace dinamico
+m0@A:              LOADFP               ;enlace dinamico
                    LOADSP
                    STOREFP              ;actualizar registro de activacion (apilar)
-                   LOAD 3               ;carga valor del argumento en la pila
-                   PUSH 10
-                   LT
-                   BF else
-then:              RMEM 1               ;lugar de retorno
-                   PUSH 3               ;celdas a reservar
-                   PUSH malloc
-                   CALL                 ;llamada a malloc
-                   DUP
-                   PUSH VT_Pair
-                   STOREREF 0           ;set vtable ;declaracion de variable
-                   LOAD 3               ;carga valor del argumento en la pila
-                   LOAD 0               ;carga valor de la variable en la pila
-                   SWAP
-                   STOREREF 2           ;almacena el tope de la pila en el atributo
-                   PUSH 10
-                   LOAD 0               ;carga valor de la variable en la pila
-                   SWAP
-                   STOREREF 1           ;almacena el tope de la pila en el atributo
-                   LOAD 0               ;carga valor de la variable en la pila
-                   STORE 4
-                   FMEM 1
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 1                ;retorno del metodo
-                   FMEM 1               ;liberar variables locales
-                   JUMP endIf
-else:              RMEM 1               ;lugar de retorno
-                   LOAD 3               ;carga valor del argumento en la pila
-                   PUSH 10
-                   DIV                  ;argumento 0 del metodo A.reverseAux
-                   PUSH reverseAux@A
-                   CALL                 ;llamada a metodo reverseAux ;declaracion de variable
-                   LOAD 3               ;carga valor del argumento en la pila
-                   PUSH 10
-                   MOD
-                   LOAD 0               ;carga valor de la variable en la pila
-                   LOADREF 1            ;carga valor del atributo en la pila
-                   MUL
-                   LOAD 0               ;carga valor de la variable en la pila
-                   LOADREF 2            ;carga valor del atributo en la pila
-                   ADD
-                   LOAD 0               ;carga valor de la variable en la pila
-                   SWAP
-                   STOREREF 2           ;almacena el tope de la pila en el atributo
-                   LOAD 0               ;carga valor de la variable en la pila
-                   LOADREF 1            ;carga valor del atributo en la pila
-                   PUSH 10
-                   MUL
-                   LOAD 0               ;carga valor de la variable en la pila
-                   SWAP
-                   STOREREF 1           ;almacena el tope de la pila en el atributo
-                   LOAD 0               ;carga valor de la variable en la pila
-                   STORE 4
-                   FMEM 1
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 1                ;retorno del metodo
-                   FMEM 1               ;liberar variables locales
-endIf:             NOP                  ;fin del if
-                   FMEM 0               ;liberar variables locales
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 1                ;retorno del metodo
-main:              LOADFP               ;enlace dinamico
-                   LOADSP
-                   STOREFP              ;actualizar registro de activacion (apilar)
-                   PUSH 54321           ;declaracion de variable
-                   PUSH 56789           ;declaracion de variable
-                   RMEM 1               ;lugar de retorno
-                   LOAD 0               ;carga valor de la variable en la pila ;argumento 0 del metodo A.reverse
-                   PUSH reverse@A
-                   CALL                 ;llamada a metodo reverse ;argumento 0 del metodo System.printIln
-                   PUSH printIln@System
-                   CALL                 ;llamada a metodo System.printIln
-                   RMEM 1               ;lugar de retorno
-                   LOAD -1              ;carga valor de la variable en la pila ;argumento 0 del metodo A.reverse
-                   PUSH reverse@A
-                   CALL                 ;llamada a metodo reverse ;argumento 0 del metodo System.printIln
-                   PUSH printIln@System
-                   CALL                 ;llamada a metodo System.printIln
-                   FMEM 2               ;liberar variables locales
-                   STOREFP              ;actualizar registro de activación (desapilar)
-                   RET 0                ;retorno del metodo
-reverse@A:         LOADFP               ;enlace dinamico
-                   LOADSP
-                   STOREFP              ;actualizar registro de activacion (apilar)
-                   RMEM 1               ;lugar de retorno
-                   LOAD 3               ;carga valor del argumento en la pila ;argumento 0 del metodo A.reverseAux
-                   PUSH reverseAux@A
-                   CALL                 ;llamada a metodo reverseAux
+                   LOAD 3               ;carga this
                    LOADREF 2            ;carga valor del atributo en la pila
                    STORE 4
                    FMEM 0
@@ -120,6 +33,66 @@ reverse@A:         LOADFP               ;enlace dinamico
                    FMEM 0               ;liberar variables locales
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 1                ;retorno del metodo
+m1@A:              LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
+main:              LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   RMEM 1               ;lugar de retorno
+                   PUSH 3               ;celdas a reservar
+                   PUSH malloc
+                   CALL                 ;llamada a malloc
+                   DUP
+                   PUSH VT_B
+                   STOREREF 0           ;set vtable ;declaracion de variable
+                   LOAD 0               ;carga valor de la variable en la pila
+                   PUSH 9               ;argumento 0 del metodo m1
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 4
+                   CALL                 ;llamada a metodo m1
+                   LOAD 0               ;carga valor de la variable en la pila
+                   LOADREF 1            ;carga valor del atributo en la pila ;argumento 0 del metodo System.printIln
+                   PUSH printIln@System
+                   CALL                 ;llamada a metodo System.printIln
+                   LOAD 0               ;carga valor de la variable en la pila
+                   RMEM 1               ;lugar de retorno
+                   SWAP
+                   DUP
+                   LOADREF 0
+                   LOADREF 1
+                   CALL                 ;llamada a metodo m0 ;argumento 0 del metodo System.printIln
+                   PUSH printIln@System
+                   CALL                 ;llamada a metodo System.printIln
+                   FMEM 1               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 0                ;retorno del metodo
+                   .DATA                ;VTable de B
+VT_B:              DW debugPrint@Object,m0@A,main
+                   .CODE                ;codigo de metodos definidos en B
+m1@B:              LOADFP               ;enlace dinamico
+                   LOADSP
+                   STOREFP              ;actualizar registro de activacion (apilar)
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOAD 3               ;carga this
+                   SWAP
+                   STOREREF 1           ;almacena el tope de la pila en el atributo
+                   LOAD 4               ;carga valor del argumento en la pila
+                   LOAD 3
+                   SWAP
+                   STOREREF 2           ;almacena el tope de la pila en el atributo
+                   FMEM 0               ;liberar variables locales
+                   STOREFP              ;actualizar registro de activación (desapilar)
+                   RET 2                ;retorno del metodo
                    .DATA                ;VTable de Object
 VT_Object:         DW debugPrint@Object
                    .CODE                ;codigo de metodos definidos en Object
@@ -214,6 +187,3 @@ printBln@System:   LOADFP               ;enlace dinamico
                    PRNLN
                    STOREFP              ;actualizar registro de activación (desapilar)
                    RET 1                ;retorno del metodo
-                   .DATA                ;VTable de Pair
-VT_Pair:           DW debugPrint@Object
-                   .CODE                ;codigo de metodos definidos en Pair

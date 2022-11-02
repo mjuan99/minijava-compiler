@@ -1,36 +1,26 @@
-//12345
-//98765
-
 class A{
-    public String at1;
+    public int x;
     static void main(){
-        var a = 54321;
-        var b = 56789;
-        System.printIln(reverse(a));
-        System.printIln(reverse(b));
+        var a = new B();
+        a.m1(9);
+        System.printIln(a.x);
+        System.printIln(a.m0());
     }
 
-    static int reverse(int i){
-        return reverseAux(i).reversedNumber;
+    int m0(){
+        return x;
     }
 
-    static Pair reverseAux(int i){
-        if(i < 10) {
-            var ret = new Pair();
-            ret.reversedNumber = i;
-            ret.multiplier = 10;
-            return ret;
-        }
-        else {
-            var ret = reverseAux(i / 10);
-            ret.reversedNumber = (i % 10) * ret.multiplier + ret.reversedNumber;
-            ret.multiplier = ret.multiplier * 10;
-            return ret;
-        }
+    void m1(int i){
+        x = i;
     }
 }
 
-class Pair{
-    public int reversedNumber;
-    public int multiplier;
+class B extends A{
+    public int x;
+
+    void m1(int i){
+        x = i;
+        super.x = i;
+    }
 }

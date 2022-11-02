@@ -18,7 +18,7 @@ public class ASTStringLiteral extends ASTLiteral{
 
     @Override
     public void generateCode() {
-        CodeGenerator.generateCode("RMEM 1 ;lugar de retorno"); //TODO revisar esta linea
+        CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
         CodeGenerator.generateCode("PUSH " + (tkLiteral.getLexeme().length()));
         CodeGenerator.generateCode("PUSH " + CodeGenerator.tagMalloc);
         CodeGenerator.generateCode("CALL ;llamada a malloc");
