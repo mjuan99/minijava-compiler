@@ -22,10 +22,10 @@ public class ASTVariableChaining implements ASTChaining{
         STClass previousTypeClass = ST.symbolTable.getSTClass(previousType.toString());
         if(previousTypeClass != null) {
             stAttribute = previousTypeClass.getAttribute(tkVariable.getLexeme());
-            if(previousTypeClass != ST.symbolTable.getCurrentSTClass() && !stAttribute.isPublic())
-                throw new SemanticException(new SemanticError(tkVariable, "intento de acceso a atributo privado " + tkVariable.getLexeme() + " de la clase " + previousType));
             if (stAttribute == null)
                 throw new SemanticException(new SemanticError(tkVariable, "el tipo " + previousType + " no tiene un atributo llamado " + tkVariable.getLexeme()));
+            if(previousTypeClass != ST.symbolTable.getCurrentSTClass() && !stAttribute.isPublic())
+                throw new SemanticException(new SemanticError(tkVariable, "intento de acceso a atributo privado " + tkVariable.getLexeme() + " de la clase " + previousType));
         }else
             throw new SemanticException(new SemanticError(tkVariable, "intento de acceso a atributos de la interfaz " + previousType));
         if(astChaining == null)
