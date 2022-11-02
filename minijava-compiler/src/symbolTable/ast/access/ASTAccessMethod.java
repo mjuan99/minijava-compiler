@@ -57,7 +57,8 @@ public class ASTAccessMethod extends ASTAccess{
             CodeGenerator.generateCode("LOAD 3 ;this");
         if(!stMethod.getSTReturnType().equals(new STTypeVoid())) {
             CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
-            CodeGenerator.generateCode("SWAP");
+            if(!stMethod.isStatic())
+                CodeGenerator.generateCode("SWAP");
         }
         for(int i = arguments.size() - 1; i >= 0; i--){
             ASTExpression argument = arguments.get(i);
