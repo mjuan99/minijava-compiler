@@ -17,4 +17,6 @@ public interface ASTChaining {
     boolean isNotVoid();
 
     void setLeftSideOfAssignment();
+
+    void setSuper();
 }

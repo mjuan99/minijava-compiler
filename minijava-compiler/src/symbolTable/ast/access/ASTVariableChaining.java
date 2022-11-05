@@ -78,6 +78,9 @@ public class ASTVariableChaining implements ASTChaining{
     }
 
     @Override
+    public void setSuper() {}
+
+    @Override
     public boolean isValidVariable() {
         if(astChaining == null)
             return true;

@@ -48,6 +48,7 @@ public class ASTAccessSuper extends ASTAccess{
     @Override
     public void generateCode() {
         CodeGenerator.generateCode("LOAD 3");
+        astChaining.setSuper();
         astChaining.generateCode();
     }
 

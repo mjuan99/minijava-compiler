@@ -19,11 +19,13 @@ public class ASTMethodChaining implements ASTChaining{
     private final LinkedList<ASTExpression> arguments;
     private final ASTChaining astChaining;
     private STAbstractMethod stMethod;
+    private boolean superChaining;
 
     public ASTMethodChaining(Token tkMethod, LinkedList<ASTExpression> arguments, ASTChaining astChaining) {
         this.tkMethod = tkMethod;
         this.arguments = arguments;
         this.astChaining = astChaining;
+        superChaining = false;
     }
 
     public void print(){
@@ -66,6 +68,11 @@ public class ASTMethodChaining implements ASTChaining{
     }
 
     @Override
+    public void setSuper() {
+        superChaining = true;
+    }
+
+    @Override
     public void generateCode() {
         if(stMethod.isStatic())
             CodeGenerator.generateCode("POP ;libero espacio del this en llamada a metodo estatico");
@@ -81,7 +88,7 @@ public class ASTMethodChaining implements ASTChaining{
             if(!stMethod.isStatic())
                 CodeGenerator.generateCode("SWAP");
         }
-        if(!stMethod.isStatic()) {
+        if(!stMethod.isStatic() && !superChaining) {
             CodeGenerator.generateCode("DUP");
             CodeGenerator.generateCode("LOADREF 0");
             CodeGenerator.generateCode("LOADREF " + stMethod.getOffset());
