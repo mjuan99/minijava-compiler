@@ -68,7 +68,7 @@ public class ASTMethodChaining implements ASTChaining{
     @Override
     public void generateCode() {
         if(stMethod.isStatic())
-            CodeGenerator.generateCode("FMEM 1 ;libero espacio del this en llamada a metodo estatico");
+            CodeGenerator.generateCode("POP ;libero espacio del this en llamada a metodo estatico");
         if(!stMethod.getSTReturnType().equals(new STTypeVoid())) {
             CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
             if(!stMethod.isStatic())

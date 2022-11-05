@@ -31,6 +31,6 @@ public class ASTMethodCall extends ASTSentence{
     public void generateCode() {
         astAccess.generateCode();
         if(astAccess.isNotVoid())
-            CodeGenerator.generateCode("FMEM 1");
+            CodeGenerator.generateCode("POP ;descarta el resultado de la llamada");
     }
 }
