@@ -30,7 +30,7 @@ public class STTypeReference implements STType{
     @Override
     public boolean conformsWith(STType stType) {
         if(!(stType instanceof STTypeReference))
-            return false;
+            return stType instanceof STTypeChar || stType instanceof STTypeInt;
         else
             if(Objects.equals(stType.toString(), "Object"))
                 return true;

@@ -11,7 +11,7 @@ public class STTypeInt implements STPrimitiveType{
 
     @Override
     public boolean conformsWith(STType stType) {
-        if(stType instanceof STTypeInt)
+        if(stType instanceof STTypeInt || stType instanceof STTypeChar)
             return true;
         else
             if(stType instanceof STTypeReference)
