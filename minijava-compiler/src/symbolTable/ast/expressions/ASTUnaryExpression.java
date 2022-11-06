@@ -50,9 +50,6 @@ public class ASTUnaryExpression implements ASTExpression{
                 case "!":
                     CodeGenerator.generateCode("NOT");
                     break;
-                case "+":
-                    //TODO preguntar. no hago nada?
-                    break;
             }
     }
 }

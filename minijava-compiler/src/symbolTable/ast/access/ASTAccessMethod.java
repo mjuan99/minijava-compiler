@@ -58,23 +58,23 @@ public class ASTAccessMethod extends ASTAccess{
         if(!stMethod.getSTReturnType().equals(new STTypeVoid())) {
             CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
             if(!stMethod.isStatic())
-                CodeGenerator.generateCode("SWAP");
+                CodeGenerator.generateCode("SWAP ;swap this con el lugar de retorno");
         }
         for(int i = arguments.size() - 1; i >= 0; i--){
             ASTExpression argument = arguments.get(i);
             argument.generateCode();
-            CodeGenerator.setComment("argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
+            CodeGenerator.setComment("argumento " + i);
             if(!stMethod.isStatic())
-                CodeGenerator.generateCode("SWAP");
+                CodeGenerator.generateCode("SWAP ;swap this con el argumento");
         }
         if(!stMethod.isStatic()) {
-            CodeGenerator.generateCode("DUP");
-            CodeGenerator.generateCode("LOADREF 0");
-            CodeGenerator.generateCode("LOADREF " + stMethod.getOffset());
+            CodeGenerator.generateCode("DUP ;cargar la etiqueta del metodo " + stMethod.getTKName().getLexeme() + " de la vtable (1)");
+            CodeGenerator.generateCode("LOADREF 0 ;cargar la etiqueta del metodo " + stMethod.getTKName().getLexeme() + " de la vtable (2)");
+            CodeGenerator.generateCode("LOADREF " + stMethod.getOffset() + " ;cargar la etiqueta del metodo " + stMethod.getTKName().getLexeme() + " de la vtable (3)");
         }
         else
-            CodeGenerator.generateCode("PUSH " + stMethod.getMethodTag());
-        CodeGenerator.generateCode("CALL ;llamada a metodo " + stMethod.getTKName().getLexeme());
+            CodeGenerator.generateCode("PUSH " + stMethod.getMethodTag() + " ;cargar la etiqueta del metodo " + stMethod.getTKName().getLexeme());
+        CodeGenerator.generateCode("CALL ;llamada al metodo " + stMethod.getTKName().getLexeme());
         if(astChaining != null)
             astChaining.generateCode();
     }

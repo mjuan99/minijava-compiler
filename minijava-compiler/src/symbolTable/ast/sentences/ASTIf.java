@@ -51,11 +51,12 @@ public class ASTIf extends ASTSentence{
         String endIfTag = TagManager.getTag("endIf");
         String elseTag = elseSentence != null ? TagManager.getTag("else") : endIfTag;
         condition.generateCode();
-        CodeGenerator.generateCode("BF " + elseTag);
+        CodeGenerator.setComment("condicion del if");
+        CodeGenerator.generateCode("BF " + elseTag + " ;salto al else");
         CodeGenerator.setNextInstructionTag(thenTag);
         thenSentence.generateCode();
         if(elseSentence != null) {
-            CodeGenerator.generateCode("JUMP " + endIfTag);
+            CodeGenerator.generateCode("JUMP " + endIfTag + " ;salto al fin del if");
             CodeGenerator.setNextInstructionTag(elseTag);
             elseSentence.generateCode();
         }

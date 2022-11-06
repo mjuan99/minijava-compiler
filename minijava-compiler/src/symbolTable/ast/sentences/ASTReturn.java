@@ -46,9 +46,9 @@ public class ASTReturn extends ASTSentence{
         ASTBlock currentBlock = ST.symbolTable.getCurrentASTBlock();
         if(returnExpression != null){
             returnExpression.generateCode();
-            CodeGenerator.generateCode("STORE " + (currentMethod.getArguments().size() + (currentMethod.isStatic() ? 3 : 4)));
+            CodeGenerator.generateCode("STORE " + (currentMethod.getArguments().size() + (currentMethod.isStatic() ? 3 : 4)) + " ;guarda el valor de retorno");
         }
-        CodeGenerator.generateCode("FMEM " + currentBlock.getCurrentVariableOffset());
+        CodeGenerator.generateCode("FMEM " + currentBlock.getCurrentVariableOffset() + " ;liberar variables del metodo");
         CodeGenerator.generateCode("STOREFP ;actualizar registro de activación (desapilar)");
         CodeGenerator.generateCode("RET " + (currentMethod.getArguments().size() + (currentMethod.isStatic() ? 0 : 1)) + " ;retorno del metodo");
     }

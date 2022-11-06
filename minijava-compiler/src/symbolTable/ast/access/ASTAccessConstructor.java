@@ -60,12 +60,12 @@ public class ASTAccessConstructor extends ASTAccess{
     public void generateCode() {
         CodeGenerator.generateCode("RMEM 1 ;lugar de retorno");
         CodeGenerator.generateCode("PUSH " + (stClass.getAttributesSize() + 1) + " ;celdas a reservar");
-        CodeGenerator.generateCode("PUSH " + CodeGenerator.tagMalloc);
+        CodeGenerator.generateCode("PUSH " + CodeGenerator.tagMalloc + " ;cargar la eitqueta de la rutina malloc");
         CodeGenerator.generateCode("CALL ;llamada a malloc");
 
-        CodeGenerator.generateCode("DUP");
-        CodeGenerator.generateCode("PUSH " + stClass.getVTableTag());
-        CodeGenerator.generateCode("STOREREF 0 ;set vtable");
+        CodeGenerator.generateCode("DUP ;setear vtable (1)");
+        CodeGenerator.generateCode("PUSH " + stClass.getVTableTag() + " ;setear vtable (2)");
+        CodeGenerator.generateCode("STOREREF 0 ;setear vtable (3)");
 
         if(astChaining != null)
             astChaining.generateCode();

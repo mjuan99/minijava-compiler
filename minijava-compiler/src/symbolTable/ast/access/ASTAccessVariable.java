@@ -61,7 +61,7 @@ public class ASTAccessVariable extends ASTAccess{
             if(!isLeftSideOfAssignment || astChaining != null)
                 CodeGenerator.generateCode("LOADREF " + stAttribute.getOffset() + " ;carga valor del atributo en la pila");
             else{
-                CodeGenerator.generateCode("SWAP");
+                CodeGenerator.generateCode("SWAP ;swap el valor de la asignacion con this");
                 CodeGenerator.generateCode("STOREREF " + stAttribute.getOffset() + " ;almacena el tope de la pila en el atributo");
             }
         }

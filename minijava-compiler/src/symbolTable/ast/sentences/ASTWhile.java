@@ -41,9 +41,10 @@ public class ASTWhile extends ASTSentence{
         String endWhileTag = TagManager.getTag("endWhile");
         CodeGenerator.setNextInstructionTag(whileConditionTag);
         condition.generateCode();
-        CodeGenerator.generateCode("BF " + endWhileTag);
+        CodeGenerator.setComment("condicion del while");
+        CodeGenerator.generateCode("BF " + endWhileTag + " ;salto al fin del while");
         astSentence.generateCode();
-        CodeGenerator.generateCode("JUMP " + whileConditionTag);
-        CodeGenerator.generateCode(endWhileTag + ": NOP");
+        CodeGenerator.generateCode("JUMP " + whileConditionTag + " ;salto al a condicion del while");
+        CodeGenerator.generateCode(endWhileTag + ": NOP ;fin del while");
     }
 }

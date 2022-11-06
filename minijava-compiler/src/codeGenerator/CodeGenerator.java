@@ -14,14 +14,14 @@ public class CodeGenerator {
         String tagHeapInit = TagManager.getTag("heapInit");
         tagMalloc = TagManager.getTag("malloc");
         tagMain = TagManager.getTag("main");
-        generateCode(".code");
-        generateCode("PUSH " + tagHeapInit);
+        generateCode(".CODE ;inicio del programa");
+        generateCode("PUSH " + tagHeapInit + " ;cargar la etiqueta de la rutina heapInit");
         generateCode("CALL ;llamada a heapInit");
-        generateCode("PUSH " + tagMain);
+        generateCode("PUSH " + tagMain + " ;cargar la etiqueta del metodo main");
         generateCode("CALL ;llamada a main");
         generateCode("HALT ;finalizacion del programa");
 
-        generateCode(tagHeapInit + ": RET 0");
+        generateCode(tagHeapInit + ": RET 0 ;rutina heapInit vacia");
 
         generateCode(tagMalloc + ": LOADFP ;Inicialización unidad");
         generateCode("LOADSP");

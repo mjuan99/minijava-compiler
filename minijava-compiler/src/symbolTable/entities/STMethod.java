@@ -28,7 +28,7 @@ public class STMethod implements STAbstractMethod{
     private boolean defaultBlock;
     private String methodTag;
     private int offset;
-    private LinkedList<STMethod> redefinitions;
+    private final LinkedList<STMethod> redefinitions;
 
     public STMethod(Token tkName, boolean isStatic, STType stReturnType){
         this.tkName = tkName;
@@ -161,11 +161,11 @@ public class STMethod implements STAbstractMethod{
             ST.symbolTable.setCurrentSTMethod(this);
             CodeGenerator.setNextInstructionTag(getMethodTag());
             CodeGenerator.generateCode("LOADFP ;enlace dinamico");
-            CodeGenerator.generateCode("LOADSP");
-            CodeGenerator.generateCode("STOREFP ;actualizar registro de activacion (apilar)");
+            CodeGenerator.generateCode("LOADSP ;apilar registro de activacion (1)");
+            CodeGenerator.generateCode("STOREFP ;apilar registro de activacion (2)");
             astBlock.generateCode();
-            CodeGenerator.generateCode("STOREFP ;actualizar registro de activación (desapilar)");
-            CodeGenerator.generateCode("RET " + (stArguments.size() + (isStatic ? 0 : 1)) + " ;retorno del metodo"); //TODO preguntar
+            CodeGenerator.generateCode("STOREFP ;desapilar registro de activación");
+            CodeGenerator.generateCode("RET " + (stArguments.size() + (isStatic ? 0 : 1)) + " ;retorno del metodo");
         }
     }
 

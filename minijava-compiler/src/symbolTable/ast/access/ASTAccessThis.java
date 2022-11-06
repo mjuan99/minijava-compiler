@@ -45,7 +45,7 @@ public class ASTAccessThis extends ASTAccess{
 
     @Override
     public void generateCode() {
-        CodeGenerator.generateCode("LOAD 3");
+        CodeGenerator.generateCode("LOAD 3 ;this");
         if(astChaining != null)
             astChaining.generateCode();
     }

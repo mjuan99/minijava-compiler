@@ -76,7 +76,7 @@ public class ASTAccessStaticMethod extends ASTAccess{
             argument.generateCode();
             CodeGenerator.setComment("argumento " + i + " del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
         }
-        CodeGenerator.generateCode("PUSH " + stMethod.getMethodTag());
+        CodeGenerator.generateCode("PUSH " + stMethod.getMethodTag() + " ;cargar la etiqueta del metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
         CodeGenerator.generateCode("CALL ;llamada a metodo " + stMethod.getSTClass().getTKName().getLexeme() + "." + stMethod.getTKName().getLexeme());
         if(astChaining != null)
             astChaining.generateCode();
