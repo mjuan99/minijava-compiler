@@ -1,37 +1,58 @@
-//m1 en B
-//m1 en A
-//7
-//5
 
-class A{
-    public int x;
+
+class Main{
     static void main(){
-        var b = new B();
-        b.m1();
-        System.printIln(b.getXA());
-        System.printIln(b.getXB());
+        getBI1().m1();
+        getBI2().m2();
+        getDI1().m1();
+        getDI2().m2();
     }
 
-    int getXA(){
-        return x;
+    static I1 getBI1(){
+        return new B();
     }
 
+    static I2 getBI2(){
+        return new B();
+    }
+
+    static I1 getDI1(){
+        return new D();
+    }
+
+    static I2 getDI2(){
+        return new D();
+    }
+
+}
+
+interface I1{
+    void m1();
+}
+
+interface I2{
+    void m2();
+}
+class A{
     void m1(){
         System.printSln("m1 en A");
     }
 }
 
-class B extends A{
-    public int x;
-
-    void m1(){
-        x = 5;
-        super.x = 7;
-        System.printSln("m1 en B");
-        super.m1();
+class B extends A implements I1, I2{
+    void m2(){
+        System.printSln("m2 en B");
     }
+}
 
-    int getXB(){
-        return x;
+class C{
+    void m2(){
+        System.printSln("m2 en C");
+    }
+}
+
+class D extends C implements I1, I2{
+    void m1(){
+        System.printSln("m1 en D");
     }
 }

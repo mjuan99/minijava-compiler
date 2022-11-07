@@ -16,6 +16,7 @@ public class STMethodHeader implements STAbstractMethod{
     private final HashMap<String, STArgument> stArguments;
     private LinkedList<STArgument> stArgumentsList;
     private boolean errorFound;
+    private int offset;
 
     public STMethodHeader(Token tkName, Token tkStatic, STType stReturnType){
         this.tkName = tkName;
@@ -24,6 +25,7 @@ public class STMethodHeader implements STAbstractMethod{
         stArguments = new HashMap<>();
         stArgumentsList = new LinkedList<>();
         errorFound = false;
+        offset = -1;
     }
 
     public boolean errorFound(){
@@ -86,10 +88,13 @@ public class STMethodHeader implements STAbstractMethod{
         return tkStatic != null;
     }
 
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
     @Override
     public int getOffset() {
-        //TODO implementar
-        return 0;
+        return offset;
     }
 
     @Override

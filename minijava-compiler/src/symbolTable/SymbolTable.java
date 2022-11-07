@@ -237,6 +237,8 @@ public class SymbolTable {
         for(STInterface stInterface : stInterfaces.values())
             stInterface.generateOffsets();
         for(STClass stClass : stClasses.values())
+            stClass.consolidateMethodsOffsets();
+        for(STClass stClass : stClasses.values())
             stClass.generateCode();
     }
 }

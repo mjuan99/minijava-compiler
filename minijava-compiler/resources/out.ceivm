@@ -19,20 +19,8 @@ malloc:            LOADFP                         ;Inicialización unidad
                    STOREFP
                    RET 1                          ;Retorna eliminando el parámetro
                    .DATA                          ;VTable de A
-VT_A:              DW getXA@A,m1@A
+VT_A:              DW m1@A
                    .CODE                          ;codigo de metodos definidos en A
-getXA@A:           LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar this
-                   LOADREF 2                      ;cargar valor del atributo en la pila
-                   STORE 4                        ;guarda el valor de retorno
-                   FMEM 0                         ;liberar variables del metodo
-                   STOREFP                        ;actualizar registro de activación (desapilar)
-                   RET 1                          ;retorno del metodo
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
 m1@A:              LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
@@ -69,56 +57,90 @@ m1@A:              LOADFP                         ;enlace dinamico
                    FMEM 0                         ;liberar variables locales
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
-main:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 3                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_B                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3) ;declaracion de variable
-                   LOAD 0                         ;carga valor de la variable en la pila
-                   DUP
-                   LOADREF 0
-                   LOADREF 1
-                   CALL                           ;llamada a metodo m1
-                   LOAD 0                         ;carga valor de la variable en la pila
-                   RMEM 1                         ;lugar de retorno
-                   SWAP
-                   DUP
-                   LOADREF 0
-                   LOADREF 0
-                   CALL                           ;llamada a metodo getXA ;argumento 0 del metodo System.printIln
-                   PUSH printIln@System           ;cargar la etiqueta del metodo System.printIln
-                   CALL                           ;llamada a metodo System.printIln
-                   LOAD 0                         ;carga valor de la variable en la pila
-                   RMEM 1                         ;lugar de retorno
-                   SWAP
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                           ;llamada a metodo getXB ;argumento 0 del metodo System.printIln
-                   PUSH printIln@System           ;cargar la etiqueta del metodo System.printIln
-                   CALL                           ;llamada a metodo System.printIln
-                   FMEM 1                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
                    .DATA                          ;VTable de B
-VT_B:              DW getXA@A,m1@B,getXB@B
+VT_B:              DW m1@A,m2@B,m2@B
                    .CODE                          ;codigo de metodos definidos en B
-m1@B:              LOADFP                         ;enlace dinamico
+m2@B:              LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   PUSH 5                         ;cargar literal entero en el tope de la pila
-                   LOAD 3                         ;cargar this
-                   SWAP                           ;swap el valor de la asignacion con this
-                   STOREREF 1                     ;almacena el tope de la pila en el atributo
-                   PUSH 7                         ;cargar literal entero en el tope de la pila
-                   LOAD 3                         ;cargar this
-                   SWAP
-                   STOREREF 2                     ;almacena el tope de la pila en el atributo
+                   RMEM 1                         ;lugar de retorno
+                   PUSH 9                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
+                   CALL                           ;llamada a malloc
+                   DUP
+                   PUSH 'm'
+                   STOREREF 1
+                   DUP
+                   PUSH '2'
+                   STOREREF 2
+                   DUP
+                   PUSH ' '
+                   STOREREF 3
+                   DUP
+                   PUSH 'e'
+                   STOREREF 4
+                   DUP
+                   PUSH 'n'
+                   STOREREF 5
+                   DUP
+                   PUSH ' '
+                   STOREREF 6
+                   DUP
+                   PUSH 'B'
+                   STOREREF 7
+                   DUP
+                   PUSH 0                         ;terminador de string
+                   STOREREF 8                     ;argumento 0 del metodo System.printSln
+                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
+                   CALL                           ;llamada a metodo System.printSln
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 1                          ;retorno del metodo
+                   .DATA                          ;VTable de C
+VT_C:              DW m2@C
+                   .CODE                          ;codigo de metodos definidos en C
+m2@C:              LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
+                   RMEM 1                         ;lugar de retorno
+                   PUSH 9                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
+                   CALL                           ;llamada a malloc
+                   DUP
+                   PUSH 'm'
+                   STOREREF 1
+                   DUP
+                   PUSH '2'
+                   STOREREF 2
+                   DUP
+                   PUSH ' '
+                   STOREREF 3
+                   DUP
+                   PUSH 'e'
+                   STOREREF 4
+                   DUP
+                   PUSH 'n'
+                   STOREREF 5
+                   DUP
+                   PUSH ' '
+                   STOREREF 6
+                   DUP
+                   PUSH 'C'
+                   STOREREF 7
+                   DUP
+                   PUSH 0                         ;terminador de string
+                   STOREREF 8                     ;argumento 0 del metodo System.printSln
+                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
+                   CALL                           ;llamada a metodo System.printSln
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 1                          ;retorno del metodo
+                   .DATA                          ;VTable de D
+VT_D:              DW m2@C,m1@D,m2@C
+                   .CODE                          ;codigo de metodos definidos en D
+m1@D:              LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
                    RMEM 1                         ;lugar de retorno
                    PUSH 9                         ;celdas a reservar
                    PUSH malloc                    ;cargar la etiqueta de la rutina malloc
@@ -142,28 +164,13 @@ m1@B:              LOADFP                         ;enlace dinamico
                    PUSH ' '
                    STOREREF 6
                    DUP
-                   PUSH 'B'
+                   PUSH 'D'
                    STOREREF 7
                    DUP
                    PUSH 0                         ;terminador de string
                    STOREREF 8                     ;argumento 0 del metodo System.printSln
                    PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
                    CALL                           ;llamada a metodo System.printSln
-                   LOAD 3                         ;cargar this
-                   PUSH m1@A
-                   CALL                           ;llamada a metodo m1
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-getXB@B:           LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar this
-                   LOADREF 1                      ;cargar valor del atributo en la pila
-                   STORE 4                        ;guarda el valor de retorno
-                   FMEM 0                         ;liberar variables del metodo
-                   STOREFP                        ;actualizar registro de activación (desapilar)
-                   RET 1                          ;retorno del metodo
                    FMEM 0                         ;liberar variables locales
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
@@ -175,6 +182,108 @@ debugPrint@Object: LOADFP                         ;enlace dinamico
                    PRNLN                          ;imprimir salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
+main:              LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
+                   RMEM 1                         ;lugar de retorno
+                   PUSH getBI1@Main               ;cargar la etiqueta del metodo getBI1
+                   CALL                           ;llamada al metodo getBI1
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                           ;llamada a metodo m1
+                   RMEM 1                         ;lugar de retorno
+                   PUSH getBI2@Main               ;cargar la etiqueta del metodo getBI2
+                   CALL                           ;llamada al metodo getBI2
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                           ;llamada a metodo m2
+                   RMEM 1                         ;lugar de retorno
+                   PUSH getDI1@Main               ;cargar la etiqueta del metodo getDI1
+                   CALL                           ;llamada al metodo getDI1
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                           ;llamada a metodo m1
+                   RMEM 1                         ;lugar de retorno
+                   PUSH getDI2@Main               ;cargar la etiqueta del metodo getDI2
+                   CALL                           ;llamada al metodo getDI2
+                   DUP
+                   LOADREF 0
+                   LOADREF 2
+                   CALL                           ;llamada a metodo m2
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 0                          ;retorno del metodo
+getBI1@Main:       LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
+                   RMEM 1                         ;lugar de retorno
+                   PUSH 1                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
+                   CALL                           ;llamada a malloc
+                   DUP                            ;setear vtable (1)
+                   PUSH VT_B                      ;setear vtable (2)
+                   STOREREF 0                     ;setear vtable (3)
+                   STORE 3                        ;guarda el valor de retorno
+                   FMEM 0                         ;liberar variables del metodo
+                   STOREFP                        ;actualizar registro de activación (desapilar)
+                   RET 0                          ;retorno del metodo
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 0                          ;retorno del metodo
+getBI2@Main:       LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
+                   RMEM 1                         ;lugar de retorno
+                   PUSH 1                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
+                   CALL                           ;llamada a malloc
+                   DUP                            ;setear vtable (1)
+                   PUSH VT_B                      ;setear vtable (2)
+                   STOREREF 0                     ;setear vtable (3)
+                   STORE 3                        ;guarda el valor de retorno
+                   FMEM 0                         ;liberar variables del metodo
+                   STOREFP                        ;actualizar registro de activación (desapilar)
+                   RET 0                          ;retorno del metodo
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 0                          ;retorno del metodo
+getDI1@Main:       LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
+                   RMEM 1                         ;lugar de retorno
+                   PUSH 1                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
+                   CALL                           ;llamada a malloc
+                   DUP                            ;setear vtable (1)
+                   PUSH VT_D                      ;setear vtable (2)
+                   STOREREF 0                     ;setear vtable (3)
+                   STORE 3                        ;guarda el valor de retorno
+                   FMEM 0                         ;liberar variables del metodo
+                   STOREFP                        ;actualizar registro de activación (desapilar)
+                   RET 0                          ;retorno del metodo
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 0                          ;retorno del metodo
+getDI2@Main:       LOADFP                         ;enlace dinamico
+                   LOADSP                         ;apilar registro de activacion (1)
+                   STOREFP                        ;apilar registro de activacion (2)
+                   RMEM 1                         ;lugar de retorno
+                   PUSH 1                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
+                   CALL                           ;llamada a malloc
+                   DUP                            ;setear vtable (1)
+                   PUSH VT_D                      ;setear vtable (2)
+                   STOREREF 0                     ;setear vtable (3)
+                   STORE 3                        ;guarda el valor de retorno
+                   FMEM 0                         ;liberar variables del metodo
+                   STOREFP                        ;actualizar registro de activación (desapilar)
+                   RET 0                          ;retorno del metodo
+                   FMEM 0                         ;liberar variables locales
+                   STOREFP                        ;desapilar registro de activación
+                   RET 0                          ;retorno del metodo
 printC@System:     LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)

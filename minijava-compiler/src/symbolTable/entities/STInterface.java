@@ -12,10 +12,14 @@ public class STInterface {
     private final Token tkName;
     private final HashMap<String, STMethodHeader> stMethodsHeaders;
     private final HashMap<String, STMethodHeader> stMethodsHeadersSimplified;
+    private final LinkedList<STMethodHeader> ownMethodsHeaders;
     private final HashMap<String, Token> tkInterfacesItExtends;
     private boolean consolidated;
     private boolean cyclicInheritance;
     private boolean errorFound;
+    private boolean offsetsGenerated;
+    private final LinkedList<STClass> inheritorClasses;
+    private final LinkedList<STInterface> inheritorInterfaces;
 
     public STInterface(Token tkName) {
         this.tkName = tkName;
@@ -25,6 +29,10 @@ public class STInterface {
         consolidated = false;
         cyclicInheritance = false;
         errorFound = false;
+        offsetsGenerated = false;
+        inheritorInterfaces = new LinkedList<>();
+        inheritorClasses = new LinkedList<>();
+        ownMethodsHeaders = new LinkedList<>();
     }
 
     public boolean errorFound(){
@@ -82,9 +90,11 @@ public class STInterface {
     public void consolidate() {
         if(!consolidated){
             if(!cyclicInheritance){
+                saveOwnMethodsHeaders();
                 tkInterfacesItExtends.forEach((key, tkInterface) -> {
                     STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
                     if(stInterface != null && !stInterface.errorFound()){
+                        stInterface.addInheritorInterface(this);
                         stInterface.consolidate();
                         addMethodsFromParentSTInterface(stInterface);
                     }
@@ -92,6 +102,10 @@ public class STInterface {
             }
             consolidated = true;
         }
+    }
+
+    private void saveOwnMethodsHeaders() {
+        ownMethodsHeaders.addAll(stMethodsHeadersSimplified.values());
     }
 
     private void addMethodsFromParentSTInterface(STInterface stInterface) {
@@ -155,6 +169,38 @@ public class STInterface {
     }
 
     public void generateOffsets() {
-        //TODO implementar
+        if(!offsetsGenerated){
+            for(STInterface inheritorInterface : inheritorInterfaces)
+                inheritorInterface.generateOffsets();
+            int minMethodOffset = getMaxInheritorMethodOffset() + 1;
+            int i = 0;
+            for(STMethodHeader stMethodHeader : ownMethodsHeaders)
+                stMethodHeader.setOffset(minMethodOffset + i++);
+            offsetsGenerated = true;
+        }
+    }
+
+    private int getMaxInheritorMethodOffset() {
+        int maxInheritorMethodOffset = -1;
+        for(STInterface stInterface : inheritorInterfaces)
+            maxInheritorMethodOffset = Math.max(maxInheritorMethodOffset, stInterface.getMaxMethodOffset());
+        for(STClass stClass : inheritorClasses)
+            maxInheritorMethodOffset = Math.max(maxInheritorMethodOffset, stClass.getMaxMethodOffset());
+        return maxInheritorMethodOffset;
+    }
+
+    public int getMaxMethodOffset(){
+        int maxMethodOffset = -1;
+        for(STMethodHeader stMethodHeader : ownMethodsHeaders)
+            maxMethodOffset = Math.max(maxMethodOffset, stMethodHeader.getOffset());
+        return maxMethodOffset;
+    }
+
+    public void addInheritorClass(STClass inheritorClass){
+        inheritorClasses.add(inheritorClass);
+    }
+
+    public void addInheritorInterface(STInterface inheritorInterface){
+        inheritorInterfaces.add(inheritorInterface);
     }
 }

@@ -12,7 +12,6 @@ public interface STAbstractMethod {
     Token getTKName();
 
     boolean isStatic();
-
     int getOffset();
 
     String getMethodTag();

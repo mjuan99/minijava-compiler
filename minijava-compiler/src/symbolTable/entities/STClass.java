@@ -24,7 +24,7 @@ public class STClass {
     private boolean errorFound;
     private boolean offsetsGenerated;
     private String vTableTag;
-    private int dynamicMethodsCount;
+    private final HashMap<Integer, STMethod> offsetsToMethodsMap;
 
     public STClass(Token tkName){
         this.tkName = tkName;
@@ -39,7 +39,7 @@ public class STClass {
         errorFound = false;
         offsetsGenerated = false;
         vTableTag = null;
-        dynamicMethodsCount = 0;
+        offsetsToMethodsMap = new HashMap<>();
     }
 
     public boolean errorFound(){
@@ -170,6 +170,7 @@ public class STClass {
             STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
             if(stInterface != null && !stInterface.errorFound()){
                 stInterface.consolidate();
+                stInterface.addInheritorClass(this);
                 stInterface.getSTMethodsHeaders().forEach((key2, stMethodHeader) -> {
                     if(!stMethodHeader.errorFound()) {
                         STMethod stImplementedMethod = stMethods.get(stMethodHeader.getHash());
@@ -288,19 +289,28 @@ public class STClass {
     }
 
     private void loadVTable(){
-        if(dynamicMethodsCount > 0) {
+        int maxMethodOffset = getMaxMethodOffset();
+        if(maxMethodOffset > -1) {
             StringBuilder methodsTags = new StringBuilder();
-            for (int i = 0; i < dynamicMethodsCount; i++)
-                for (STMethod stMethod : stMethodsSimplified.values()) {
-                    if (!stMethod.isStatic() && stMethod.getOffset() == i) {
-                        methodsTags.append(stMethod.getMethodTag()).append(",");
-                    }
-                }
+            for (int i = 0; i <= maxMethodOffset; i++) {
+                STMethod stMethod = offsetsToMethodsMap.get(i);
+                if(stMethod != null)
+                    methodsTags.append(stMethod.getMethodTag()).append(",");
+                else
+                    methodsTags.append(0).append(", ");
+            }
             CodeGenerator.generateCode(".DATA ;VTable de " + tkName.getLexeme());
             CodeGenerator.setNextInstructionTag(getVTableTag());
             CodeGenerator.generateCode("DW " + methodsTags.substring(0, methodsTags.length() - 1));
             CodeGenerator.generateCode(".CODE ;codigo de metodos definidos en " + tkName.getLexeme());
         }
+    }
+
+    public int getMaxMethodOffset(){
+        int maxMethodOffset = -1;
+        for(int offset : offsetsToMethodsMap.keySet())
+            maxMethodOffset = Math.max(maxMethodOffset, offset);
+        return maxMethodOffset;
     }
 
     public void generateOffsets() {
@@ -314,23 +324,35 @@ public class STClass {
             int minMethodOffset = getMinMethodOffset();
             for (STMethod stMethod : stMethodsSimplified.values())
                 if (!stMethod.isStatic()) {
-                    dynamicMethodsCount += 1;
-                    if(stMethod.getOffset() == -1)
-                        stMethod.setOffset(minMethodOffset + i++);
+                    if(stMethod.getOffsets().isEmpty())
+                        stMethod.addOffset(minMethodOffset + i++);
+                    offsetsToMethodsMap.put(stMethod.getOffsets().getLast(), stMethod);
                 }
             offsetsGenerated = true;
         }
     }
 
+    public void consolidateMethodsOffsets(){
+        for(Token tkInterface : tkInterfacesItImplements.values()){
+            STInterface stInterface = ST.symbolTable.getSTInterface(tkInterface.getLexeme());
+            for(STMethodHeader stMethodHeader : stInterface.getSTMethodsHeaders().values()){
+                STMethod stMethod = stMethodsSimplified.get(stMethodHeader.getTKName().getLexeme());
+                stMethod.addOffset(stMethodHeader.getOffset());
+                offsetsToMethodsMap.put(stMethod.getOffsets().getLast(), stMethod);
+            }
+        }
+    }
+
     public boolean hasDynamicMethods(){
-        return dynamicMethodsCount > 0;
+        return !offsetsToMethodsMap.isEmpty();
     }
     private int getMinMethodOffset(){
         int maxParentMethodOffset = -1;
         if(tkClassItExtends != null)
             for(STMethod stMethod : ST.symbolTable.getSTClass(tkClassItExtends.getLexeme()).stMethods.values())
                 if(!stMethod.isStatic())
-                    maxParentMethodOffset = Math.max(maxParentMethodOffset, stMethod.getOffset());
+                    for(int offset : stMethod.getOffsets())
+                        maxParentMethodOffset = Math.max(maxParentMethodOffset, offset);
         return maxParentMethodOffset + 1;
     }
 
