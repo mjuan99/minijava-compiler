@@ -17,6 +17,6 @@ public class ASTIntLiteral extends ASTLiteral{
 
     @Override
     public void generateCode() {
-        CodeGenerator.generateCode("PUSH " + tkLiteral.getLexeme());
+        CodeGenerator.generateCode("PUSH " + tkLiteral.getLexeme() + " ;cargar literal entero en el tope de la pila");
     }
 }

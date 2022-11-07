@@ -57,9 +57,9 @@ public class ASTAccessVariable extends ASTAccess{
     @Override
     public void generateCode() {
         if(stAttribute != null) {
-            CodeGenerator.generateCode("LOAD 3 ;carga this");
+            CodeGenerator.generateCode("LOAD 3 ;cargar this");
             if(!isLeftSideOfAssignment || astChaining != null)
-                CodeGenerator.generateCode("LOADREF " + stAttribute.getOffset() + " ;carga valor del atributo en la pila");
+                CodeGenerator.generateCode("LOADREF " + stAttribute.getOffset() + " ;cargar valor del atributo en la pila");
             else{
                 CodeGenerator.generateCode("SWAP ;swap el valor de la asignacion con this");
                 CodeGenerator.generateCode("STOREREF " + stAttribute.getOffset() + " ;almacena el tope de la pila en el atributo");

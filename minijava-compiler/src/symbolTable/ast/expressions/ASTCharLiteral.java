@@ -17,6 +17,6 @@ public class ASTCharLiteral extends ASTLiteral{
 
     @Override
     public void generateCode() {
-        CodeGenerator.generateCode("PUSH " + tkLiteral.getLexeme());
+        CodeGenerator.generateCode("PUSH " + tkLiteral.getLexeme() + " ;cargar literal char en la pila");
     }
 }

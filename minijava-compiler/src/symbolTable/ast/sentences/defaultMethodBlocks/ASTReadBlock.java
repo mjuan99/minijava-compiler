@@ -7,7 +7,7 @@ public class ASTReadBlock extends ASTBlock {
 
     @Override
     public void generateCode() {
-        CodeGenerator.generateCode("READ");
-        CodeGenerator.generateCode("STORE 3");
+        CodeGenerator.generateCode("READ ;leer entrada");
+        CodeGenerator.generateCode("STORE 3 ;almacenar valor leido en el lugar de retorno");
     }
 }

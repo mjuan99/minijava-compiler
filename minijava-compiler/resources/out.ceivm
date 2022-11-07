@@ -19,13 +19,13 @@ malloc:            LOADFP                         ;Inicialización unidad
                    STOREFP
                    RET 1                          ;Retorna eliminando el parámetro
                    .DATA                          ;VTable de A
-VT_A:              DW debugPrint@Object,getXA@A,m1@A,main
+VT_A:              DW getXA@A,m1@A
                    .CODE                          ;codigo de metodos definidos en A
 getXA@A:           LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;carga this
-                   LOADREF 2                      ;carga valor del atributo en la pila
+                   LOAD 3                         ;cargar this
+                   LOADREF 2                      ;cargar valor del atributo en la pila
                    STORE 4                        ;guarda el valor de retorno
                    FMEM 0                         ;liberar variables del metodo
                    STOREFP                        ;actualizar registro de activación (desapilar)
@@ -37,12 +37,9 @@ m1@A:              LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
                    RMEM 1                         ;lugar de retorno
-                   PUSH 9
-                   PUSH malloc
+                   PUSH 9                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
                    CALL                           ;llamada a malloc
-                   DUP
-                   PUSH VT_String
-                   STOREREF 0                     ;set vtable
                    DUP
                    PUSH 'm'
                    STOREREF 1
@@ -65,7 +62,7 @@ m1@A:              LOADFP                         ;enlace dinamico
                    PUSH 'A'
                    STOREREF 7
                    DUP
-                   PUSH 0
+                   PUSH 0                         ;terminador de string
                    STOREREF 8                     ;argumento 0 del metodo System.printSln
                    PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
                    CALL                           ;llamada a metodo System.printSln
@@ -85,14 +82,14 @@ main:              LOADFP                         ;enlace dinamico
                    LOAD 0                         ;carga valor de la variable en la pila
                    DUP
                    LOADREF 0
-                   LOADREF 2
+                   LOADREF 1
                    CALL                           ;llamada a metodo m1
                    LOAD 0                         ;carga valor de la variable en la pila
                    RMEM 1                         ;lugar de retorno
                    SWAP
                    DUP
                    LOADREF 0
-                   LOADREF 1
+                   LOADREF 0
                    CALL                           ;llamada a metodo getXA ;argumento 0 del metodo System.printIln
                    PUSH printIln@System           ;cargar la etiqueta del metodo System.printIln
                    CALL                           ;llamada a metodo System.printIln
@@ -101,7 +98,7 @@ main:              LOADFP                         ;enlace dinamico
                    SWAP
                    DUP
                    LOADREF 0
-                   LOADREF 4
+                   LOADREF 2
                    CALL                           ;llamada a metodo getXB ;argumento 0 del metodo System.printIln
                    PUSH printIln@System           ;cargar la etiqueta del metodo System.printIln
                    CALL                           ;llamada a metodo System.printIln
@@ -109,26 +106,23 @@ main:              LOADFP                         ;enlace dinamico
                    STOREFP                        ;desapilar registro de activación
                    RET 0                          ;retorno del metodo
                    .DATA                          ;VTable de B
-VT_B:              DW debugPrint@Object,getXA@A,m1@B,main,getXB@B
+VT_B:              DW getXA@A,m1@B,getXB@B
                    .CODE                          ;codigo de metodos definidos en B
 m1@B:              LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   PUSH 5
-                   LOAD 3                         ;carga this
+                   PUSH 5                         ;cargar literal entero en el tope de la pila
+                   LOAD 3                         ;cargar this
                    SWAP                           ;swap el valor de la asignacion con this
                    STOREREF 1                     ;almacena el tope de la pila en el atributo
-                   PUSH 7
-                   LOAD 3
+                   PUSH 7                         ;cargar literal entero en el tope de la pila
+                   LOAD 3                         ;cargar this
                    SWAP
                    STOREREF 2                     ;almacena el tope de la pila en el atributo
                    RMEM 1                         ;lugar de retorno
-                   PUSH 9
-                   PUSH malloc
+                   PUSH 9                         ;celdas a reservar
+                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
                    CALL                           ;llamada a malloc
-                   DUP
-                   PUSH VT_String
-                   STOREREF 0                     ;set vtable
                    DUP
                    PUSH 'm'
                    STOREREF 1
@@ -151,11 +145,11 @@ m1@B:              LOADFP                         ;enlace dinamico
                    PUSH 'B'
                    STOREREF 7
                    DUP
-                   PUSH 0
+                   PUSH 0                         ;terminador de string
                    STOREREF 8                     ;argumento 0 del metodo System.printSln
                    PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
                    CALL                           ;llamada a metodo System.printSln
-                   LOAD 3
+                   LOAD 3                         ;cargar this
                    PUSH m1@A
                    CALL                           ;llamada a metodo m1
                    FMEM 0                         ;liberar variables locales
@@ -164,8 +158,8 @@ m1@B:              LOADFP                         ;enlace dinamico
 getXB@B:           LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;carga this
-                   LOADREF 1                      ;carga valor del atributo en la pila
+                   LOAD 3                         ;cargar this
+                   LOADREF 1                      ;cargar valor del atributo en la pila
                    STORE 4                        ;guarda el valor de retorno
                    FMEM 0                         ;liberar variables del metodo
                    STOREFP                        ;actualizar registro de activación (desapilar)
@@ -173,97 +167,88 @@ getXB@B:           LOADFP                         ;enlace dinamico
                    FMEM 0                         ;liberar variables locales
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
-                   .DATA                          ;VTable de Object
-VT_Object:         DW debugPrint@Object
-                   .CODE                          ;codigo de metodos definidos en Object
 debugPrint@Object: LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   IPRINT
-                   PRNLN
+                   LOAD 3                         ;cargar parametro a imprimir
+                   IPRINT                         ;imprimir por pantalla
+                   PRNLN                          ;imprimir salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
-                   .DATA                          ;VTable de String
-VT_String:         DW debugPrint@Object
-                   .CODE                          ;codigo de metodos definidos en String
-                   .DATA                          ;VTable de System
-VT_System:         DW debugPrint@Object,printC@System,printS@System,println@System,printCln@System,printSln@System,read@System,printB@System,printIln@System,printI@System,printBln@System
-                   .CODE                          ;codigo de metodos definidos en System
 printC@System:     LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   CPRINT
+                   LOAD 3                         ;cargar parametro a imprimir
+                   CPRINT                         ;imprimir por pantalla
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 printS@System:     LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   PUSH 1
-                   ADD
-                   SPRINT
+                   LOAD 3                         ;cargar string a imprimir (1)
+                   PUSH 1                         ;cargar string a imprimir (2)
+                   ADD                            ;cargar string a imprimir (3)
+                   SPRINT                         ;imprimir string
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 println@System:    LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   PRNLN
+                   PRNLN                          ;imprimir salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 0                          ;retorno del metodo
 printCln@System:   LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   CPRINT
-                   PRNLN
+                   LOAD 3                         ;cargar parametro a imprimir
+                   CPRINT                         ;imprimir por pantalla
+                   PRNLN                          ;imprimir salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 printSln@System:   LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   PUSH 1
-                   ADD
-                   SPRINT
-                   PRNLN
+                   LOAD 3                         ;cargar string a imprimir (1)
+                   PUSH 1                         ;cargar string a imprimir (2)
+                   ADD                            ;cargar string a imprimir (3)
+                   SPRINT                         ;imprimir string
+                   PRNLN                          ;salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 read@System:       LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   READ
-                   STORE 3
+                   READ                           ;leer entrada
+                   STORE 3                        ;almacenar valor leido en el lugar de retorno
                    STOREFP                        ;desapilar registro de activación
                    RET 0                          ;retorno del metodo
 printB@System:     LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   BPRINT
+                   LOAD 3                         ;cargar parametro a imprimir
+                   BPRINT                         ;imprimir por pantalla
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 printIln@System:   LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   IPRINT
-                   PRNLN
+                   LOAD 3                         ;cargar parametro a imprimir
+                   IPRINT                         ;imprimir por pantalla
+                   PRNLN                          ;imprimir salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 printI@System:     LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   IPRINT
+                   LOAD 3                         ;cargar parametro a imprimir
+                   IPRINT                         ;imprimir por pantalla
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo
 printBln@System:   LOADFP                         ;enlace dinamico
                    LOADSP                         ;apilar registro de activacion (1)
                    STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3
-                   BPRINT
-                   PRNLN
+                   LOAD 3                         ;cargar parametro a imprimir
+                   BPRINT                         ;imprimir por pantalla
+                   PRNLN                          ;imprimir salto de linea
                    STOREFP                        ;desapilar registro de activación
                    RET 1                          ;retorno del metodo

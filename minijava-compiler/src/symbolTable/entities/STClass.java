@@ -24,6 +24,7 @@ public class STClass {
     private boolean errorFound;
     private boolean offsetsGenerated;
     private String vTableTag;
+    private int dynamicMethodsCount;
 
     public STClass(Token tkName){
         this.tkName = tkName;
@@ -38,6 +39,7 @@ public class STClass {
         errorFound = false;
         offsetsGenerated = false;
         vTableTag = null;
+        dynamicMethodsCount = 0;
     }
 
     public boolean errorFound(){
@@ -286,17 +288,19 @@ public class STClass {
     }
 
     private void loadVTable(){
-        StringBuilder methodsTags = new StringBuilder();
-        for(int i = 0; i < stMethodsSimplified.size(); i++)
-            for(STMethod stMethod : stMethodsSimplified.values()) {
-                if (stMethod.getOffset() == i) {
-                    methodsTags.append(stMethod.getMethodTag()).append(",");
+        if(dynamicMethodsCount > 0) {
+            StringBuilder methodsTags = new StringBuilder();
+            for (int i = 0; i < dynamicMethodsCount; i++)
+                for (STMethod stMethod : stMethodsSimplified.values()) {
+                    if (!stMethod.isStatic() && stMethod.getOffset() == i) {
+                        methodsTags.append(stMethod.getMethodTag()).append(",");
+                    }
                 }
-            }
-        CodeGenerator.generateCode(".DATA ;VTable de " + tkName.getLexeme());
-        CodeGenerator.setNextInstructionTag(getVTableTag());
-        CodeGenerator.generateCode("DW " + methodsTags.substring(0, methodsTags.length() - 1));
-        CodeGenerator.generateCode(".CODE ;codigo de metodos definidos en " + tkName.getLexeme());
+            CodeGenerator.generateCode(".DATA ;VTable de " + tkName.getLexeme());
+            CodeGenerator.setNextInstructionTag(getVTableTag());
+            CodeGenerator.generateCode("DW " + methodsTags.substring(0, methodsTags.length() - 1));
+            CodeGenerator.generateCode(".CODE ;codigo de metodos definidos en " + tkName.getLexeme());
+        }
     }
 
     public void generateOffsets() {
@@ -309,17 +313,24 @@ public class STClass {
             i = 0;
             int minMethodOffset = getMinMethodOffset();
             for (STMethod stMethod : stMethodsSimplified.values())
-                if (stMethod.getOffset() == -1)
-                    stMethod.setOffset(minMethodOffset + i++);
+                if (!stMethod.isStatic()) {
+                    dynamicMethodsCount += 1;
+                    if(stMethod.getOffset() == -1)
+                        stMethod.setOffset(minMethodOffset + i++);
+                }
             offsetsGenerated = true;
         }
     }
 
+    public boolean hasDynamicMethods(){
+        return dynamicMethodsCount > 0;
+    }
     private int getMinMethodOffset(){
         int maxParentMethodOffset = -1;
         if(tkClassItExtends != null)
             for(STMethod stMethod : ST.symbolTable.getSTClass(tkClassItExtends.getLexeme()).stMethods.values())
-                maxParentMethodOffset = Math.max(maxParentMethodOffset, stMethod.getOffset());
+                if(!stMethod.isStatic())
+                    maxParentMethodOffset = Math.max(maxParentMethodOffset, stMethod.getOffset());
         return maxParentMethodOffset + 1;
     }
 

@@ -18,8 +18,8 @@ public class ASTBooleanLiteral extends ASTLiteral{
     @Override
     public void generateCode() {
         if(tkLiteral.getLexeme().equals("true"))
-            CodeGenerator.generateCode("PUSH 1");
+            CodeGenerator.generateCode("PUSH 1 ;cargar literal true en la pila");
         else
-            CodeGenerator.generateCode("PUSH 0");
+            CodeGenerator.generateCode("PUSH 0 ;cargar literal false en la pila");
     }
 }

@@ -63,9 +63,11 @@ public class ASTAccessConstructor extends ASTAccess{
         CodeGenerator.generateCode("PUSH " + CodeGenerator.tagMalloc + " ;cargar la eitqueta de la rutina malloc");
         CodeGenerator.generateCode("CALL ;llamada a malloc");
 
-        CodeGenerator.generateCode("DUP ;setear vtable (1)");
-        CodeGenerator.generateCode("PUSH " + stClass.getVTableTag() + " ;setear vtable (2)");
-        CodeGenerator.generateCode("STOREREF 0 ;setear vtable (3)");
+        if(stClass.hasDynamicMethods()) {
+            CodeGenerator.generateCode("DUP ;setear vtable (1)");
+            CodeGenerator.generateCode("PUSH " + stClass.getVTableTag() + " ;setear vtable (2)");
+            CodeGenerator.generateCode("STOREREF 0 ;setear vtable (3)");
+        }
 
         if(astChaining != null)
             astChaining.generateCode();

@@ -18,6 +18,6 @@ public class ASTNullLiteral extends ASTLiteral{
 
     @Override
     public void generateCode() {
-        CodeGenerator.generateCode("PUSH 0");
+        CodeGenerator.generateCode("PUSH 0 ;cargar literal null en la pila");
     }
 }
