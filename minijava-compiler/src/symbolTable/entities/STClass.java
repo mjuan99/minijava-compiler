@@ -25,6 +25,8 @@ public class STClass {
     private boolean offsetsGenerated;
     private String vTableTag;
     private final HashMap<Integer, STMethod> offsetsToMethodsMap;
+    private int maxMethodOffset;
+    private final LinkedList<STClass> inheritorClasses;
 
     public STClass(Token tkName){
         this.tkName = tkName;
@@ -40,6 +42,8 @@ public class STClass {
         offsetsGenerated = false;
         vTableTag = null;
         offsetsToMethodsMap = new HashMap<>();
+        maxMethodOffset = -1;
+        inheritorClasses = new LinkedList<>();
     }
 
     public boolean errorFound(){
@@ -122,6 +126,7 @@ public class STClass {
                 if(tkClassItExtends != null){
                     STClass stClassItExtends = ST.symbolTable.getSTClass(tkClassItExtends.getLexeme());
                     if(stClassItExtends != null){
+                        stClassItExtends.addInheritorClass(this);
                         stClassItExtends.consolidate();
                         if(!stClassItExtends.errorFound()) {
                             addMethodsFromParentSTClass(stClassItExtends);
@@ -290,6 +295,9 @@ public class STClass {
 
     private void loadVTable(){
         int maxMethodOffset = getMaxMethodOffset();
+        for(STMethod stMethod : stMethodsSimplified.values())
+            for(int offset : stMethod.getOffsets())
+                offsetsToMethodsMap.put(offset, stMethod);
         if(maxMethodOffset > -1) {
             StringBuilder methodsTags = new StringBuilder();
             for (int i = 0; i <= maxMethodOffset; i++) {
@@ -307,10 +315,20 @@ public class STClass {
     }
 
     public int getMaxMethodOffset(){
-        int maxMethodOffset = -1;
-        for(int offset : offsetsToMethodsMap.keySet())
-            maxMethodOffset = Math.max(maxMethodOffset, offset);
+        if(maxMethodOffset == -1)
+            for (int offset : offsetsToMethodsMap.keySet())
+                maxMethodOffset = Math.max(maxMethodOffset, offset);
         return maxMethodOffset;
+    }
+
+    public void setMaxMethodOffset(int offset){
+        maxMethodOffset = Math.max(maxMethodOffset, offset);
+        for(STClass inheritorClass : inheritorClasses)
+            inheritorClass.setMaxMethodOffset(maxMethodOffset);
+    }
+
+    public void addInheritorClass(STClass inheritorClass){
+        inheritorClasses.add(inheritorClass);
     }
 
     public void generateOffsets() {

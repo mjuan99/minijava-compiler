@@ -20,6 +20,7 @@ public class STInterface {
     private boolean offsetsGenerated;
     private final LinkedList<STClass> inheritorClasses;
     private final LinkedList<STInterface> inheritorInterfaces;
+    private int maxMethodOffset;
 
     public STInterface(Token tkName) {
         this.tkName = tkName;
@@ -33,6 +34,7 @@ public class STInterface {
         inheritorInterfaces = new LinkedList<>();
         inheritorClasses = new LinkedList<>();
         ownMethodsHeaders = new LinkedList<>();
+        maxMethodOffset = -1;
     }
 
     public boolean errorFound(){
@@ -176,8 +178,21 @@ public class STInterface {
             int i = 0;
             for(STMethodHeader stMethodHeader : ownMethodsHeaders)
                 stMethodHeader.setOffset(minMethodOffset + i++);
+            maxMethodOffset = minMethodOffset + i - 1;
             offsetsGenerated = true;
+            for(STClass inheritorClass : inheritorClasses)
+                inheritorClass.setMaxMethodOffset(maxMethodOffset);
+            for(STInterface inheritorInterface : inheritorInterfaces)
+                inheritorInterface.setMaxMethodOffset(maxMethodOffset);
         }
+    }
+
+    public void setMaxMethodOffset(int offset){
+        maxMethodOffset = Math.max(maxMethodOffset, offset);
+        for(STInterface inheritorInterface : inheritorInterfaces)
+            inheritorInterface.setMaxMethodOffset(maxMethodOffset);
+        for(STClass inheritorClass : inheritorClasses)
+            inheritorClass.setMaxMethodOffset(maxMethodOffset);
     }
 
     private int getMaxInheritorMethodOffset() {
@@ -190,9 +205,6 @@ public class STInterface {
     }
 
     public int getMaxMethodOffset(){
-        int maxMethodOffset = -1;
-        for(STMethodHeader stMethodHeader : ownMethodsHeaders)
-            maxMethodOffset = Math.max(maxMethodOffset, stMethodHeader.getOffset());
         return maxMethodOffset;
     }
 

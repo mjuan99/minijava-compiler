@@ -1,13 +1,13 @@
 //m1 en A
-//m1 en B
+//m1 en A
 //m2 en B
 //m2 en C
 //m1 en D
-//m2 en D
-//m1 en B
+//m2 en C
+//m1 en A
 //m2 en B
 //m1 en D
-//m2 en D
+//m2 en C
 
 class Main{
     static void main(){
@@ -55,9 +55,6 @@ class A{
 }
 
 class B extends A implements I1, I2{
-    void m1(){
-        System.printSln("m1 en B");
-    }
     void m2(){
         System.printSln("m2 en B");
     }
@@ -72,8 +69,5 @@ class C{
 class D extends C implements I1, I2{
     void m1(){
         System.printSln("m1 en D");
-    }
-    void m2(){
-        System.printSln("m2 en D");
     }
 }
