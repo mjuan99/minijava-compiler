@@ -1,14 +1,21 @@
 package codeGenerator;
 
-import symbolTable.ST;
+import semanticAnalyzer.SemanticAnalyzer;
+import symbolTable.SymbolTable;
 
 import java.util.Scanner;
 
 public class CodeGenerator {
-    public static String code = "";
+    private static String code = "";
     public static String tagMain;
     public static String tagMalloc;
-    private static boolean newLine = true;
+    private static boolean newLine;
+    private final SymbolTable symbolTable;
+
+    public CodeGenerator(SemanticAnalyzer semanticAnalyzer){
+        newLine = true;
+        symbolTable = semanticAnalyzer.getSymbolTable();
+    }
 
     public String generateCode(boolean formatCode){
         String tagHeapInit = TagManager.getTag("heapInit");
@@ -37,7 +44,7 @@ public class CodeGenerator {
         generateCode("STOREFP");
         generateCode("RET 1 ;Retorna eliminando el parámetro");
 
-        ST.symbolTable.generateCode();
+        symbolTable.generateCode();
         if(formatCode)
             return format(code);
         else

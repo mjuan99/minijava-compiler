@@ -46,10 +46,10 @@ public class Main {
             SourceFileManager sourceFileManager = new SourceFileManager(sourceFilePath);
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(sourceFileManager);
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
-            new SemanticAnalyzer(syntacticAnalyzer);
+            SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(syntacticAnalyzer);
             System.out.println("[SinErrores]");
             if(GENERATE_CODE)
-                return new CodeGenerator().generateCode(FORMAT_CODE);
+                return new CodeGenerator(semanticAnalyzer).generateCode(FORMAT_CODE);
             else
                 System.exit(0);
         } catch (FileNotFoundException exception) {
