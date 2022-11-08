@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ExecuteVM {
+public class RunVM {
     public static void main(String[] args){
         try {
             Process vmProcess = getVMProcess(args[0]);

@@ -13,7 +13,8 @@ import java.nio.file.Path;
 
 public class Main {
     public final static int ERR_ARGUMENTO_FALTANTE = 1;
-    public final static boolean DEBUG = true;
+    public final static boolean GENERATE_CODE = true;
+    public final static boolean RUN_VM = true;
     public final static boolean FORMAT_CODE = true;
 
     public static void main(String[] args){
@@ -32,12 +33,11 @@ public class Main {
                 if (path.getParent() != null)
                     Files.createDirectories(path.getParent());
                 Files.writeString(path, code);
+                if (RUN_VM)
+                    RunVM.main(new String[]{path.toString()});
             } catch (IOException e) {
-                e.printStackTrace();
                 System.out.println("Error de IO");
             }
-            if (DEBUG)
-                ExecuteVM.main(new String[]{path.toString()});
         }
     }
 
@@ -48,7 +48,10 @@ public class Main {
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexicalAnalyzer);
             new SemanticAnalyzer(syntacticAnalyzer);
             System.out.println("[SinErrores]");
-            return new CodeGenerator().generateCode(FORMAT_CODE);
+            if(GENERATE_CODE)
+                return new CodeGenerator().generateCode(FORMAT_CODE);
+            else
+                System.exit(0);
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){
