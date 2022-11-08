@@ -30,7 +30,7 @@ public class STTypeReference implements STType{
     @Override
     public boolean conformsWith(STType stType) {
         if(!(stType instanceof STTypeReference))
-            return stType instanceof STTypeChar || stType instanceof STTypeInt;
+            return reference.getLexeme().equals("String") && (stType instanceof STTypeChar || stType instanceof STTypeInt);
         else
             if(Objects.equals(stType.toString(), "Object"))
                 return true;

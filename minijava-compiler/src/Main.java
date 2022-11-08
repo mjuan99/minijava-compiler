@@ -13,7 +13,7 @@ import java.nio.file.Path;
 
 public class Main {
     public final static int ERR_ARGUMENTO_FALTANTE = 1;
-    public final static boolean GENERATE_CODE = true;
+    public final static boolean GENERATE_CODE = false;
     public final static boolean RUN_VM = true;
     public final static boolean FORMAT_CODE = true;
 
@@ -51,7 +51,7 @@ public class Main {
             if(GENERATE_CODE)
                 return new CodeGenerator(semanticAnalyzer).generateCode(FORMAT_CODE);
             else
-                System.exit(0);
+                return "";
         } catch (FileNotFoundException exception) {
             System.out.println("Archivo no encontrado");
         } catch (IOException exception){

@@ -45,7 +45,7 @@ public class ASTAccessVariable extends ASTAccess{
             if(variableType == null) {
                 stAttribute = ST.symbolTable.getCurrentSTClass().getAttribute(tkVariable.getLexeme());
                 if(stAttribute != null) variableType = stAttribute.getSTType();
-                if (stVariable != null && ST.symbolTable.getCurrentSTMethod().isStatic())
+                if (variableType != null && ST.symbolTable.getCurrentSTMethod().isStatic())
                     throw new SemanticException(new SemanticError(tkVariable, "acceso a atributo de instancia en metodo estatico"));
             }
         }
