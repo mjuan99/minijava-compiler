@@ -1,501 +1,1010 @@
-                   .CODE                          ;inicio del programa
-                   PUSH heapInit                  ;cargar la etiqueta de la rutina heapInit
-                   CALL                           ;llamada a heapInit
-                   PUSH main                      ;cargar la etiqueta del metodo main
-                   CALL                           ;llamada a main
-                   HALT                           ;finalizacion del programa
-heapInit:          RET 0                          ;rutina heapInit vacia
-malloc:            LOADFP                         ;Inicialización unidad
-                   LOADSP
-                   STOREFP                        ;Finaliza inicialización del RA
-                   LOADHL                         ;hl
-                   DUP                            ;hl
-                   PUSH 1                         ;1
-                   ADD                            ;hl+1
-                   STORE 4                        ;Guarda el resultado (un puntero a la primer celda de la región de memoria)
-                   LOAD 3                         ;Carga la cantidad de celdas a alojar (parámetro que debe ser positivo)
-                   ADD
-                   STOREHL                        ;Mueve el heap limit (hl). Expande el heap
-                   STOREFP
-                   RET 1                          ;Retorna eliminando el parámetro
-                   .DATA                          ;VTable de A
-VT_A:              DW m1@A
-                   .CODE                          ;codigo de metodos definidos en A
-m1@A:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 9                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP
-                   PUSH 'm'
-                   STOREREF 1
-                   DUP
-                   PUSH '1'
-                   STOREREF 2
-                   DUP
-                   PUSH ' '
-                   STOREREF 3
-                   DUP
-                   PUSH 'e'
-                   STOREREF 4
-                   DUP
-                   PUSH 'n'
-                   STOREREF 5
-                   DUP
-                   PUSH ' '
-                   STOREREF 6
-                   DUP
-                   PUSH 'A'
-                   STOREREF 7
-                   DUP
-                   PUSH 0                         ;terminador de string
-                   STOREREF 8                     ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
-                   CALL                           ;llamada a metodo System.printSln
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-                   .DATA                          ;VTable de B
-VT_B:              DW m1@B,m2@B,m1@B,m2@B
-                   .CODE                          ;codigo de metodos definidos en B
-m1@B:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 9                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP
-                   PUSH 'm'
-                   STOREREF 1
-                   DUP
-                   PUSH '1'
-                   STOREREF 2
-                   DUP
-                   PUSH ' '
-                   STOREREF 3
-                   DUP
-                   PUSH 'e'
-                   STOREREF 4
-                   DUP
-                   PUSH 'n'
-                   STOREREF 5
-                   DUP
-                   PUSH ' '
-                   STOREREF 6
-                   DUP
-                   PUSH 'B'
-                   STOREREF 7
-                   DUP
-                   PUSH 0                         ;terminador de string
-                   STOREREF 8                     ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
-                   CALL                           ;llamada a metodo System.printSln
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-m2@B:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 9                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP
-                   PUSH 'm'
-                   STOREREF 1
-                   DUP
-                   PUSH '2'
-                   STOREREF 2
-                   DUP
-                   PUSH ' '
-                   STOREREF 3
-                   DUP
-                   PUSH 'e'
-                   STOREREF 4
-                   DUP
-                   PUSH 'n'
-                   STOREREF 5
-                   DUP
-                   PUSH ' '
-                   STOREREF 6
-                   DUP
-                   PUSH 'B'
-                   STOREREF 7
-                   DUP
-                   PUSH 0                         ;terminador de string
-                   STOREREF 8                     ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
-                   CALL                           ;llamada a metodo System.printSln
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-                   .DATA                          ;VTable de C
-VT_C:              DW m2@C
-                   .CODE                          ;codigo de metodos definidos en C
-m2@C:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 9                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP
-                   PUSH 'm'
-                   STOREREF 1
-                   DUP
-                   PUSH '2'
-                   STOREREF 2
-                   DUP
-                   PUSH ' '
-                   STOREREF 3
-                   DUP
-                   PUSH 'e'
-                   STOREREF 4
-                   DUP
-                   PUSH 'n'
-                   STOREREF 5
-                   DUP
-                   PUSH ' '
-                   STOREREF 6
-                   DUP
-                   PUSH 'C'
-                   STOREREF 7
-                   DUP
-                   PUSH 0                         ;terminador de string
-                   STOREREF 8                     ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
-                   CALL                           ;llamada a metodo System.printSln
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-                   .DATA                          ;VTable de D
-VT_D:              DW m2@D,m1@D,m1@D,m2@D
-                   .CODE                          ;codigo de metodos definidos en D
-m1@D:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 9                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP
-                   PUSH 'm'
-                   STOREREF 1
-                   DUP
-                   PUSH '1'
-                   STOREREF 2
-                   DUP
-                   PUSH ' '
-                   STOREREF 3
-                   DUP
-                   PUSH 'e'
-                   STOREREF 4
-                   DUP
-                   PUSH 'n'
-                   STOREREF 5
-                   DUP
-                   PUSH ' '
-                   STOREREF 6
-                   DUP
-                   PUSH 'D'
-                   STOREREF 7
-                   DUP
-                   PUSH 0                         ;terminador de string
-                   STOREREF 8                     ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
-                   CALL                           ;llamada a metodo System.printSln
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-m2@D:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 9                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la etiqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP
-                   PUSH 'm'
-                   STOREREF 1
-                   DUP
-                   PUSH '2'
-                   STOREREF 2
-                   DUP
-                   PUSH ' '
-                   STOREREF 3
-                   DUP
-                   PUSH 'e'
-                   STOREREF 4
-                   DUP
-                   PUSH 'n'
-                   STOREREF 5
-                   DUP
-                   PUSH ' '
-                   STOREREF 6
-                   DUP
-                   PUSH 'D'
-                   STOREREF 7
-                   DUP
-                   PUSH 0                         ;terminador de string
-                   STOREREF 8                     ;argumento 0 del metodo System.printSln
-                   PUSH printSln@System           ;cargar la etiqueta del metodo System.printSln
-                   CALL                           ;llamada a metodo System.printSln
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-debugPrint@Object: LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   IPRINT                         ;imprimir por pantalla
-                   PRNLN                          ;imprimir salto de linea
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-getBAsI2@Main:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_B                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   STORE 3                        ;guarda el valor de retorno
-                   FMEM 0                         ;liberar variables del metodo
-                   STOREFP                        ;actualizar registro de activación (desapilar)
-                   RET 0                          ;retorno del metodo
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-getDAsI1@Main:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_D                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   STORE 3                        ;guarda el valor de retorno
-                   FMEM 0                         ;liberar variables del metodo
-                   STOREFP                        ;actualizar registro de activación (desapilar)
-                   RET 0                          ;retorno del metodo
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-getBAsI1@Main:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_B                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   STORE 3                        ;guarda el valor de retorno
-                   FMEM 0                         ;liberar variables del metodo
-                   STOREFP                        ;actualizar registro de activación (desapilar)
-                   RET 0                          ;retorno del metodo
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-getDAsI2@Main:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_D                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   STORE 3                        ;guarda el valor de retorno
-                   FMEM 0                         ;liberar variables del metodo
-                   STOREFP                        ;actualizar registro de activación (desapilar)
-                   RET 0                          ;retorno del metodo
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-main:              LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_A                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   DUP
-                   LOADREF 0
-                   LOADREF 0
-                   CALL                           ;llamada a metodo m1
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_B                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   DUP
-                   LOADREF 0
-                   LOADREF 0
-                   CALL                           ;llamada a metodo m1
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_B                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   DUP
-                   LOADREF 0
-                   LOADREF 1
-                   CALL                           ;llamada a metodo m2
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_C                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   DUP
-                   LOADREF 0
-                   LOADREF 0
-                   CALL                           ;llamada a metodo m2
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_D                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   DUP
-                   LOADREF 0
-                   LOADREF 1
-                   CALL                           ;llamada a metodo m1
-                   RMEM 1                         ;lugar de retorno
-                   PUSH 1                         ;celdas a reservar
-                   PUSH malloc                    ;cargar la eitqueta de la rutina malloc
-                   CALL                           ;llamada a malloc
-                   DUP                            ;setear vtable (1)
-                   PUSH VT_D                      ;setear vtable (2)
-                   STOREREF 0                     ;setear vtable (3)
-                   DUP
-                   LOADREF 0
-                   LOADREF 0
-                   CALL                           ;llamada a metodo m2
-                   RMEM 1                         ;lugar de retorno
-                   PUSH getBAsI1@Main             ;cargar la etiqueta del metodo getBAsI1
-                   CALL                           ;llamada al metodo getBAsI1
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                           ;llamada a metodo m1
-                   RMEM 1                         ;lugar de retorno
-                   PUSH getBAsI2@Main             ;cargar la etiqueta del metodo getBAsI2
-                   CALL                           ;llamada al metodo getBAsI2
-                   DUP
-                   LOADREF 0
-                   LOADREF 3
-                   CALL                           ;llamada a metodo m2
-                   RMEM 1                         ;lugar de retorno
-                   PUSH getDAsI1@Main             ;cargar la etiqueta del metodo getDAsI1
-                   CALL                           ;llamada al metodo getDAsI1
-                   DUP
-                   LOADREF 0
-                   LOADREF 2
-                   CALL                           ;llamada a metodo m1
-                   RMEM 1                         ;lugar de retorno
-                   PUSH getDAsI2@Main             ;cargar la etiqueta del metodo getDAsI2
-                   CALL                           ;llamada al metodo getDAsI2
-                   DUP
-                   LOADREF 0
-                   LOADREF 3
-                   CALL                           ;llamada a metodo m2
-                   FMEM 0                         ;liberar variables locales
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-printC@System:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   CPRINT                         ;imprimir por pantalla
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-printS@System:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar string a imprimir (1)
-                   PUSH 1                         ;cargar string a imprimir (2)
-                   ADD                            ;cargar string a imprimir (3)
-                   SPRINT                         ;imprimir string
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-println@System:    LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   PRNLN                          ;imprimir salto de linea
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-printCln@System:   LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   CPRINT                         ;imprimir por pantalla
-                   PRNLN                          ;imprimir salto de linea
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-printSln@System:   LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar string a imprimir (1)
-                   PUSH 1                         ;cargar string a imprimir (2)
-                   ADD                            ;cargar string a imprimir (3)
-                   SPRINT                         ;imprimir string
-                   PRNLN                          ;salto de linea
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-read@System:       LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   READ                           ;leer entrada
-                   STORE 3                        ;almacenar valor leido en el lugar de retorno
-                   STOREFP                        ;desapilar registro de activación
-                   RET 0                          ;retorno del metodo
-printB@System:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   BPRINT                         ;imprimir por pantalla
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-printIln@System:   LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   IPRINT                         ;imprimir por pantalla
-                   PRNLN                          ;imprimir salto de linea
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-printI@System:     LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   IPRINT                         ;imprimir por pantalla
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
-printBln@System:   LOADFP                         ;enlace dinamico
-                   LOADSP                         ;apilar registro de activacion (1)
-                   STOREFP                        ;apilar registro de activacion (2)
-                   LOAD 3                         ;cargar parametro a imprimir
-                   BPRINT                         ;imprimir por pantalla
-                   PRNLN                          ;imprimir salto de linea
-                   STOREFP                        ;desapilar registro de activación
-                   RET 1                          ;retorno del metodo
+                       .CODE                           ;inicio del programa
+                       PUSH heapInit                   ;cargar la etiqueta de la rutina heapInit
+                       CALL                            ;llamada a heapInit
+                       PUSH main                       ;cargar la etiqueta del metodo main
+                       CALL                            ;llamada a main
+                       HALT                            ;finalizacion del programa
+heapInit:              RET 0                           ;rutina heapInit vacia
+malloc:                LOADFP                          ;Inicialización unidad
+                       LOADSP
+                       STOREFP                         ;Finaliza inicialización del RA
+                       LOADHL                          ;hl
+                       DUP                             ;hl
+                       PUSH 1                          ;1
+                       ADD                             ;hl+1
+                       STORE 4                         ;Guarda el resultado (un puntero a la primer celda de la región de memoria)
+                       LOAD 3                          ;Carga la cantidad de celdas a alojar (parámetro que debe ser positivo)
+                       ADD
+                       STOREHL                         ;Mueve el heap limit (hl). Expande el heap
+                       STOREFP
+                       RET 1                           ;Retorna eliminando el parámetro
+getAsIGet2@A:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;carga valor del argumento en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+getAsIGet1@A:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;carga valor del argumento en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+getAsIAdd@A:           LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;carga valor del argumento en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+main:                  LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       RMEM 1                          ;lugar de retorno
+                       PUSH 3                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la eitqueta de la rutina malloc
+                       CALL                            ;llamada a malloc
+                       DUP                             ;setear vtable (1)
+                       PUSH VT_List2                   ;setear vtable (2)
+                       STOREREF 0                      ;setear vtable (3) ;declaracion de variable
+                       RMEM 1                          ;lugar de retorno
+                       LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       PUSH getAsIGet1@A               ;cargar la etiqueta del metodo getAsIGet1
+                       CALL                            ;llamada al metodo getAsIGet1 ;declaracion de variable
+                       RMEM 1                          ;lugar de retorno
+                       LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       PUSH getAsIGet2@A               ;cargar la etiqueta del metodo getAsIGet2
+                       CALL                            ;llamada al metodo getAsIGet2 ;declaracion de variable
+                       RMEM 1                          ;lugar de retorno
+                       LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       PUSH getAsIAdd@A                ;cargar la etiqueta del metodo getAsIAdd
+                       CALL                            ;llamada al metodo getAsIAdd ;declaracion de variable
+                       PUSH 4                          ;cargar literal entero en el tope de la pila ;declaracion de variable
+whileCondition:        LOAD -4                         ;carga valor de la variable en la pila
+                       PUSH 15                         ;cargar literal entero en el tope de la pila
+                       LT                              ;condicion del while
+                       BF endWhile                     ;salto al fin del while
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -4                         ;carga valor de la variable en la pila ;argumento 0 del metodo addLast
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 19
+                       CALL                            ;llamada a metodo addLast
+                       POP                             ;descarta el resultado de la llamada
+                       LOAD -4                         ;carga valor de la variable en la pila
+                       PUSH 3                          ;cargar literal entero en el tope de la pila
+                       ADD
+                       STORE -4                        ;almacena el tope de la pila en la variable
+                       FMEM 0                          ;liberar variables locales
+                       JUMP whileCondition             ;salto al a condicion del while
+endWhile:              NOP                             ;fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 70                         ;cargar literal entero en el tope de la pila ;argumento 0 del metodo getNode
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 8
+                       CALL                            ;llamada a metodo getNode ;declaracion de variable
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 5                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addBefore
+                       SWAP
+                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 17
+                       CALL                            ;llamada a metodo addBefore
+                       POP                             ;descarta el resultado de la llamada
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 6                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addBefore
+                       SWAP
+                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 17
+                       CALL                            ;llamada a metodo addBefore
+                       POP                             ;descarta el resultado de la llamada
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 100                        ;cargar literal entero en el tope de la pila ;argumento 0 del metodo getNode
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 8
+                       CALL                            ;llamada a metodo getNode
+                       STORE -5                        ;almacena el tope de la pila en la variable
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 11                         ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addAfter
+                       SWAP
+                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 18
+                       CALL                            ;llamada a metodo addAfter
+                       STORE -5                        ;almacena el tope de la pila en la variable
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 12                         ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addAfter
+                       SWAP
+                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 18
+                       CALL                            ;llamada a metodo addAfter
+                       POP                             ;descarta el resultado de la llamada
+                       PUSH 3                          ;cargar literal entero en el tope de la pila
+                       STORE -4                        ;almacena el tope de la pila en la variable
+whileCondition$2:      LOAD -4                         ;carga valor de la variable en la pila
+                       PUSH 0                          ;cargar literal entero en el tope de la pila
+                       GT                              ;condicion del while
+                       BF endWhile$2                   ;salto al fin del while
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -4                         ;carga valor de la variable en la pila ;argumento 0 del metodo addFirst
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 20
+                       CALL                            ;llamada a metodo addFirst
+                       POP                             ;descarta el resultado de la llamada
+                       LOAD -4                         ;carga valor de la variable en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       SUB
+                       STORE -4                        ;almacena el tope de la pila en la variable
+                       FMEM 0                          ;liberar variables locales
+                       JUMP whileCondition$2           ;salto al a condicion del while
+endWhile$2:            NOP                             ;fin del while
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 8                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addAfter
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 13
+                       CALL                            ;llamada a metodo getFirst ;argumento 0 del metodo getNext
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 16
+                       CALL                            ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 16
+                       CALL                            ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 16
+                       CALL                            ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 16
+                       CALL                            ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 16
+                       CALL                            ;llamada a metodo getNext ;argumento 0 del metodo getNext
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 16
+                       CALL                            ;llamada a metodo getNext ;argumento 0 del metodo addAfter
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 18
+                       CALL                            ;llamada a metodo addAfter
+                       POP                             ;descarta el resultado de la llamada
+                       LOAD -3                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       PUSH 9                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addBefore
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -2                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 14
+                       CALL                            ;llamada a metodo getLast ;argumento 0 del metodo getPrevious
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 15
+                       CALL                            ;llamada a metodo getPrevious ;argumento 0 del metodo getPrevious
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 15
+                       CALL                            ;llamada a metodo getPrevious ;argumento 0 del metodo getPrevious
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 15
+                       CALL                            ;llamada a metodo getPrevious ;argumento 0 del metodo addBefore
+                       SWAP
+                       DUP
+                       LOADREF 0
+                       LOADREF 17
+                       CALL                            ;llamada a metodo addBefore
+                       POP                             ;descarta el resultado de la llamada
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       DUP
+                       LOADREF 0
+                       LOADREF 3
+                       CALL                            ;llamada a metodo print
+                       FMEM 6                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 0                           ;retorno del metodo
+                       .DATA                           ;VTable de List2
+VT_List2:              DW getPrevious@List,addLast@List2,addBefore@List2,print@List,addAfter@List2,getSize@List,getFirst@List,getNext@List,getNode@List,getLast@List,addFirst@List2,0, 0, getFirst@List,getLast@List,getPrevious@List,getNext@List,addBefore@List2,addAfter@List2,addLast@List2,addFirst@List2
+                       .CODE                           ;codigo de metodos definidos en List2
+addLast@List2:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       PUSH 10                         ;cargar literal entero en el tope de la pila
+                       MUL                             ;argumento 0 del metodo addLast
+                       SWAP
+                       PUSH addLast@List
+                       CALL                            ;llamada a metodo addLast
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+addBefore@List2:       LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD 5                          ;carga valor del argumento en la pila
+                       PUSH 10                         ;cargar literal entero en el tope de la pila
+                       MUL                             ;argumento 1 del metodo addBefore
+                       SWAP
+                       LOAD 4                          ;carga valor del argumento en la pila ;argumento 0 del metodo addBefore
+                       SWAP
+                       PUSH addBefore@List
+                       CALL                            ;llamada a metodo addBefore
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 3                           ;retorno del metodo
+addAfter@List2:        LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD 5                          ;carga valor del argumento en la pila
+                       PUSH 10                         ;cargar literal entero en el tope de la pila
+                       MUL                             ;argumento 1 del metodo addAfter
+                       SWAP
+                       LOAD 4                          ;carga valor del argumento en la pila ;argumento 0 del metodo addAfter
+                       SWAP
+                       PUSH addAfter@List
+                       CALL                            ;llamada a metodo addAfter
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 3                           ;retorno del metodo
+addFirst@List2:        LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       RMEM 1                          ;lugar de retorno
+                       SWAP
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       PUSH 10                         ;cargar literal entero en el tope de la pila
+                       MUL                             ;argumento 0 del metodo addFirst
+                       SWAP
+                       PUSH addFirst@List
+                       CALL                            ;llamada a metodo addFirst
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+debugPrint@Object:     LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       IPRINT                          ;imprimir por pantalla
+                       PRNLN                           ;imprimir salto de linea
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+                       .DATA                           ;VTable de List
+VT_List:               DW getPrevious@List,addLast@List,addBefore@List,print@List,addAfter@List,getSize@List,getFirst@List,getNext@List,getNode@List,getLast@List,addFirst@List,0, 0, getFirst@List,getLast@List,getPrevious@List,getNext@List,addBefore@List,addAfter@List,addLast@List,addFirst@List
+                       .CODE                           ;codigo de metodos definidos en List
+getPrevious@List:      LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila ;declaracion de variable
+whileCondition$3:      LOAD 0                          ;carga valor de la variable en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       NE                              ;condicion del while
+                       BF endWhile$3                   ;salto al fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       EQ                              ;condicion del if
+                       BF else                         ;salto al else
+then:                  LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       JUMP endIf                      ;salto al fin del if
+else:                  LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE 0                         ;almacena el tope de la pila en la variable
+endIf:                 NOP                             ;fin del if
+                       JUMP whileCondition$3           ;salto al a condicion del while
+endWhile$3:            NOP                             ;fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 1                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+addLast@List:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       RMEM 1                          ;lugar de retorno
+                       PUSH 3                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la eitqueta de la rutina malloc
+                       CALL                            ;llamada a malloc ;declaracion de variable
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       EQ                              ;condicion del if
+                       BF else$2                       ;salto al else
+then$2:                LOAD 0                          ;carga valor de la variable en la pila
+                       LOAD 3                          ;cargar this
+                       SWAP                            ;swap el valor de la asignacion con this
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       JUMP endIf$2                    ;salto al fin del if
+else$2:                LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila ;declaracion de variable
+whileCondition$4:      LOAD -1                         ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       NE                              ;condicion del while
+                       BF endWhile$4                   ;salto al fin del while
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE -1                        ;almacena el tope de la pila en la variable
+                       JUMP whileCondition$4           ;salto al a condicion del while
+endWhile$4:            NOP                             ;fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       FMEM 1                          ;liberar variables locales
+endIf$2:               NOP                             ;fin del if
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       ADD
+                       LOAD 3                          ;cargar this
+                       SWAP                            ;swap el valor de la asignacion con this
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 1                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+addBefore@List:        LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       RMEM 1                          ;lugar de retorno
+                       PUSH 3                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la eitqueta de la rutina malloc
+                       CALL                            ;llamada a malloc ;declaracion de variable
+                       LOAD 5                          ;carga valor del argumento en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila ;declaracion de variable
+whileCondition$5:      LOAD -1                         ;carga valor de la variable en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       NE                              ;condicion del while
+                       BF endWhile$5                   ;salto al fin del while
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       EQ                              ;condicion del if
+                       BF else$3                       ;salto al else
+then$3:                LOAD 0                          ;carga valor de la variable en la pila
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       ADD
+                       LOAD 3                          ;cargar this
+                       SWAP                            ;swap el valor de la asignacion con this
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 2                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       JUMP endIf$3                    ;salto al fin del if
+else$3:                LOAD -1                         ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE -1                        ;almacena el tope de la pila en la variable
+endIf$3:               NOP                             ;fin del if
+                       JUMP whileCondition$5           ;salto al a condicion del while
+endWhile$5:            NOP                             ;fin del while
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 2                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 2                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 3                           ;retorno del metodo
+print@List:            LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila ;declaracion de variable
+                       RMEM 1                          ;lugar de retorno
+                       PUSH 9                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la etiqueta de la rutina malloc
+                       CALL                            ;llamada a malloc
+                       DUP
+                       PUSH 's'
+                       STOREREF 1
+                       DUP
+                       PUSH 'i'
+                       STOREREF 2
+                       DUP
+                       PUSH 'z'
+                       STOREREF 3
+                       DUP
+                       PUSH 'e'
+                       STOREREF 4
+                       DUP
+                       PUSH ' '
+                       STOREREF 5
+                       DUP
+                       PUSH '='
+                       STOREREF 6
+                       DUP
+                       PUSH ' '
+                       STOREREF 7
+                       DUP
+                       PUSH 0                          ;terminador de string
+                       STOREREF 8                      ;argumento 0 del metodo System.printS
+                       PUSH printS@System              ;cargar la etiqueta del metodo System.printS
+                       CALL                            ;llamada a metodo System.printS
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila ;argumento 0 del metodo System.printIln
+                       PUSH printIln@System            ;cargar la etiqueta del metodo System.printIln
+                       CALL                            ;llamada a metodo System.printIln
+                       PUSH 0                          ;cargar literal entero en el tope de la pila ;declaracion de variable
+whileCondition$6:      LOAD -1                         ;carga valor de la variable en la pila
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       LT                              ;condicion del while
+                       BF endWhile$6                   ;salto al fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 2                       ;carga valor del atributo en la pila ;argumento 0 del metodo System.printI
+                       PUSH printI@System              ;cargar la etiqueta del metodo System.printI
+                       CALL                            ;llamada a metodo System.printI
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       SUB
+                       LT                              ;condicion del if
+                       BF endIf$4                      ;salto al else
+then$4:                RMEM 1                          ;lugar de retorno
+                       PUSH 4                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la etiqueta de la rutina malloc
+                       CALL                            ;llamada a malloc
+                       DUP
+                       PUSH ','
+                       STOREREF 1
+                       DUP
+                       PUSH ' '
+                       STOREREF 2
+                       DUP
+                       PUSH 0                          ;terminador de string
+                       STOREREF 3                      ;argumento 0 del metodo System.printS
+                       PUSH printS@System              ;cargar la etiqueta del metodo System.printS
+                       CALL                            ;llamada a metodo System.printS
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE 0                         ;almacena el tope de la pila en la variable
+                       FMEM 0                          ;liberar variables locales
+endIf$4:               NOP                             ;fin del if
+                       LOAD -1                         ;carga valor de la variable en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       ADD
+                       STORE -1                        ;almacena el tope de la pila en la variable
+                       FMEM 0                          ;liberar variables locales
+                       JUMP whileCondition$6           ;salto al a condicion del while
+endWhile$6:            NOP                             ;fin del while
+                       PUSH println@System             ;cargar la etiqueta del metodo System.println
+                       CALL                            ;llamada a metodo System.println
+                       FMEM 2                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+addAfter@List:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       RMEM 1                          ;lugar de retorno
+                       PUSH 3                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la eitqueta de la rutina malloc
+                       CALL                            ;llamada a malloc ;declaracion de variable
+                       LOAD 5                          ;carga valor del argumento en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       SWAP
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       ADD
+                       LOAD 3                          ;cargar this
+                       SWAP                            ;swap el valor de la asignacion con this
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 1                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 3                           ;retorno del metodo
+getSize@List:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+getFirst@List:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+getNext@List:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+getNode@List:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila ;declaracion de variable
+whileCondition$7:      LOAD 0                          ;carga valor de la variable en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       NE                              ;condicion del while
+                       BF endWhile$7                   ;salto al fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 2                       ;carga valor del atributo en la pila
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       EQ                              ;condicion del if
+                       BF else$4                       ;salto al else
+then$5:                LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       JUMP endIf$5                    ;salto al fin del if
+else$4:                LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE 0                         ;almacena el tope de la pila en la variable
+endIf$5:               NOP                             ;fin del if
+                       JUMP whileCondition$7           ;salto al a condicion del while
+endWhile$7:            NOP                             ;fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 1                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+getLast@List:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       EQ                              ;condicion del if
+                       BF else$5                       ;salto al else
+then$6:                PUSH 0                          ;cargar literal null en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       JUMP endIf$6                    ;salto al fin del if
+else$5:                LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila ;declaracion de variable
+whileCondition$8:      LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       PUSH 0                          ;cargar literal null en la pila
+                       NE                              ;condicion del while
+                       BF endWhile$8                   ;salto al fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOADREF 1                       ;carga valor del atributo en la pila
+                       STORE 0                         ;almacena el tope de la pila en la variable
+                       JUMP whileCondition$8           ;salto al a condicion del while
+endWhile$8:            NOP                             ;fin del while
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 1                          ;liberar variables locales
+endIf$6:               NOP                             ;fin del if
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+addFirst@List:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       RMEM 1                          ;lugar de retorno
+                       PUSH 3                          ;celdas a reservar
+                       PUSH malloc                     ;cargar la eitqueta de la rutina malloc
+                       CALL                            ;llamada a malloc ;declaracion de variable
+                       LOAD 4                          ;carga valor del argumento en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 3                          ;cargar this
+                       LOADREF 1                       ;cargar valor del atributo en la pila
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       SWAP
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOAD 3                          ;cargar this
+                       SWAP                            ;swap el valor de la asignacion con this
+                       STOREREF 1                      ;almacena el tope de la pila en el atributo
+                       LOAD 3                          ;cargar this
+                       LOADREF 2                       ;cargar valor del atributo en la pila
+                       PUSH 1                          ;cargar literal entero en el tope de la pila
+                       ADD
+                       LOAD 3                          ;cargar this
+                       SWAP                            ;swap el valor de la asignacion con this
+                       STOREREF 2                      ;almacena el tope de la pila en el atributo
+                       LOAD 0                          ;carga valor de la variable en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 1                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 1                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+                       .DATA                           ;VTable de ListDummy
+VT_ListDummy:          DW getPrevious@ListDummy,m1@ListDummy,m2@ListDummy,m4@ListDummy,m5@ListDummy,m6@ListDummy,getNext@ListDummy,getLast@ListDummy,addLast@ListDummy,addBefore@ListDummy,addAfter@ListDummy,getFirst@ListDummy,addFirst@ListDummy,getFirst@ListDummy,getLast@ListDummy,getPrevious@ListDummy,getNext@ListDummy,addBefore@ListDummy,addAfter@ListDummy,addLast@ListDummy,addFirst@ListDummy
+                       .CODE                           ;codigo de metodos definidos en ListDummy
+getPrevious@ListDummy: LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+m1@ListDummy:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       NOP                             ;bloque vacio
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+m2@ListDummy:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       NOP                             ;bloque vacio
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+m4@ListDummy:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       NOP                             ;bloque vacio
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+m5@ListDummy:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       NOP                             ;bloque vacio
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+m6@ListDummy:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       NOP                             ;bloque vacio
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+getNext@ListDummy:     LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+getLast@ListDummy:     LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+addLast@ListDummy:     LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+addBefore@ListDummy:   LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 3                           ;retorno del metodo
+addAfter@ListDummy:    LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 6                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 3                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 3                           ;retorno del metodo
+getFirst@ListDummy:    LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+addFirst@ListDummy:    LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PUSH 0                          ;cargar literal null en la pila
+                       STORE 5                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 2                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 2                           ;retorno del metodo
+printC@System:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       CPRINT                          ;imprimir por pantalla
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+printS@System:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar string a imprimir (1)
+                       PUSH 1                          ;cargar string a imprimir (2)
+                       ADD                             ;cargar string a imprimir (3)
+                       SPRINT                          ;imprimir string
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+println@System:        LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       PRNLN                           ;imprimir salto de linea
+                       STOREFP                         ;desapilar registro de activación
+                       RET 0                           ;retorno del metodo
+printCln@System:       LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       CPRINT                          ;imprimir por pantalla
+                       PRNLN                           ;imprimir salto de linea
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+printSln@System:       LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar string a imprimir (1)
+                       PUSH 1                          ;cargar string a imprimir (2)
+                       ADD                             ;cargar string a imprimir (3)
+                       SPRINT                          ;imprimir string
+                       PRNLN                           ;salto de linea
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+read@System:           LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       READ                            ;leer entrada
+                       STORE 3                         ;almacenar valor leido en el lugar de retorno
+                       STOREFP                         ;desapilar registro de activación
+                       RET 0                           ;retorno del metodo
+printB@System:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       BPRINT                          ;imprimir por pantalla
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+printIln@System:       LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       IPRINT                          ;imprimir por pantalla
+                       PRNLN                           ;imprimir salto de linea
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+printI@System:         LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       IPRINT                          ;imprimir por pantalla
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+printBln@System:       LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;cargar parametro a imprimir
+                       BPRINT                          ;imprimir por pantalla
+                       PRNLN                           ;imprimir salto de linea
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo

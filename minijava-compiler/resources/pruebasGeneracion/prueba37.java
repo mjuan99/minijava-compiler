@@ -2,20 +2,24 @@
 //10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130
 
 class A{
-    static IGet1 getAsIGet1(List l){
+    static IList getAsIList(List l){
         return l;
     }
-    static IGet2 getAsIGet2(List l){
+    static IGet1 getAsIGet1(IList l){
         return l;
     }
-    static IAdd getAsIAdd(List l){
+    static IGet2 getAsIGet2(IList l){
+        return l;
+    }
+    static IAdd getAsIAdd(IList l){
         return l;
     }
     static void main(){
         var list = new List2();
-        var iGet1 = getAsIGet1(list);
-        var iGet2 = getAsIGet2(list);
-        var iAdd = getAsIAdd(list);
+        var iList = getAsIList(list);
+        var iGet1 = getAsIGet1(iList);
+        var iGet2 = getAsIGet2(iList);
+        var iAdd = getAsIAdd(iList);
         var i = 4;
         while(i < 15){
             iAdd.addLast(i);
@@ -79,7 +83,7 @@ class List2 extends List{
     }
 }
 
-class List implements IAdd, IGet1, IGet2{
+class List implements IList{
     private int size;
     private Node head;
 
@@ -192,7 +196,7 @@ class List implements IAdd, IGet1, IGet2{
 
 }
 
-class ListDummy implements IList{
+class ListDummy implements IAdd, IGet1, IGet2{
     Node addFirst(int element){return null;}
     Node addLast(int element){return null;}
     Node addBefore(Node node, int element){return null;}

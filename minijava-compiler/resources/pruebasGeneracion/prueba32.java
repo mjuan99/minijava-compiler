@@ -1,30 +1,34 @@
 //size = 13
-//10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130
+//1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 
 class A{
-    static IGet1 getAsIGet1(List l){
+    static IList getAsIList(List l){
         return l;
     }
-    static IGet2 getAsIGet2(List l){
+    static IGet1 getAsIGet1(IList l){
         return l;
     }
-    static IAdd getAsIAdd(List l){
+    static IGet2 getAsIGet2(IList l){
+        return l;
+    }
+    static IAdd getAsIAdd(IList l){
         return l;
     }
     static void main(){
-        var list = new List2();
-        var iGet1 = getAsIGet1(list);
-        var iGet2 = getAsIGet2(list);
-        var iAdd = getAsIAdd(list);
+        var list = new List();
+        var iList = getAsIList(list);
+        var iGet1 = getAsIGet1(iList);
+        var iGet2 = getAsIGet2(iList);
+        var iAdd = getAsIAdd(iList);
         var i = 4;
         while(i < 15){
             iAdd.addLast(i);
             i = i + 3;
         }
-        var node = list.getNode(70);
+        var node = list.getNode(7);
         iAdd.addBefore(node, 5);
         iAdd.addBefore(node, 6);
-        node = list.getNode(100);
+        node = list.getNode(10);
         node = iAdd.addAfter(node, 11);
         iAdd.addAfter(node, 12);
         i = 3;
@@ -60,26 +64,7 @@ interface IGet2{
 
 interface IList extends IAdd, IGet1, IGet2{}
 
-class List2 extends List{
-
-    Node addFirst(int element){
-        return super.addFirst(element*10);
-    }
-
-    Node addLast(int element){
-        return super.addLast(element*10);
-    }
-
-    Node addAfter(Node node, int element){
-        return super.addAfter(node, element*10);
-    }
-
-    Node addBefore(Node node, int element){
-        return super.addBefore(node, element*10);
-    }
-}
-
-class List implements IAdd, IGet1, IGet2{
+class List implements IList{
     private int size;
     private Node head;
 
@@ -192,7 +177,7 @@ class List implements IAdd, IGet1, IGet2{
 
 }
 
-class ListDummy implements IList{
+class ListDummy implements IAdd, IGet1, IGet2{
     Node addFirst(int element){return null;}
     Node addLast(int element){return null;}
     Node addBefore(Node node, int element){return null;}
