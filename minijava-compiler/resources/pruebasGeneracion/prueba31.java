@@ -5,7 +5,9 @@
 //m1 en D
 //m2 en D
 //m1 en B
+//m1 en B
 //m2 en B
+//m2 en D
 //m1 en D
 //m2 en D
 
@@ -17,10 +19,16 @@ class Main{
         new C().m2();
         new D().m1();
         new D().m2();
+        getBAsA().m1();
         getBAsI1().m1();
         getBAsI2().m2();
+        getDAsC().m2();
         getDAsI1().m1();
         getDAsI2().m2();
+    }
+
+    static A getBAsA(){
+        return new B();
     }
 
     static I1 getBAsI1(){
@@ -29,6 +37,10 @@ class Main{
 
     static I2 getBAsI2(){
         return new B();
+    }
+
+    static C getDAsC(){
+        return new D();
     }
 
     static I1 getDAsI1(){

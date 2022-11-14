@@ -18,6 +18,17 @@ malloc:                LOADFP                          ;Inicialización unidad
                        STOREHL                         ;Mueve el heap limit (hl). Expande el heap
                        STOREFP
                        RET 1                           ;Retorna eliminando el parámetro
+getAsIList@A:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;carga valor del argumento en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
 getAsIGet2@A:          LOADFP                          ;enlace dinamico
                        LOADSP                          ;apilar registro de activacion (1)
                        STOREFP                         ;apilar registro de activacion (2)
@@ -30,6 +41,17 @@ getAsIGet2@A:          LOADFP                          ;enlace dinamico
                        STOREFP                         ;desapilar registro de activación
                        RET 1                           ;retorno del metodo
 getAsIGet1@A:          LOADFP                          ;enlace dinamico
+                       LOADSP                          ;apilar registro de activacion (1)
+                       STOREFP                         ;apilar registro de activacion (2)
+                       LOAD 3                          ;carga valor del argumento en la pila
+                       STORE 4                         ;guarda el valor de retorno
+                       FMEM 0                          ;liberar variables del metodo
+                       STOREFP                         ;actualizar registro de activación (desapilar)
+                       RET 1                           ;retorno del metodo
+                       FMEM 0                          ;liberar variables locales
+                       STOREFP                         ;desapilar registro de activación
+                       RET 1                           ;retorno del metodo
+getAsList@A:           LOADFP                          ;enlace dinamico
                        LOADSP                          ;apilar registro de activacion (1)
                        STOREFP                         ;apilar registro de activacion (2)
                        LOAD 3                          ;carga valor del argumento en la pila
@@ -63,39 +85,47 @@ main:                  LOADFP                          ;enlace dinamico
                        STOREREF 0                      ;setear vtable (3) ;declaracion de variable
                        RMEM 1                          ;lugar de retorno
                        LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       PUSH getAsList@A                ;cargar la etiqueta del metodo getAsList
+                       CALL                            ;llamada al metodo getAsList ;declaracion de variable
+                       RMEM 1                          ;lugar de retorno
+                       LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       PUSH getAsIList@A               ;cargar la etiqueta del metodo getAsIList
+                       CALL                            ;llamada al metodo getAsIList ;declaracion de variable
+                       RMEM 1                          ;lugar de retorno
+                       LOAD -2                         ;carga valor de la variable en la pila ;argumento 0
                        PUSH getAsIGet1@A               ;cargar la etiqueta del metodo getAsIGet1
                        CALL                            ;llamada al metodo getAsIGet1 ;declaracion de variable
                        RMEM 1                          ;lugar de retorno
-                       LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       LOAD -2                         ;carga valor de la variable en la pila ;argumento 0
                        PUSH getAsIGet2@A               ;cargar la etiqueta del metodo getAsIGet2
                        CALL                            ;llamada al metodo getAsIGet2 ;declaracion de variable
                        RMEM 1                          ;lugar de retorno
-                       LOAD 0                          ;carga valor de la variable en la pila ;argumento 0
+                       LOAD -2                         ;carga valor de la variable en la pila ;argumento 0
                        PUSH getAsIAdd@A                ;cargar la etiqueta del metodo getAsIAdd
                        CALL                            ;llamada al metodo getAsIAdd ;declaracion de variable
                        PUSH 4                          ;cargar literal entero en el tope de la pila ;declaracion de variable
-whileCondition:        LOAD -4                         ;carga valor de la variable en la pila
+whileCondition:        LOAD -6                         ;carga valor de la variable en la pila
                        PUSH 15                         ;cargar literal entero en el tope de la pila
                        LT                              ;condicion del while
                        BF endWhile                     ;salto al fin del while
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -4                         ;carga valor de la variable en la pila ;argumento 0 del metodo addLast
+                       LOAD -6                         ;carga valor de la variable en la pila ;argumento 0 del metodo addLast
                        SWAP
                        DUP
                        LOADREF 0
                        LOADREF 19
                        CALL                            ;llamada a metodo addLast
                        POP                             ;descarta el resultado de la llamada
-                       LOAD -4                         ;carga valor de la variable en la pila
+                       LOAD -6                         ;carga valor de la variable en la pila
                        PUSH 3                          ;cargar literal entero en el tope de la pila
                        ADD
-                       STORE -4                        ;almacena el tope de la pila en la variable
+                       STORE -6                        ;almacena el tope de la pila en la variable
                        FMEM 0                          ;liberar variables locales
                        JUMP whileCondition             ;salto al a condicion del while
 endWhile:              NOP                             ;fin del while
-                       LOAD 0                          ;carga valor de la variable en la pila
+                       LOAD -1                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 70                         ;cargar literal entero en el tope de la pila ;argumento 0 del metodo getNode
@@ -104,24 +134,24 @@ endWhile:              NOP                             ;fin del while
                        LOADREF 0
                        LOADREF 8
                        CALL                            ;llamada a metodo getNode ;declaracion de variable
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 5                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addBefore
                        SWAP
-                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
+                       LOAD -7                         ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
                        SWAP
                        DUP
                        LOADREF 0
                        LOADREF 17
                        CALL                            ;llamada a metodo addBefore
                        POP                             ;descarta el resultado de la llamada
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 6                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addBefore
                        SWAP
-                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
+                       LOAD -7                         ;carga valor de la variable en la pila ;argumento 0 del metodo addBefore
                        SWAP
                        DUP
                        LOADREF 0
@@ -137,25 +167,25 @@ endWhile:              NOP                             ;fin del while
                        LOADREF 0
                        LOADREF 8
                        CALL                            ;llamada a metodo getNode
-                       STORE -5                        ;almacena el tope de la pila en la variable
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       STORE -7                        ;almacena el tope de la pila en la variable
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 11                         ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addAfter
                        SWAP
-                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
+                       LOAD -7                         ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
                        SWAP
                        DUP
                        LOADREF 0
                        LOADREF 18
                        CALL                            ;llamada a metodo addAfter
-                       STORE -5                        ;almacena el tope de la pila en la variable
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       STORE -7                        ;almacena el tope de la pila en la variable
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 12                         ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addAfter
                        SWAP
-                       LOAD -5                         ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
+                       LOAD -7                         ;carga valor de la variable en la pila ;argumento 0 del metodo addAfter
                        SWAP
                        DUP
                        LOADREF 0
@@ -163,52 +193,52 @@ endWhile:              NOP                             ;fin del while
                        CALL                            ;llamada a metodo addAfter
                        POP                             ;descarta el resultado de la llamada
                        PUSH 3                          ;cargar literal entero en el tope de la pila
-                       STORE -4                        ;almacena el tope de la pila en la variable
-whileCondition$2:      LOAD -4                         ;carga valor de la variable en la pila
+                       STORE -6                        ;almacena el tope de la pila en la variable
+whileCondition$2:      LOAD -6                         ;carga valor de la variable en la pila
                        PUSH 0                          ;cargar literal entero en el tope de la pila
                        GT                              ;condicion del while
                        BF endWhile$2                   ;salto al fin del while
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -4                         ;carga valor de la variable en la pila ;argumento 0 del metodo addFirst
+                       LOAD -6                         ;carga valor de la variable en la pila ;argumento 0 del metodo addFirst
                        SWAP
                        DUP
                        LOADREF 0
                        LOADREF 20
                        CALL                            ;llamada a metodo addFirst
                        POP                             ;descarta el resultado de la llamada
-                       LOAD -4                         ;carga valor de la variable en la pila
+                       LOAD -6                         ;carga valor de la variable en la pila
                        PUSH 1                          ;cargar literal entero en el tope de la pila
                        SUB
-                       STORE -4                        ;almacena el tope de la pila en la variable
+                       STORE -6                        ;almacena el tope de la pila en la variable
                        FMEM 0                          ;liberar variables locales
                        JUMP whileCondition$2           ;salto al a condicion del while
 endWhile$2:            NOP                             ;fin del while
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 8                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addAfter
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -1                         ;carga valor de la variable en la pila
+                       LOAD -3                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        DUP
@@ -251,21 +281,21 @@ endWhile$2:            NOP                             ;fin del while
                        LOADREF 18
                        CALL                            ;llamada a metodo addAfter
                        POP                             ;descarta el resultado de la llamada
-                       LOAD -3                         ;carga valor de la variable en la pila
+                       LOAD -5                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        PUSH 9                          ;cargar literal entero en el tope de la pila ;argumento 1 del metodo addBefore
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -2                         ;carga valor de la variable en la pila
+                       LOAD -4                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
-                       LOAD -1                         ;carga valor de la variable en la pila
+                       LOAD -3                         ;carga valor de la variable en la pila
                        RMEM 1                          ;lugar de retorno
                        SWAP
                        DUP
@@ -298,7 +328,7 @@ endWhile$2:            NOP                             ;fin del while
                        LOADREF 0
                        LOADREF 3
                        CALL                            ;llamada a metodo print
-                       FMEM 6                          ;liberar variables locales
+                       FMEM 8                          ;liberar variables locales
                        STOREFP                         ;desapilar registro de activación
                        RET 0                           ;retorno del metodo
                        .DATA                           ;VTable de List2
